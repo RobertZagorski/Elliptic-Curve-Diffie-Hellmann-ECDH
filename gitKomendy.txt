@@ -9,11 +9,16 @@ git init
 git add *
 //commit'owanie zmian Do . Polecenie -m dodaje treść do commit'a
 git commit -m "..........."
-//Dodaj commit'a do zdalnego repozytorium na stronie GitHub (konieczne podanie swojej
+
+//Dodanie plików do repozytorium po raz pierwszy !!!! (konieczne podanie swojej
 //nazwy użytkownika i hasła z GitHub'a)
-git push origin master
-git remote add origin https://github.com/RobertZagorski/Diffie-Hellmann-Elliptic-Curve-Algorithm.git
+git remote add origin https://github.com/RobertZagorski/Elliptic-Curve-Diffie-Hellmann-ECDH
 git push -u origin master
+
+//Dodaj commit'a do zdalnego repozytorium na stronie GitHub (konieczne podanie swojej
+//nazwy użytkownika i hasła z GitHub'a) za każdym kolejnym razem
+git push origin master
+
 //Wyświetlenie aktualnego statusu commit'ów
 git status
 
