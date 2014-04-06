@@ -1,0 +1,27 @@
+//Wyświetlenie zawartości katalogu na lokalnej maszynie
+ls
+//Przejście od odpowiedniego folderu
+cd Java/Diffie_Hellmann/
+//Zainicjowanie repozytorium lokalnego w aktualnej ścieżce
+git init
+// Dodanie plików do migawki (dodanie ewentualnych nowych plików do migawki 
+//lub zarejestrowanie zmian w plikach już wcześniej znajdujących się w repo)
+git add *
+//commit'owanie zmian Do . Polecenie -m dodaje treść do commit'a
+git commit -m "..........."
+//Dodaj commit'a do zdalnego repozytorium na stronie GitHub (konieczne podanie swojej
+//nazwy użytkownika i hasła z GitHub'a)
+git push origin master
+git remote add origin https://github.com/RobertZagorski/Diffie-Hellmann-Elliptic-Curve-Algorithm.git
+git push -u origin master
+//Wyświetlenie aktualnego statusu commit'ów
+git status
+
+// Pobranie aktualnej wersji do repozytorium 'origin'
+git fetch https://github.com/RobertZagorski/Diffie-Hellmann-Elliptic-Curve-Algorithm.git
+//Potem (najlepiej zawsze wykonywać tę komendę przed każdorazowym rozpoczęciem pracy 
+//nad projektem)
+git pull origin
+
+//Wylistowanie plików należących do repozytorium
+git ls-tree --full-name --name-only -r HEAD
