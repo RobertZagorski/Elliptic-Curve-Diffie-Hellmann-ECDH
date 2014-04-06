@@ -1,4 +1,4 @@
-//Wyświetlenie zawartości katalogu na lokalnej maszynie
+﻿//Wyświetlenie zawartości katalogu na lokalnej maszynie
 ls
 //Przejście od odpowiedniego folderu
 cd Java/Diffie_Hellmann/
@@ -23,7 +23,7 @@ git push origin master
 git status
 
 // Pobranie aktualnej wersji do repozytorium 'origin'
-git fetch https://github.com/RobertZagorski/Diffie-Hellmann-Elliptic-Curve-Algorithm.git
+git pull https://github.com/RobertZagorski/Diffie-Hellmann-Elliptic-Curve-Algorithm.git
 //Potem (najlepiej zawsze wykonywać tę komendę przed każdorazowym rozpoczęciem pracy 
 //nad projektem)
 git pull origin
