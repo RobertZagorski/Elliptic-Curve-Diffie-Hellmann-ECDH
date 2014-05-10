@@ -1,0 +1,126 @@
+package dh;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.border.TitledBorder;
+import javax.swing.UIManager;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import java.awt.Font;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JTextField;
+
+
+public class Window extends JPanel implements ActionListener {
+
+	private static final long serialVersionUID = 1L;
+	main mainframe;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	
+	public Window(main main)	{
+		this.mainframe = main;
+		this.requestFocusInWindow();
+		setDoubleBuffered(true);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Dane wej\u015Bciowe", TitledBorder.LEFT, TitledBorder.TOP, null, null));
+		GroupLayout groupLayout = new GroupLayout(this);
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 353, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(237, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(339, Short.MAX_VALUE))
+		);
+		
+		JLabel lblNewLabel = new JLabel("n: ");
+		lblNewLabel.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		JLabel lblGx = new JLabel("Gx: ");
+		lblGx.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		
+		JLabel lblGy = new JLabel("Gy: ");
+		lblGy.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		
+		textField = new JTextField();
+		textField.setColumns(10);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		
+		textField_2 = new JTextField();
+		textField_2.setColumns(10);
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(19)
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblGy)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblGx)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblNewLabel)
+							.addGap(10)
+							.addComponent(textField, GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)))
+					.addContainerGap())
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel)
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblGx)
+						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblGy)
+						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(46, Short.MAX_VALUE))
+		);
+		panel.setLayout(gl_panel);
+		setLayout(groupLayout);
+		mainframe.setTitle("ECDH");
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if ("Dodaj".equals(e.getActionCommand()))
+		{
+			
+		}
+		else if ("Usuñ".equals(e.getActionCommand()))
+		{
+
+		}
+		else if ("Zakoñcz".equals(e.getActionCommand()))
+		{
+			
+		}
+		else JOptionPane.showMessageDialog(mainframe, "Wyst¹pi³ b³¹d. Spróbuj ponownie");		
+	}
+}

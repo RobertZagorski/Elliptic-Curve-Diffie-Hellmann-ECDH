@@ -1,0 +1,58 @@
+package dh;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+
+
+public class Window extends JPanel implements ActionListener {
+
+	private static final long serialVersionUID = 1L;
+	main mainframe;
+	
+	public Window(main main)	{
+		this.mainframe = main;
+		this.requestFocusInWindow();
+		setDoubleBuffered(true);
+		
+		JPanel panel = new JPanel();
+		GroupLayout groupLayout = new GroupLayout(this);
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 334, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(256, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(353, Short.MAX_VALUE))
+		);
+		setLayout(groupLayout);
+		mainframe.setTitle("ECDH");
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if ("Dodaj".equals(e.getActionCommand()))
+		{
+			
+		}
+		else if ("Usuñ".equals(e.getActionCommand()))
+		{
+
+		}
+		else if ("Zakoñcz".equals(e.getActionCommand()))
+		{
+			
+		}
+		else JOptionPane.showMessageDialog(mainframe, "Wyst¹pi³ b³¹d. Spróbuj ponownie");		
+	}
+}

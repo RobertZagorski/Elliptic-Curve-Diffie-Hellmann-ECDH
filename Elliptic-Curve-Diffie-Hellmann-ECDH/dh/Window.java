@@ -1,522 +1,271 @@
 package dh;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.ArrayList;
-
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.border.TitledBorder;
+import javax.swing.UIManager;
+import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import java.awt.Font;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JTextField;
+import javax.swing.JList;
+import javax.swing.DefaultListModel;
+import javax.swing.JScrollPane;
+
 
 public class Window extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	main mainframe;
-	GroupLayout layout;
-	JLabel RuleNameLabel;
-	JLabel FilterLabel;
-	JLabel FilterIdentifierLabel;
-	JLabel PrecedenceLabel;
-	JLabel QCILabel;
-	JLabel maxRequestedBandwidthDLLabel;
-	JLabel maxRequestedBandwidthULLabel;
-	JLabel guaranteedBitrateDLLabel;
-	JLabel guaranteedBitrateULLabel;
-	JLabel bearerIdentifierLabel;
-	JLabel priorityLabel;
-	JLabel pre_emption_capabilityLabel;
-	JLabel pre_emption_vulnerabilityLabel;
-	
-	JPanel RuleNamePanel;
-	JPanel FilterPanel;
-	JPanel FilterIdentifierPanel;
-	JPanel PrecedencePanel;
-	JPanel QCIPanel;
-	JPanel maxRequestedBandwidthDLPanel;
-	JPanel maxRequestedBandwidthULPanel;
-	JPanel guaranteedBitrateDLPanel;
-	JPanel guaranteedBitrateULPanel;
-	JPanel bearerIdentifierPanel;
-	JPanel priorityPanel;
-	JPanel pre_emption_capabilityPanel;
-	JPanel pre_emption_vulnerabilityPanel;
-	JPanel ProvisionedRulesPanel;
-	
-	JTextField RuleName;
-	JTextField Filter;
-	JTextField FilterIdentifier;
-	JTextField Precedence;
-	JComboBox<String> QCI;
-	JTextField maxRequestedBandwidthDL;
-	JTextField maxRequestedBandwidthUL;
-	JTextField guaranteedBitrateDL;
-	JTextField guaranteedBitrateUL;
-	JTextField bearerIdentifier;
-	JComboBox<String> priority;
-	JComboBox<String> pre_emption_capability;
-	JComboBox<String> pre_emption_vulnerability;
-	JComboBox<String> ProvisionedRules;
-	
-	String QCIPattern;
-	String priorityPattern;
-	String pre_emption_capabilityPattern;
-	String pre_emption_vulnerabilityPattern;
-	String ProvisionedRulesPattern;
-	ArrayList<String> Rules;
-	
-	JButton DodajButton;
-	JButton UsunButton;
-	JButton ZakonczButton;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
+	private JTextField textField_5;
+	private JTextField textField_6;
+	private JTextField textField_7;
+	private JTextField textField_8;
+	private JTextField textField_9;
+	private JTextField textField_10;
+	private JTextField textField_11;
+	private JTextField textField_12;
 	
 	public Window(main main)	{
-		layout = new GroupLayout(this);
-		this.setLayout(layout);
-		layout.setAutoCreateGaps(true);
-		layout.setAutoCreateContainerGaps(true);
 		this.mainframe = main;
 		this.requestFocusInWindow();
 		setDoubleBuffered(true);
-		CreateLayout();
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Dane wej\u015Bciowe", TitledBorder.LEFT, TitledBorder.TOP, null, null));
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new TitledBorder(null, "Kroki wykonywanego algorytmu", TitledBorder.LEFT, TitledBorder.TOP, null, null));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
+		gl_panel_1.setHorizontalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addGap(2)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE))
+		);
+		gl_panel_1.setVerticalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+		);
+		
+		DefaultListModel listModel = new DefaultListModel();
+		JList list = new JList(listModel);
+		scrollPane.setColumnHeaderView(list);
+		scrollPane.setViewportView(list);
+		panel_1.setLayout(gl_panel_1);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBorder(new TitledBorder(null, "U\u017Cytkownik A", TitledBorder.LEFT, TitledBorder.TOP, null, null));
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBorder(new TitledBorder(null, "U\u017Cytkownik B", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GroupLayout groupLayout = new GroupLayout(this);
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(panel_2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
+						.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		
+		JLabel lblKluczPrywatny = new JLabel("Klucz prywatny (a):");
+		lblKluczPrywatny.setBounds(26, 30, 121, 14);
+		lblKluczPrywatny.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		
+		textField_3 = new JTextField();
+		textField_3.setBounds(26, 56, 310, 20);
+		textField_3.setColumns(10);
+		
+		JButton btnGeneruj = new JButton("Generuj");
+		btnGeneruj.setLocation(259, 27);
+		btnGeneruj.setSize(78, 23);
+		
+		JLabel lblKluczPublicznya = new JLabel("Klucz publiczny (Ax = aGx; Ay = aGy):");
+		lblKluczPublicznya.setBounds(26, 96, 225, 16);
+		lblKluczPublicznya.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		
+		textField_5 = new JTextField();
+		textField_5.setBounds(26, 123, 310, 20);
+		textField_5.setColumns(10);
+		
+		textField_6 = new JTextField();
+		textField_6.setBounds(26, 149, 310, 20);
+		textField_6.setColumns(10);
+		
+		JButton btnOblicz = new JButton("Oblicz");
+		btnOblicz.setBounds(259, 94, 78, 23);
+		panel_2.setLayout(null);
+		panel_2.add(textField_3);
+		panel_2.add(lblKluczPrywatny);
+		panel_2.add(btnGeneruj);
+		panel_2.add(lblKluczPublicznya);
+		panel_2.add(btnOblicz);
+		panel_2.add(textField_5);
+		panel_2.add(textField_6);
+		
+		JLabel lblKluczTajnysx = new JLabel("Klucz tajny (Sx = aBx; Sy = aBy):");
+		lblKluczTajnysx.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		lblKluczTajnysx.setBounds(26, 194, 225, 16);
+		panel_2.add(lblKluczTajnysx);
+		
+		JButton btnOblicz_2 = new JButton("Oblicz");
+		btnOblicz_2.setBounds(258, 192, 78, 23);
+		panel_2.add(btnOblicz_2);
+		
+		textField_9 = new JTextField();
+		textField_9.setBounds(26, 221, 310, 20);
+		panel_2.add(textField_9);
+		textField_9.setColumns(10);
+		
+		textField_10 = new JTextField();
+		textField_10.setBounds(26, 247, 310, 20);
+		panel_2.add(textField_10);
+		textField_10.setColumns(10);
+		
+		JLabel lblKluczPrywatnyb = new JLabel("Klucz prywatny (b):");
+		lblKluczPrywatnyb.setBounds(26, 30, 128, 16);
+		lblKluczPrywatnyb.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		
+		textField_4 = new JTextField();
+		textField_4.setBounds(26, 56, 310, 20);
+		textField_4.setColumns(10);
+		
+		JButton btnGeneruj_1 = new JButton("Generuj");
+		btnGeneruj_1.setBounds(257, 27, 78, 23);
+		
+		JLabel lblKluczPublicznybx = new JLabel("Klucz publiczny (Bx = bGx; By = bGy):");
+		lblKluczPublicznybx.setBounds(26, 96, 219, 16);
+		lblKluczPublicznybx.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		
+		textField_7 = new JTextField();
+		textField_7.setBounds(26, 123, 310, 20);
+		textField_7.setColumns(10);
+		
+		textField_8 = new JTextField();
+		textField_8.setBounds(26, 149, 310, 20);
+		textField_8.setColumns(10);
+		
+		JButton btnOblicz_1 = new JButton("Oblicz");
+		btnOblicz_1.setBounds(257, 94, 78, 23);
+		panel_3.setLayout(null);
+		panel_3.add(textField_8);
+		panel_3.add(lblKluczPublicznybx);
+		panel_3.add(btnOblicz_1);
+		panel_3.add(lblKluczPrywatnyb);
+		panel_3.add(btnGeneruj_1);
+		panel_3.add(textField_4);
+		panel_3.add(textField_7);
+		
+		JLabel lblKluczTajnysx_1 = new JLabel("Klucz tajny (Sx = bAx; Sy = bAy):");
+		lblKluczTajnysx_1.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		lblKluczTajnysx_1.setBounds(26, 194, 225, 16);
+		panel_3.add(lblKluczTajnysx_1);
+		
+		JButton btnNewButton = new JButton("Oblicz");
+		btnNewButton.setBounds(258, 192, 78, 23);
+		panel_3.add(btnNewButton);
+		
+		textField_11 = new JTextField();
+		textField_11.setBounds(26, 221, 310, 20);
+		panel_3.add(textField_11);
+		textField_11.setColumns(10);
+		
+		textField_12 = new JTextField();
+		textField_12.setBounds(26, 247, 310, 20);
+		panel_3.add(textField_12);
+		textField_12.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("n: ");
+		lblNewLabel.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		JLabel lblGx = new JLabel("Gx: ");
+		lblGx.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		
+		JLabel lblGy = new JLabel("Gy: ");
+		lblGy.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		
+		textField = new JTextField();
+		textField.setColumns(10);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		
+		textField_2 = new JTextField();
+		textField_2.setColumns(10);
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(19)
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblGy)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblGx)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(textField, GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)))
+					.addContainerGap())
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel)
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblGx)
+						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblGy)
+						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(46, Short.MAX_VALUE))
+		);
+		panel.setLayout(gl_panel);
+		setLayout(groupLayout);
 		mainframe.setTitle("ECDH");
-	}
-	
-	private void CreateLayout() {
-		RuleNameLabel = createRuleNameLabel();
-		FilterLabel = createFilterLabel();
-		FilterIdentifierLabel = createFilterIdentifierLabel();
-		PrecedenceLabel = createPrecedenceLabel();
-		QCILabel = createQCILabel();
-		maxRequestedBandwidthDLLabel = createmaxRequestedBandwidthDLLabel();
-		maxRequestedBandwidthULLabel = createmaxRequestedBandwidthULLabel();
-		guaranteedBitrateDLLabel = createguaranteedBitrateDLLabel();
-		guaranteedBitrateULLabel = createguaranteedBitrateULLabel();
-		bearerIdentifierLabel = createbearerIdentifierLabel();
-		priorityLabel = createpriorityLabel();
-		pre_emption_capabilityLabel = createpre_emption_capabilityLabel();
-		pre_emption_vulnerabilityLabel = createpre_emption_vulnerabilityLabel();
 		
-		RuleNamePanel = createRuleNamePanel() ;
-		FilterPanel = createFilterPanel();
-		FilterIdentifierPanel = createFilterIdentifierPanel();
-		PrecedencePanel = createPrecedencePanel();
-		QCIPanel = createQCIPanel();
-		maxRequestedBandwidthDLPanel = createmaxRequestedBandwidthDLPanel();
-		maxRequestedBandwidthULPanel = createmaxRequestedBandwidthULPanel();
-		guaranteedBitrateDLPanel = createguaranteedBitrateDLPanel();
-		guaranteedBitrateULPanel = createguaranteedBitrateULPanel();
-		bearerIdentifierPanel = createbearerIdentifierPanel();
-		priorityPanel = createpriorityPanel();
-		pre_emption_capabilityPanel = createpre_emption_capabilityPanel();
-		pre_emption_vulnerabilityPanel = createpre_emption_vulnerabilityPanel();
-		ProvisionedRulesPanel = createProvisionedRulesPanel();
-		
-		DodajButton = createDodajButton();
-		UsunButton = createUsunButton();
-		ZakonczButton = createZakonczButton();
-		
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-			     	.addComponent(RuleNameLabel)
-			     	.addComponent(FilterLabel)
-			     	.addComponent(FilterIdentifierLabel)
-			     	.addComponent(PrecedenceLabel)
-			     	.addComponent(QCILabel)
-			     	.addComponent(maxRequestedBandwidthDLLabel)
-			     	.addComponent(maxRequestedBandwidthULLabel)
-			     	.addComponent(guaranteedBitrateDLLabel)
-			     	.addComponent(guaranteedBitrateULLabel)
-			     	.addComponent(bearerIdentifierLabel)
-			     	.addComponent(priorityLabel)
-			     	.addComponent(pre_emption_capabilityLabel)
-			     	.addComponent(pre_emption_vulnerabilityLabel))
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-			        .addComponent(RuleNamePanel)
-			        .addComponent(FilterPanel)
-			        .addComponent(FilterIdentifierPanel)
-			        .addComponent(PrecedencePanel)
-			        .addComponent(QCIPanel)
-			        .addComponent(maxRequestedBandwidthDLPanel)
-			        .addComponent(maxRequestedBandwidthULPanel)
-			        .addComponent(guaranteedBitrateDLPanel)
-			        .addComponent(guaranteedBitrateULPanel)
-			        .addComponent(bearerIdentifierPanel)
-			        .addComponent(priorityPanel)
-			        .addComponent(pre_emption_capabilityPanel)
-			        .addComponent(pre_emption_vulnerabilityPanel))
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-			        .addComponent(ProvisionedRulesPanel)
-			    	.addComponent(DodajButton)
-			        .addComponent(UsunButton)
-			        .addComponent(ZakonczButton))
-			);
-		layout.linkSize(SwingConstants.HORIZONTAL, RuleNameLabel, 
-												   FilterLabel,
-												   FilterIdentifierLabel,
-												   PrecedenceLabel,
-												   QCILabel,
-												   maxRequestedBandwidthDLLabel,
-												   maxRequestedBandwidthULLabel,
-												   guaranteedBitrateDLLabel,
-												   guaranteedBitrateULLabel,
-												   bearerIdentifierLabel,
-												   priorityLabel,
-												   pre_emption_capabilityLabel,
-												   pre_emption_vulnerabilityLabel);
-		layout.linkSize(SwingConstants.HORIZONTAL, RuleNamePanel,
-												   FilterPanel,
-												   FilterIdentifierPanel,
-												   PrecedencePanel,
-												   QCIPanel,
-												   maxRequestedBandwidthDLPanel,
-												   maxRequestedBandwidthULPanel,
-												   guaranteedBitrateDLPanel,
-												   guaranteedBitrateULPanel,
-												   bearerIdentifierPanel,
-												   priorityPanel,
-												   pre_emption_capabilityPanel,
-												   pre_emption_vulnerabilityPanel);
-		layout.linkSize(SwingConstants.HORIZONTAL, ProvisionedRulesPanel,
-												   DodajButton,
-												   UsunButton,
-												   ZakonczButton);
-		layout.setVerticalGroup(layout.createSequentialGroup()
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			        .addComponent(RuleNameLabel)
-			        .addComponent(RuleNamePanel))
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    	.addComponent(FilterLabel)
-			        .addComponent(FilterPanel))
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    	.addComponent(FilterIdentifierLabel)
-			        .addComponent(FilterIdentifierPanel))
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    	.addComponent(PrecedenceLabel)
-			        .addComponent(PrecedencePanel))
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    	.addComponent(QCILabel)
-			        .addComponent(QCIPanel)
-			        .addComponent(ProvisionedRulesPanel))
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    	.addComponent(maxRequestedBandwidthDLLabel)
-			        .addComponent(maxRequestedBandwidthDLPanel)
-			        .addComponent(DodajButton))
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    	.addComponent(maxRequestedBandwidthULLabel)
-			        .addComponent(maxRequestedBandwidthULPanel)
-			        .addComponent(UsunButton))
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    	.addComponent(guaranteedBitrateDLLabel)
-			        .addComponent(guaranteedBitrateDLPanel)
-			        .addComponent(ZakonczButton))
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    	.addComponent(guaranteedBitrateULLabel)
-			        .addComponent(guaranteedBitrateULPanel))
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    	.addComponent(bearerIdentifierLabel)
-			        .addComponent(bearerIdentifierPanel))
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    	.addComponent(priorityLabel)
-			        .addComponent(priorityPanel))
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    	.addComponent(pre_emption_capabilityLabel)
-			        .addComponent(pre_emption_capabilityPanel))
-			    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    	.addComponent(pre_emption_vulnerabilityLabel)
-			        .addComponent(pre_emption_vulnerabilityPanel))
-			);
-		
-		
-	}
-	
-	private JLabel createRuleNameLabel()
-	{
-		JLabel label = new JLabel("Rule Name");
-		return label;
-		
-	}
-	
-	private JPanel createRuleNamePanel()
-	{
-		JPanel textFieldPanel = new JPanel();
-		textFieldPanel.setLayout(new FlowLayout());
-		RuleName = new JTextField();
-		RuleName.setPreferredSize(new Dimension(150,20));
-		textFieldPanel.add(RuleName);
-		return textFieldPanel;
-	}
-	
-	private JLabel createFilterLabel()
-	{
-		JLabel label = new JLabel("Filter");
-		return label;
-	}
-	
-	private JPanel createFilterPanel()
-	{
-		JPanel textFieldPanel = new JPanel();
-		textFieldPanel.setLayout(new FlowLayout());
-		Filter = new JTextField();
-		Filter.setPreferredSize(new Dimension(150,20));
-		textFieldPanel.add(Filter);
-		return textFieldPanel;
-	}
-	
-	private JLabel createFilterIdentifierLabel()
-	{
-		JLabel label = new JLabel("Filter Identifier");
-		return label;
-	}
-	
-	private JPanel createFilterIdentifierPanel()
-	{
-		JPanel textFieldPanel = new JPanel();
-		textFieldPanel.setLayout(new FlowLayout());
-		FilterIdentifier = new JTextField();
-		FilterIdentifier.setPreferredSize(new Dimension(150,20));
-		textFieldPanel.add(FilterIdentifier);
-		return textFieldPanel;
-	}
-	
-	private JLabel createPrecedenceLabel()
-	{
-		JLabel label = new JLabel("Precedence");
-		return label;
-	}
-	
-	private JPanel createPrecedencePanel()
-	{
-		JPanel textFieldPanel = new JPanel();
-		textFieldPanel.setLayout(new FlowLayout());
-		Precedence = new JTextField();
-		Precedence.setPreferredSize(new Dimension(150,20));
-		textFieldPanel.add(Precedence);
-		return textFieldPanel;
-	}
-	
-	private JLabel createQCILabel()
-	{
-		JLabel label = new JLabel("QoS Class Identifier");
-		return label;
-	}
-	
-	private JPanel createQCIPanel()
-	{
-		QCIPanel = new JPanel();
-		QCIPanel.setLayout(new FlowLayout());
-		String[] pattern = {"1","2","3","4","5","6","7","8","9"};
-		QCIPattern = pattern[0];
-		QCI = new JComboBox<String>(pattern);
-		QCI.setEditable(false);
-		QCI.addItemListener(new ItemListener(){
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				QCIPattern = (String)QCI.getSelectedItem();
-			}
-		});
-		QCIPanel.add(QCI);
-		QCIPattern = pattern[0];
-		return QCIPanel;
-	}
-	
-	private JLabel createmaxRequestedBandwidthDLLabel()
-	{
-		JLabel label = new JLabel("Max Requested Bandwidth Downlink");
-		return label;
-	}
-	
-	private JPanel createmaxRequestedBandwidthDLPanel()
-	{
-		JPanel textFieldPanel = new JPanel();
-		textFieldPanel.setLayout(new FlowLayout());
-		maxRequestedBandwidthDL = new JTextField();
-		maxRequestedBandwidthDL.setPreferredSize(new Dimension(150,20));
-		textFieldPanel.add(maxRequestedBandwidthDL);
-		return textFieldPanel;
-	}
-	
-	private JLabel createmaxRequestedBandwidthULLabel()
-	{
-		JLabel label = new JLabel("Max Requested Bandwidth Uplink");
-		return label;
-	}
-	
-	private JPanel createmaxRequestedBandwidthULPanel()
-	{
-		JPanel textFieldPanel = new JPanel();
-		textFieldPanel.setLayout(new FlowLayout());
-		maxRequestedBandwidthUL = new JTextField();
-		maxRequestedBandwidthUL.setPreferredSize(new Dimension(150,20));
-		textFieldPanel.add(maxRequestedBandwidthUL);
-		return textFieldPanel;
-	}
-	
-	private JLabel createguaranteedBitrateDLLabel()
-	{
-		JLabel label = new JLabel("Guaranteed Bitrate Downlink");
-		return label;
-	}
-	
-	private JPanel createguaranteedBitrateDLPanel()
-	{
-		JPanel textFieldPanel = new JPanel();
-		textFieldPanel.setLayout(new FlowLayout());
-		guaranteedBitrateDL = new JTextField();
-		guaranteedBitrateDL.setPreferredSize(new Dimension(150,20));
-		textFieldPanel.add(guaranteedBitrateDL);
-		return textFieldPanel;
-	}
-	
-	private JLabel createguaranteedBitrateULLabel()
-	{
-		JLabel label = new JLabel("Guaranteed Bitrate Uplink");
-		return label;
-	}
-	
-	private JPanel createguaranteedBitrateULPanel()
-	{
-		JPanel textFieldPanel = new JPanel();
-		textFieldPanel.setLayout(new FlowLayout());
-		guaranteedBitrateUL = new JTextField();
-		guaranteedBitrateUL.setPreferredSize(new Dimension(150,20));
-		textFieldPanel.add(guaranteedBitrateUL);
-		return textFieldPanel;
-	}
-	
-	private JLabel createbearerIdentifierLabel()
-	{
-		JLabel label = new JLabel("Bearer Identifier");
-		return label;
-	}
-	
-	private JPanel createbearerIdentifierPanel()
-	{
-		JPanel textFieldPanel = new JPanel();
-		textFieldPanel.setLayout(new FlowLayout());
-		bearerIdentifier = new JTextField();
-		bearerIdentifier.setPreferredSize(new Dimension(150,20));
-		textFieldPanel.add(bearerIdentifier);
-		return textFieldPanel;
-	}
-	
-	private JLabel createpriorityLabel()
-	{
-		JLabel label = new JLabel("Priority");
-		return label;
-	}
-	
-	private JPanel createpriorityPanel()
-	{
-		priorityPanel = new JPanel();
-		priorityPanel.setLayout(new FlowLayout());
-		String[] pattern = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
-		priorityPattern = pattern[0];
-		priority = new JComboBox<String>(pattern);
-		priority.setEditable(false);
-		priority.addItemListener(new ItemListener(){
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				priorityPattern = (String)priority.getSelectedItem();
-			}
-		});
-		priorityPanel.add(priority);
-		priorityPattern = pattern[0];
-		return priorityPanel;
-	}
-	
-	private JLabel createpre_emption_capabilityLabel()
-	{
-		JLabel label = new JLabel("Pre Emption Capability");
-		return label;
-	}
-	
-	private JPanel createpre_emption_capabilityPanel()
-	{
-		pre_emption_capabilityPanel = new JPanel();
-		pre_emption_capabilityPanel.setLayout(new FlowLayout());
-		String[] pattern = {"Yes","No"};
-		pre_emption_capabilityPattern = pattern[0];
-		pre_emption_capability = new JComboBox<String>(pattern);
-		pre_emption_capability.setEditable(false);
-		pre_emption_capability.addItemListener(new ItemListener(){
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				pre_emption_capabilityPattern = (String)pre_emption_capability.getSelectedItem();
-			}
-		});
-		pre_emption_capabilityPanel.add(pre_emption_capability);
-		return pre_emption_capabilityPanel;
-	}
-	
-	private JLabel createpre_emption_vulnerabilityLabel()
-	{
-		JLabel label = new JLabel("Pre Emption Vulnerability");
-		return label;
-	}
-	
-	private JPanel createpre_emption_vulnerabilityPanel()
-	{
-		pre_emption_vulnerabilityPanel = new JPanel();
-		pre_emption_vulnerabilityPanel.setLayout(new FlowLayout());
-		String[] pattern = {"Yes","No"};
-		pre_emption_vulnerabilityPattern = pattern[0];
-		pre_emption_vulnerability = new JComboBox<String>(pattern);
-		pre_emption_vulnerability.setEditable(false);
-		pre_emption_vulnerability.addItemListener(new ItemListener(){
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				pre_emption_vulnerabilityPattern = (String)pre_emption_vulnerability.getSelectedItem();
-			}
-		});
-		pre_emption_vulnerabilityPanel.add(pre_emption_vulnerability);
-		return pre_emption_vulnerabilityPanel;
-	}
-	
-	private JPanel createProvisionedRulesPanel()
-	{
-		ProvisionedRulesPanel = new JPanel();
-		ProvisionedRulesPanel.setLayout(new FlowLayout());
-		String[] pattern = {""};
-		ProvisionedRulesPattern = pattern[0];
-		ProvisionedRules = new JComboBox<String>(pattern);
-		ProvisionedRules.setEditable(false);
-		ProvisionedRules.addItemListener(new ItemListener(){
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				ProvisionedRulesPattern = (String)ProvisionedRules.getSelectedItem();
-			}
-		});
-		ProvisionedRulesPanel.add(ProvisionedRules);
-		ProvisionedRulesPattern = pattern[0];
-		return ProvisionedRulesPanel;
-	}
-	
-	private JButton createDodajButton() {
-		DodajButton = new JButton("Dodaj regu³ê");
-		DodajButton.setActionCommand("Dodaj");
-		DodajButton.addActionListener(this);
-		return DodajButton;
-	}
-	
-	private JButton createUsunButton() {
-		UsunButton = new JButton("Usun Regu³ê");
-		UsunButton.setActionCommand("Usuñ");
-		UsunButton.addActionListener(this);
-		return UsunButton;
-	}
-	
-	private JButton createZakonczButton() {
-		ZakonczButton = new JButton("Zakoñcz");
-		ZakonczButton.setActionCommand("Zakoñcz");
-		ZakonczButton.addActionListener(this);
-		return ZakonczButton;
 	}
 
 	@Override
@@ -535,5 +284,4 @@ public class Window extends JPanel implements ActionListener {
 		}
 		else JOptionPane.showMessageDialog(mainframe, "Wyst¹pi³ b³¹d. Spróbuj ponownie");		
 	}
-
 }
