@@ -45,7 +45,6 @@ public class Window extends JPanel implements ActionListener {
 	private JTextField textField_12;
 	
 	private Klient klientA;
-	private Klient klientB;
 	
 	public Window(main main)	{
 		this.mainframe = main;
@@ -203,38 +202,7 @@ public class Window extends JPanel implements ActionListener {
 		textField_4.setBounds(26, 56, 310, 20);
 		textField_4.setColumns(10);
 		
-		/**
-		 * Generacja klucza prywatnego u¿ytkownika B
-		 */
 		JButton btnGeneruj_1 = new JButton("Generuj");
-		btnGeneruj_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				BigInteger n;
-				BigInteger gx;
-				BigInteger gy;
-				ECPunkt punktG;
-				BigInteger h;
-				try {
-					n = new BigInteger(textField.getText());
-					gx = new BigInteger(textField_1.getText());
-					gy = new BigInteger(textField_2.getText());
-					punktG = new ECPunkt(gx, gy);
-					
-					///TODO Zmienic wartoœæ h
-					h = new BigInteger("2");
-					
-					klientB = new Klient(punktG, n, h);
-					klientB.genKluczaPrywatnego(n.bitLength());
-					textField_4.setText(klientB.kluczPrywatny.toString());
-					
-					listModel.addElement("Wygenerowano klucz prywatny U¿ytkownika B.");
-					
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: n, Gx, Gy.", "B³¹d", JOptionPane.ERROR_MESSAGE);
-					e.printStackTrace();
-				}
-			}
-		});
 		btnGeneruj_1.setBounds(257, 27, 78, 23);
 		
 		JLabel lblKluczPublicznybx = new JLabel("Klucz publiczny (Bx = bGx; By = bGy):");

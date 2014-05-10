@@ -42,22 +42,20 @@ public class Klient {
 	}
 	
 	/**
-	 * Konstruktor klasy Klient. Nie zapisuje parametrów algorytmu.
-	 * Pozwala uruchomiæ algorytm z wartoœciami domyœlnymi.
-	 */
-	public Klient() {
-		
-	}
-	
-	/**
 	 * Funkcja generuj¹ca klucz prywatny u¿ytkownika (du¿a liczbê pierwsz¹ 
 	 * o zadanej liczbie bitów)
 	 * @param b liczba bitów
+	 * @return kluczPrywatny klucz prywatny
 	 */
-	public void genKluczaPrywatnego(int b)
+	public BigInteger genKluczaPrywatnego(int b)
 	{
 			SecureRandom random = new SecureRandom();
 			
+			if (n == null) {
+				n = Klient.DEFAULT_N;
+				//poprawic
+				b = n.bitLength();
+			}
 			/**
 			 * Klucz prywatny jest losowany z zakresu [0; n-1]
 			 */
@@ -73,6 +71,8 @@ public class Klient {
 				kluczPrywatny = nowyKlucz;
 				break;
 			}
+			
+			return kluczPrywatny;
 	}
 	
 	/**

@@ -58,6 +58,11 @@ public class Klient {
 	{
 			SecureRandom random = new SecureRandom();
 			
+			if (n == null) {
+				n = Klient.DEFAULT_N;
+				//poprawic
+				b = n.bitLength();
+			}
 			/**
 			 * Klucz prywatny jest losowany z zakresu [0; n-1]
 			 */

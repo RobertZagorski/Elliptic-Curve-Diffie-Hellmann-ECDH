@@ -1,8 +1,6 @@
 package dh;
 import dh.ECPunkt;
-
 import java.math.BigInteger;
-import java.security.SecureRandom;
 /**
  * Klasa klienta odopowiadaj¹ca za generowanie kluczy publicznych 
  * i prywatnych klientów
@@ -18,16 +16,8 @@ public class Klient {
 	BigInteger n;
 	BigInteger h;
 	ECPunkt kluczTajny;
-	
 	/**
-	 * Domyœlna wartoœæ rzêdu punktu G. Jest u¿ywana je¿eli u¿ytkownik nie poda³ inn¹.
-	 * Zestandaryzowana dla krzywej eleptycznej B-163.
-	 */
-	public static final BigInteger DEFAULT_N = 
-			new BigInteger("5846006549323611672814742442876390689256843201587");
-	
-	/**
-	 * Konstuktor klasy Klient pozwalaj¹cy na zapisanie parametrów
+	 * Konstuktor klasy Client pozwalaj¹cy na zapisanie parametrów
 	 * pocz¹tkowych algorytmu obliczania kluczy ECDH
 	 * @param G Generator grupy punktów krzywej eliptycznej
 	 * @param n rz¹d generatora, du¿a liczba pierwsza
@@ -42,37 +32,13 @@ public class Klient {
 	}
 	
 	/**
-	 * Konstruktor klasy Klient. Nie zapisuje parametrów algorytmu.
-	 * Pozwala uruchomiæ algorytm z wartoœciami domyœlnymi.
-	 */
-	public Klient() {
-		
-	}
-	
-	/**
 	 * Funkcja generuj¹ca klucz prywatny u¿ytkownika (du¿a liczbê pierwsz¹ 
 	 * o zadanej liczbie bitów)
 	 * @param b liczba bitów
 	 */
 	public void genKluczaPrywatnego(int b)
 	{
-			SecureRandom random = new SecureRandom();
 			
-			/**
-			 * Klucz prywatny jest losowany z zakresu [0; n-1]
-			 */
-			BigInteger maks = n.subtract(BigInteger.ONE);
-			while (true) {
-				BigInteger nowyKlucz = new BigInteger(b, random);
-				if (nowyKlucz.compareTo(maks) >= 0) {
-					continue;
-				}
-				else if (nowyKlucz.compareTo(BigInteger.ONE) <= 0) {
-					continue;
-				}
-				kluczPrywatny = nowyKlucz;
-				break;
-			}
 	}
 	
 	/**
