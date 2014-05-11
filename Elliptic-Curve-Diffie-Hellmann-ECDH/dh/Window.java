@@ -133,7 +133,7 @@ public class Window extends JPanel implements ActionListener {
 					n = new BigInteger(textField.getText());
 					gx = new BigInteger(textField_1.getText());
 					gy = new BigInteger(textField_2.getText());
-					punktG = new ECPunkt(gx, gy);
+					punktG = new ECPunkt(gx, gy, BigInteger.ONE);
 					
 					///TODO Zmienic wartoœæ h
 					h = new BigInteger("2");
@@ -218,7 +218,7 @@ public class Window extends JPanel implements ActionListener {
 					n = new BigInteger(textField.getText());
 					gx = new BigInteger(textField_1.getText());
 					gy = new BigInteger(textField_2.getText());
-					punktG = new ECPunkt(gx, gy);
+					punktG = new ECPunkt(gx, gy,BigInteger.ONE);
 					
 					///TODO Zmienic wartoœæ h
 					h = new BigInteger("2");
