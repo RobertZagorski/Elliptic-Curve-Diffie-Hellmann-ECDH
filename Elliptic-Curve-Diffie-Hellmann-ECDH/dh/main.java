@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 /**
  * 
@@ -69,20 +70,23 @@ public class main extends JFrame {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+		SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	try {
                     UIManager.setLookAndFeel(
-                                  "javax.swing.plaf.metal.MetalLookAndFeel");
-                                //  "com.sun.java.swing.plaf.motif.MotifLookAndFeel");
-                                //UIManager.getCrossPlatformLookAndFeelClassName());
+                                  "javax.swing.plaf.metal.metallookandfeel");
+                                //  "com.sun.java.swing.plaf.motif.motiflookandfeel");
+                                //uimanager.getcrossplatformlookandfeelclassname());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-				new main("ECDH").setVisible(true);
+				new main("ecdh").setVisible(true);
             }
          });
 		//	start();
+//		ECPunkt punkt = new ECPunkt(new BigInteger("1"),new BigInteger("1"),new BigInteger("6"),new BigInteger("19"));
+//		BigInteger k = new BigInteger("3423423423");
+//		punkt = punkt.wielokrotnoscPunktu(punkt,k);
 	}
 
 }

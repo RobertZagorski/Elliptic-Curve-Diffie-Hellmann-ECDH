@@ -13,12 +13,14 @@ public class ECPunkt {
 	private BigInteger gx;
 	private BigInteger gy;
 	private BigInteger a2;
+	private BigInteger module;
 	
-	public ECPunkt(BigInteger x,BigInteger y,BigInteger a)
+	public ECPunkt(BigInteger x,BigInteger y,BigInteger a,BigInteger mod)
 	{
 		gx=x;
 		gy=y;
 		a2=a;
+		module=mod;
 	}
 	
 	public ECPunkt(ECPunkt punkt)
@@ -26,6 +28,8 @@ public class ECPunkt {
 		gx=punkt.getX();
 		gy=punkt.getY();
 		a2=punkt.a2;
+		module=punkt.getModule();
+		
 	}
 	
 	public BigInteger getX()
@@ -33,19 +37,29 @@ public class ECPunkt {
 		return this.gx;
 	}
 	
-	public BigInteger getY()
-	{
-		return this.gy;
-	}
-	
 	public void setX(BigInteger x)
 	{
 		this.gx=x;
 	}
 	
+	public BigInteger getY()
+	{
+		return this.gy;
+	}
+	
 	public void setY(BigInteger y)
 	{
 		this.gy=y;
+	}
+	
+	public BigInteger getModule()
+	{
+		return this.module;
+	}
+	
+	public void setModule(BigInteger mod)
+	{
+		this.module=mod;
 	}
 	
 	/**
@@ -83,12 +97,10 @@ public class ECPunkt {
 		while (j >= 0)
 		{
 			System.out.println("kInBits.charAt(j)="+kInBits.charAt(j));
-			System.out.println("Na pocz¹tku "+System.currentTimeMillis());
 			if (kInBits.charAt(j) == '0')
 			{
 				Q = podwojeniePunktu(Q);
 				j--;
-				System.out.println("Po podwojeniu "+System.currentTimeMillis());
 			}
 			else
 			{
@@ -101,15 +113,10 @@ public class ECPunkt {
 				{
 					t++;
 				}
-				System.out.println(System.currentTimeMillis());
-				System.out.println("kInBits.subSequence(t,j).toString()= "+kInBits.subSequence(t,j+1).toString());
 				index = Integer.parseInt(kInBits.subSequence(t,j+1).toString(),2);
-				System.out.println("index= "+index);
-				System.out.println("Przed suma punktów "+System.currentTimeMillis());
-				if (index>0) Q = sumaPunktow( wielerazyPunktbinarnie(Q,new BigInteger( Integer.toString((int)Math.pow(2,j-t+1)) ) ) ,pArray[index]);
+				if (index>0) Q = sumaPunktow( wieleRazyPunktbinarnie(Q,new BigInteger( Integer.toString((int)Math.pow(2,j-t+1)) ) ) ,pArray[index]);
 				System.out.println(System.currentTimeMillis());
 				j=t-1;
-				System.out.println(j);
 				System.out.println(Q.getX());
 				System.out.println(Q.getY());
 			}
@@ -125,17 +132,60 @@ public class ECPunkt {
 	 */
 	private ECPunkt podwojeniePunktu (ECPunkt p)
 	{
-		BigInteger lambda = p.getY().divide(p.getX());
-		lambda=lambda.add(p.getX());
-		BigInteger x3 = lambda.multiply(lambda);
+//		long time = System.currentTimeMillis();
+//		System.out.println("[podwojeniepunktu] Punkt startowy: "+System.currentTimeMillis());
+		
+		BigInteger lambda = (p.getY().divide(p.getX())).mod(module);
+		
+//		System.out.println("[podwojeniepunktu]: lambda 1.krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
+		lambda=lambda.add(p.getX()).mod(module);
+		
+//		System.out.println("[podwojeniepunktu]: lambda koniec: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
+		BigInteger x3 = lambda.modPow(BigInteger.ONE.add(BigInteger.ONE), module);//lambda.multiply(lambda).mod(module);
+		
+//		System.out.println("[podwojeniepunktu]: x3 pierwszy krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
 		x3=x3.add(lambda);
-		x3=x3.add(a2);
+		
+//		System.out.println("[podwojeniepunktu]: x3 drugi krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
+		x3=x3.add(a2).mod(module);
+		
+//		System.out.println("[podwojeniepunktu]: x3 trzeci krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
 		BigInteger y3 = p.getX().add(x3);
-		y3=y3.multiply(lambda);
+		
+//		System.out.println("[podwojeniepunktu]: y3 pierwszy krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
+		y3=y3.multiply(lambda).mod(module);
+		
+//		System.out.println("[podwojeniepunktu]: y3 drugi krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
 		y3=y3.add(x3);
-		y3=y3.add(p.getY());
+		
+//		System.out.println("[podwojeniepunktu]: y3 trzeci krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
+		y3=y3.add(p.getY()).mod(module);
+		
+//		System.out.println("[podwojeniepunktu]: y3 czwarty krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
 		p.setX(x3);
 		p.setY(y3);
+		
+//		System.out.println("[podwojeniepunktu]: przypisanie do p; ostatni krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
 		return p;
 	}
 	
@@ -148,43 +198,94 @@ public class ECPunkt {
 	 */
 	private ECPunkt sumaPunktow (ECPunkt p, ECPunkt q)
 	{
-		BigInteger lambda = ( p.getY().add(q.getY()) ).divide( (p.getX().add(q.getX())) );
-		BigInteger x3 = lambda.multiply(lambda);
+//		long time = System.currentTimeMillis();
+//		System.out.println("[sumaPunktow] Punkt startowy: "+System.currentTimeMillis());
+		
+		BigInteger lambda = ( p.getY().add(q.getY()) ).divide( (p.getX().add(q.getX())) ).mod(module);
+		
+//		System.out.println("[sumaPunktow]: lambda: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
+		BigInteger x3 = lambda.multiply(lambda).mod(module);
+		
+//		System.out.println("[sumaPunktow]: x3 pierwszy krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
 		x3=x3.add(lambda);
+		
+//		System.out.println("[sumaPunktow]: x3 drugi krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
 		x3=x3.add(p.getX());
+		
+//		System.out.println("[sumaPunktow]: x3 trzeci krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
 		x3=x3.add(q.getX());
-		x3=x3.add(this.a2);
+		
+//		System.out.println("[sumaPunktow]: x3 czwarty krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
+		x3=x3.add(this.a2).mod(module);
+		
+//		System.out.println("[sumaPunktow]: x3 pi¹ty krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
 		BigInteger y3 = p.getX().add(x3);
-		y3=y3.multiply(lambda);
+		
+//		System.out.println("[sumaPunktow]: y3 pierwszy krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
+		y3=y3.multiply(lambda.mod(module));
+		
+//		System.out.println("[sumaPunktow]: y3 drugi krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
 		y3=y3.add(x3);
-		y3=y3.add(p.getY());
+		
+//		System.out.println("[sumaPunktow]: y3 trzeci krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
+		y3=y3.add(p.getY()).mod(module);
+		
+//		System.out.println("[sumaPunktow]: y3 czwarty krok: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
 		p.setX(x3);
 		p.setY(y3);
+		
+//		System.out.println("[sumaPunktow]: przypisanie do p. Koniec: "+(System.currentTimeMillis()-time));
+//		time = System.currentTimeMillis();
+		
 		return p;
 	}
 	
-	private ECPunkt wieleRazyPunkt(ECPunkt Q,int ile)
+	public ECPunkt wieleRazyPunktbinarnie(ECPunkt P, BigInteger ile)
 	{
-		ECPunkt Qpom = podwojeniePunktu(Q);
-		for (int i=0;i<ile;i++)
-		{
-			Qpom = sumaPunktow(Qpom,Q);
-		}
-		return Qpom;
-	}
-	
-	public ECPunkt wielerazyPunktbinarnie(ECPunkt P, BigInteger ile)
-	{
-		ECPunkt Q = new ECPunkt(BigInteger.ZERO,BigInteger.ZERO,BigInteger.ONE);
+//		long time = System.currentTimeMillis();
+//		System.out.println("[wieleRazyPunktbinarnie] Punkt startowy: "+System.currentTimeMillis());
+		
+		ECPunkt Q = new ECPunkt(BigInteger.ZERO,BigInteger.ZERO,BigInteger.ONE,module);
 		String kInBits = ile.toString(2);
 		for (int j=kInBits.length()-1;j>=0;j--)
 		{
+//			System.out.println("[wieleRazyPunktbinarnie] "+j+" krok pêtli; przed podwojeniem "+(System.currentTimeMillis()-time));
+//			time = System.currentTimeMillis();
+			
 			Q = podwojeniePunktu(P);
+			
+//			System.out.println("[wieleRazyPunktbinarnie] "+j+" krok pêtli; po podwojeniu "+(System.currentTimeMillis()-time));
+//			time = System.currentTimeMillis();
+			
 			if(kInBits.charAt(j) == '1')
 			{
 				Q = sumaPunktow(Q,P);
+				
+//				System.out.println("[wieleRazyPunktbinarnie] "+j+" krok pêtli; suma punktow "+(System.currentTimeMillis()-time));
+//				time = System.currentTimeMillis();
 			}
-			System.out.println(j);
+//			System.out.println("[wieleRazyPunktbinarnie] "+j+" krok pêtli; koniec kroku pêtli "+(System.currentTimeMillis()-time));
+//			time = System.currentTimeMillis();
 		}
 		return Q;
 	}

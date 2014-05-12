@@ -133,10 +133,10 @@ public class Window extends JPanel implements ActionListener {
 					n = new BigInteger(textField.getText());
 					gx = new BigInteger(textField_1.getText());
 					gy = new BigInteger(textField_2.getText());
-					punktG = new ECPunkt(gx, gy, BigInteger.ONE);
-					
 					///TODO Zmienic wartoœæ h
 					h = new BigInteger("2");
+					punktG = new ECPunkt(gx, gy, BigInteger.ONE,new BigInteger(n.multiply(h).toString()));
+
 					
 					klientA = new Klient(punktG, n, h);
 					klientA.genKluczaPrywatnego(n.bitLength());
@@ -218,10 +218,9 @@ public class Window extends JPanel implements ActionListener {
 					n = new BigInteger(textField.getText());
 					gx = new BigInteger(textField_1.getText());
 					gy = new BigInteger(textField_2.getText());
-					punktG = new ECPunkt(gx, gy,BigInteger.ONE);
-					
 					///TODO Zmienic wartoœæ h
 					h = new BigInteger("2");
+					punktG = new ECPunkt(gx, gy, BigInteger.ONE,new BigInteger(n.multiply(h).toString()));
 					
 					klientB = new Klient(punktG, n, h);
 					klientB.genKluczaPrywatnego(n.bitLength());
