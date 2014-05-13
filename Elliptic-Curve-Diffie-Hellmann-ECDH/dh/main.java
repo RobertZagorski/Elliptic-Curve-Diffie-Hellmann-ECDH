@@ -73,10 +73,7 @@ public class main extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	try {
-                    UIManager.setLookAndFeel(
-                                  "javax.swing.plaf.metal.metallookandfeel");
-                                //  "com.sun.java.swing.plaf.motif.motiflookandfeel");
-                                //uimanager.getcrossplatformlookandfeelclassname());
+                    UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

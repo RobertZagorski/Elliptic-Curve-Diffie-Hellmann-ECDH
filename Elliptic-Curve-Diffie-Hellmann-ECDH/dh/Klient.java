@@ -14,6 +14,7 @@ public class Klient {
 
 	BigInteger kluczPrywatny;
 	ECPunkt kluczPubliczny;
+	ECPunkt kluczPublicznyB;
 	ECPunkt G;
 	BigInteger n;
 	BigInteger h;
@@ -80,7 +81,7 @@ public class Klient {
 	 */
 	public void oblKluczaPublicznego()
 	{
-		
+		kluczPubliczny = kluczPubliczny.wielokrotnoscPunktu(G,kluczPrywatny);
 	}
 	
 	/**
@@ -89,7 +90,7 @@ public class Klient {
 	 */
 	public void oblKluczaTajnego()
 	{
-		
+		kluczTajny = kluczTajny.wielokrotnoscPunktu(kluczPublicznyB,kluczPrywatny);
 	}
 	
 	/**
@@ -99,6 +100,15 @@ public class Klient {
 	public void genklucz01()
 	{
 		
+	}
+	
+	/**
+	 * Generacja wspólnego klucza tajnego z klucza prywatnego i klucza 
+	 * publicznego drugiej strony
+	 */
+	public void ustawKluczPublicznyB(ECPunkt kluczB)
+	{
+		this.kluczPublicznyB = kluczB;
 	}
 	
 }
