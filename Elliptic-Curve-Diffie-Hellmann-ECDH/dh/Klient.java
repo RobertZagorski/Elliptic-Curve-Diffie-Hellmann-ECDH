@@ -81,7 +81,6 @@ public class Klient {
 	 */
 	public void oblKluczaPublicznego()
 	{
-		//kluczPubliczny = new ECPunkt(BigInteger.ONE, BigInteger.ONE, BigInteger.ONE, BigInteger.ONE);
 		kluczPubliczny = kluczPubliczny.wielokrotnoscPunktu(G,kluczPrywatny);
 	}
 	
