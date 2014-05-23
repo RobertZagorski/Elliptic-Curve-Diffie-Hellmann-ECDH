@@ -112,10 +112,4 @@ public class Klient {
 	{
 		this.kluczPublicznyB = kluczB;
 	}
-	
-	public ECPunkt getGen()
-	{
-		return G;
-	}
-	
 }

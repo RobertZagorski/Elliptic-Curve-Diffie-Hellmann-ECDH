@@ -181,21 +181,37 @@ public class ECPunkt {
 		this.a6=a6;
 	}
 	
+	/**
+	 * Funkcja zwracaj¹ca maksymaln¹ liczbê bitów cia³a binarnego
+	 * @return liczba bitów cia³a binarnego
+	 */
 	public int getm()
 	{
 		return this.m;
 	}
 	
+	/**
+	 * Funkcja ustalaj¹ca maksymaln¹ liczbê bitów cia³a binarnego
+	 * @param m liczba bitów cia³a binarnego
+	 */
 	public void setm(int m)
 	{
 		this.m=m;
 	}
 	
+	/**
+	 * Funkcja zwracaj¹ca wyk³adnik œrodkowego wyrazu wielomianu modulo
+	 * @return wyk³adnik œrodkowego wyrazu wielomianu modulo
+	 */
 	public int getk()
 	{
 		return this.k;
 	}
 	
+	/**
+	 * Funkcja ustalaj¹ca wyk³adnik œrodkowego wyrazu wielomianu modulo
+	 * @param k wyk³adnik œrodkowego wyrazu wielomianu modulo
+	 */
 	public void setk(int k)
 	{
 		this.k=k;

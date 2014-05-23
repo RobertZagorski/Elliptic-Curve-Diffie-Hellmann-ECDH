@@ -273,7 +273,7 @@ public class Window extends JPanel implements ActionListener {
 										 gx,
 										 gy);
 					
-					klientB = new Klient(klientA.getGen(), n, h);
+					klientB = new Klient(klientA.G, n, h);
 					klientB.genKluczaPrywatnego(n.bitLength());
 					textField_4.setText(klientB.kluczPrywatny.toString());
 					
