@@ -20,10 +20,20 @@ public class ECPunkt {
 	org.bouncycastle.math.ec.ECCurve curve;
 	org.bouncycastle.math.ec.ECPoint.F2m point;
 	
-	public ECPunkt(int M,int K,BigInteger A2, BigInteger A6,BigInteger x,BigInteger y)
+	/***
+	 * Konstruktor punktu klasy ECPunkt. W celu wygenerowania punktu nale¿y podaæ równie¿
+	 * parametry cia³a binarnego, do którego punkt ma nale¿eæ
+	 * @param M d³ugoœæ bitowa cia³a binarnego 
+	 * @param K wyk³adnik œrodkowy wielomianu modulo w ciele (x^m + x^k + 1)
+	 * @param A2 parametr krzywej eliptycznej
+	 * @param A6 parametr krzywej eliptycznej - wolny wyraz
+	 * @param xG wspó³rzêdna horyzontalna generatora liczb w ciele 
+	 * @param yG wspó³rzêdna wertykalna generatora liczb w ciele
+	 */
+	public ECPunkt(int M,int K,BigInteger A2, BigInteger A6,BigInteger xG,BigInteger yG)
 	{
-		gx=x;
-		gy=y;
+		gx=xG;
+		gy=yG;
 		a2=A2;
 		a6=A6;
 		m=M;
@@ -33,12 +43,16 @@ public class ECPunkt {
 		point = (org.bouncycastle.math.ec.ECPoint.F2m) curve.createPoint(gx,gy,false);
 	}
 	
+	/**
+	 * Konstruktor kopiuj¹cy klasy ECPunkt
+	 * @param Punkt punkt nale¿¹cy do tej samej krzywej eliptycznej, który nale¿y skopiowaæ
+	 */
 	public ECPunkt(ECPunkt Punkt)
 	{
-		gx=new BigInteger(Punkt.getX().toByteArray());
-		gy=new BigInteger(Punkt.getY().toByteArray());
-		a2=new BigInteger(Punkt.getA2().toByteArray());
-		a6=new BigInteger(Punkt.getA6().toByteArray());
+		gx=Punkt.getX();
+		gy=Punkt.getY();
+		a2=Punkt.getA2();
+		a6=Punkt.getA6();
 		m=Punkt.getm();
 		k=Punkt.getk();
 		java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider()); 
@@ -52,7 +66,7 @@ public class ECPunkt {
 	 * @param p punkt, który nale¿y podwoiæ
 	 * @return wynik operacji podwajania punktu
 	 */
-	public ECPunkt podwojeniePunktu (ECPunkt P)
+	private ECPunkt podwojeniePunktu (ECPunkt P)
 	{
 		ECPunkt Q = new ECPunkt(P);
 		Q.setPoint((org.bouncycastle.math.ec.ECPoint.F2m)Q.getPoint().twice());
@@ -66,18 +80,26 @@ public class ECPunkt {
 	 * @param q drugi punkt
 	 * @return punkt bêd¹cy sum¹ dwóch punktów krzywej eliptycznej
 	 */
-	public ECPunkt sumaPunktow (ECPunkt P,ECPunkt Q)
+	private ECPunkt sumaPunktow (ECPunkt P,ECPunkt Q)
 	{
 		ECPunkt wynik = new ECPunkt(P);
 		wynik.setPoint((org.bouncycastle.math.ec.ECPoint.F2m)P.getPoint().add(Q.getPoint()));
 		return wynik;
 	}
 	
-	public ECPunkt wielokrotnoscPunktu(ECPunkt P, BigInteger ile)
+	/**
+	 * Obliczenie wielokrotnoœci punktu krzywej eliptycznej metod¹ 
+	 * przesuwaj¹cych siê okienek (sliding windows)
+	 * Q = [k]P 
+	 * @param P punkt startowy obliczeñ
+	 * @param k liczba, o jak¹ punkt ma byæ zwielokrotniony
+	 * @return zwieloktrotniony punkt
+	 */
+	public ECPunkt wielokrotnoscPunktu(ECPunkt P, BigInteger k)
 	{
 		ECPunkt Q = new ECPunkt(P);
 		Q.setPoint((org.bouncycastle.math.ec.ECPoint.F2m)curve.getInfinity());
-		String kInBits = ile.toString(2);
+		String kInBits = k.toString(2);
 		for (int j=kInBits.length()-1;j>=0;j--)
 		{
 			Q = podwojeniePunktu(Q);
@@ -87,41 +109,73 @@ public class ECPunkt {
 		return Q;
 	}
 	
+	/**
+	 * Funkcja zwracaj¹ca wspó³rzêdn¹ horyzontaln¹ generatora liczb w ciele binarnym
+	 * @return wspó³rzêdna horyzontalna generatora liczb
+	 */
 	public BigInteger getX()
 	{
 		return this.gx;
 	}
 	
+	/**
+	 * Funkcja ustalaj¹ca wartoœæ wspó³rzêdnej horyzontaln¹ generatora liczb w ciele binarnym
+	 * @param x liczba, która ma byæ now¹ wspó³rzêdn¹ horyzontaln¹ generatora liczb
+	 */
 	public void setX(BigInteger x)
 	{
 		this.gx=x;
 	}
-	
+
+	/**
+	 * Funkcja zwracaj¹ca wspó³rzêdn¹ horyzontaln¹ generatora liczb w ciele binarnym
+	 * @return wspó³rzêdna horyzontalna generatora liczb
+	 */
 	public BigInteger getY()
 	{
 		return this.gy;
 	}
 	
+	/**
+	 * Funkcja ustalaj¹ca wartoœæ wspó³rzêdnej wertykaln¹ generatora liczb w ciele binarnym
+	 * @param x liczba, która ma byæ now¹ wspó³rzêdn¹ wertykaln¹ generatora liczb
+	 */
 	public void setY(BigInteger y)
 	{
 		this.gy=y;
 	}
 	
+	/**
+	 * Fukcja zwracaj¹ca parametr a2 krzywej eliptycznej
+	 * @return parametr a2 krzywej eliptycznej
+	 */
 	public BigInteger getA2()
 	{
 		return this.a2;
 	}
 	
+	/**
+	 * Funkcja ustalaj¹ca wartoœæ parametru a2 krzywej eliptycznej
+	 * @param a2 nowa wartoœæ parametru a2 krzywej eliptycznej
+	 */
 	public void setA2(BigInteger a2)
 	{
 		this.a2=a2;
 	}
 	
+	/**
+	 * Fukcja zwracaj¹ca parametr a2 krzywej eliptycznej
+	 * @return parametr a2 krzywej eliptycznej
+	 */
 	public BigInteger getA6()
 	{
 		return this.a6;
 	}
 	
+	/**
+	 * Funkcja ustalaj¹ca wartoœæ parametru a6 krzywej eliptycznej
+	 * @param a2 nowa wartoœæ parametru a6 krzywej eliptycznej
+	 */
 	public void setA6(BigInteger a6)
 	{
 		this.a6=a6;
@@ -147,21 +201,37 @@ public class ECPunkt {
 		this.k=k;
 	}
 	
+	/**
+	 * Funkcja zwracaj¹ca obiekt krzywej eliptycznej
+	 * @return obiekt krzywej eliptycznej
+	 */
 	public org.bouncycastle.math.ec.ECCurve getCurve()
 	{
 		return this.curve;
 	}
 	
+	/**
+	 * Funkcja ustalaj¹ca obiekt krzywej eliptycznej 
+	 * @param curve nowa krzywa elityczna
+	 */
 	public void setCurve(org.bouncycastle.math.ec.ECCurve curve)
 	{
 		this.curve=curve;
 	}
 	
+	/**
+	 * Funkcja zwracaj¹ca punkt krzywej eliptycznej nale¿¹cy do obiektu tej klasy
+	 * @return punkt krzywej eliptycznej
+	 */
 	public org.bouncycastle.math.ec.ECPoint.F2m getPoint()
 	{
 		return this.point;
 	}
 	
+	/**
+	 * Funkcja ustalaj¹ca wartoœæ punktu krzywej elitycznej tego obiektu klasy ECPunkt
+	 * @param point2 nowy punkt
+	 */
 	public void setPoint(org.bouncycastle.math.ec.ECPoint.F2m point2)
 	{
 		point=point2;

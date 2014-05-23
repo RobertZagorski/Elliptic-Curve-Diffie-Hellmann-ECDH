@@ -46,6 +46,7 @@ public class Window extends JPanel implements ActionListener {
 	
 	private Klient klientA;
 	private Klient klientB;
+	private JTextField textField_13;
 	
 	public Window(main main)	{
 		this.mainframe = main;
@@ -124,34 +125,35 @@ public class Window extends JPanel implements ActionListener {
 		JButton btnGeneruj = new JButton("Generuj");
 		btnGeneruj.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				int m = 239;
+				int k = 36;
 				BigInteger n;
 				BigInteger gx;
 				BigInteger gy;
 				ECPunkt punktG;
+				BigInteger a2;
 				BigInteger h;
 				try {
 					n = new BigInteger(textField.getText());
 					gx = new BigInteger(textField_1.getText());
 					gy = new BigInteger(textField_2.getText());
+					a2 = new BigInteger(textField_13.getText(),16);
 					///TODO Zmienic wartoœæ h
 					h = new BigInteger("2");
-					//TODO Trzeba zmieniæ
-					//punktG = new ECPunkt(gx, gy, BigInteger.ONE,new BigInteger(n.multiply(h).toString()));
-					punktG = new ECPunkt(239,36,
-							new BigInteger("32010857077C5431123A46B808906756F543423E8D27877578125778AC76", 16),
-							new BigInteger("790408F2EEDAF392B012EDEFB3392F30F4327C0CA3F31FC383C422AA8C16", 16),
-							new BigInteger("604399942292681484344954722575621779974285614280181861075722134673877277"),
-							new BigInteger("675317841546748718168801678160111506702021297638836949018311255830651653"));
+					punktG = new ECPunkt(m,k,
+										 a2,
+										 new BigInteger("790408F2EEDAF392B012EDEFB3392F30F4327C0CA3F31FC383C422AA8C16", 16), // a6
+										 gx,
+										 gy);
 
-					
 					klientA = new Klient(punktG, n, h);
 					klientA.genKluczaPrywatnego(n.bitLength());
 					textField_3.setText(klientA.kluczPrywatny.toString());
 					
-					listModel.addElement("Wygenerowano klucz prywatny U¿ytkownika A.");
+					listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika A.");
 					
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: n, Gx, Gy.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: n, Gx, Gy, a2.", "B³¹d", JOptionPane.ERROR_MESSAGE);
 					e.printStackTrace();
 				}
 			}
@@ -171,7 +173,23 @@ public class Window extends JPanel implements ActionListener {
 		textField_6.setBounds(26, 149, 310, 20);
 		textField_6.setColumns(10);
 		
+		/**
+		 * Obliczenie klucza publicznego u¿ytkownika A
+		 */
 		JButton btnOblicz = new JButton("Oblicz");
+		btnOblicz.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (klientA == null || klientA.G == null || klientA.kluczPrywatny == null) {
+					JOptionPane.showMessageDialog(null, "Nale¿y wygenerowaæ klucz prywatny u¿ytkownika A.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					klientB.ustawKluczPublicznyB(klientA.oblKluczaPublicznego());
+					textField_5.setText(klientA.kluczPubliczny.getPoint().getX().toBigInteger().toString());
+					textField_6.setText(klientA.kluczPubliczny.getPoint().getY().toBigInteger().toString());
+					listModel.addElement("Obliczono klucz publiczny u¿ytkownika A");
+				}
+			}
+		});
 		btnOblicz.setBounds(259, 94, 78, 23);
 		panel_2.setLayout(null);
 		panel_2.add(textField_3);
@@ -187,7 +205,26 @@ public class Window extends JPanel implements ActionListener {
 		lblKluczTajnysx.setBounds(26, 194, 225, 16);
 		panel_2.add(lblKluczTajnysx);
 		
+		/**
+		 * Obliczenie klucza tajnego u¿ytkownika A
+		 */
 		JButton btnOblicz_2 = new JButton("Oblicz");
+		btnOblicz_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (klientA == null || klientA.kluczPrywatny == null) {
+					JOptionPane.showMessageDialog(null, "Nale¿y wygenerowaæ klucz prywatny u¿ytkownika A.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+				}
+				else if (klientA.kluczPublicznyB == null) {
+					JOptionPane.showMessageDialog(null, "Nale¿y obliczyæ klucz publiczny u¿ytkownika B.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					klientA.oblKluczaTajnego();
+					textField_9.setText(klientA.kluczTajny.getPoint().getX().toBigInteger().toString());
+					textField_10.setText(klientA.kluczTajny.getPoint().getY().toBigInteger().toString());
+					listModel.addElement("Obliczono klucz tajny u¿ytkownika A");
+				}
+			}
+		});
 		btnOblicz_2.setBounds(258, 192, 78, 23);
 		panel_2.add(btnOblicz_2);
 		
@@ -219,29 +256,31 @@ public class Window extends JPanel implements ActionListener {
 				BigInteger gx;
 				BigInteger gy;
 				ECPunkt punktG;
+				BigInteger a2;
 				BigInteger h;
 				try {
+					int m = 239;
+					int k = 36;
 					n = new BigInteger(textField.getText());
 					gx = new BigInteger(textField_1.getText());
 					gy = new BigInteger(textField_2.getText());
+					a2 = new BigInteger(textField_13.getText(),16);
 					///TODO Zmienic wartoœæ h
 					h = new BigInteger("2");
-					//TODO Trzeba zmieniæ
-					//punktG = new ECPunkt(gx, gy, BigInteger.ONE,new BigInteger(n.multiply(h).toString()));
-					punktG = new ECPunkt(239,36,
-							new BigInteger("32010857077C5431123A46B808906756F543423E8D27877578125778AC76", 16),
-							new BigInteger("790408F2EEDAF392B012EDEFB3392F30F4327C0CA3F31FC383C422AA8C16", 16),
-							new BigInteger("604399942292681484344954722575621779974285614280181861075722134673877277"),
-							new BigInteger("675317841546748718168801678160111506702021297638836949018311255830651653"));
+					punktG = new ECPunkt(m,k,
+										 a2,
+										 new BigInteger("790408F2EEDAF392B012EDEFB3392F30F4327C0CA3F31FC383C422AA8C16", 16), // a6
+										 gx,
+										 gy);
 					
-					klientB = new Klient(punktG, n, h);
+					klientB = new Klient(klientA.getGen(), n, h);
 					klientB.genKluczaPrywatnego(n.bitLength());
 					textField_4.setText(klientB.kluczPrywatny.toString());
 					
-					listModel.addElement("Wygenerowano klucz prywatny U¿ytkownika B.");
+					listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika B.");
 					
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: n, Gx, Gy.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: n, Gx, Gy, a2.", "B³¹d", JOptionPane.ERROR_MESSAGE);
 					e.printStackTrace();
 				}
 			}
@@ -260,7 +299,23 @@ public class Window extends JPanel implements ActionListener {
 		textField_8.setBounds(26, 149, 310, 20);
 		textField_8.setColumns(10);
 		
+		/**
+		 * Obbliczenie klucza publicznego u¿ytkownika B
+		 */
 		JButton btnOblicz_1 = new JButton("Oblicz");
+		btnOblicz_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (klientB == null || klientB.G == null || klientB.kluczPrywatny == null) {
+					JOptionPane.showMessageDialog(null, "Nale¿y wygenerowaæ klucz prywatny u¿ytkownika B.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					klientA.ustawKluczPublicznyB(klientB.oblKluczaPublicznego());
+					textField_7.setText(klientB.kluczPubliczny.getPoint().getX().toBigInteger().toString());
+					textField_8.setText(klientB.kluczPubliczny.getPoint().getY().toBigInteger().toString());
+					listModel.addElement("Obliczono klucz publiczny u¿ytkownika B");
+				}
+			}
+		});
 		btnOblicz_1.setBounds(257, 94, 78, 23);
 		panel_3.setLayout(null);
 		panel_3.add(textField_8);
@@ -276,7 +331,26 @@ public class Window extends JPanel implements ActionListener {
 		lblKluczTajnysx_1.setBounds(26, 194, 225, 16);
 		panel_3.add(lblKluczTajnysx_1);
 		
+		/**
+		 * Obliczenie klucza tajnego u¿ytkownika B
+		 */
 		JButton btnNewButton = new JButton("Oblicz");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (klientB == null || klientB.kluczPrywatny == null) {
+					JOptionPane.showMessageDialog(null, "Nale¿y wygenerowaæ klucz prywatny u¿ytkownika B.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+				}
+				else if (klientB.kluczPublicznyB == null) {
+					JOptionPane.showMessageDialog(null, "Nale¿y obliczyæ klucz publiczny u¿ytkownika A.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					klientB.oblKluczaTajnego();
+					textField_11.setText(klientB.kluczTajny.getPoint().getX().toBigInteger().toString());
+					textField_12.setText(klientB.kluczTajny.getPoint().getY().toBigInteger().toString());
+					listModel.addElement("Obliczono klucz tajny u¿ytkownika B");
+				}
+			}
+		});
 		btnNewButton.setBounds(258, 192, 78, 23);
 		panel_3.add(btnNewButton);
 		
@@ -308,6 +382,12 @@ public class Window extends JPanel implements ActionListener {
 		
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
+		
+		textField_13 = new JTextField();
+		textField_13.setColumns(10);
+		
+		JLabel lblA = new JLabel("a2:");
+		lblA.setFont(new Font("Tahoma", Font.ITALIC, 13));
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
@@ -315,17 +395,23 @@ public class Window extends JPanel implements ActionListener {
 					.addGap(19)
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
-							.addComponent(lblGy)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
-						.addGroup(gl_panel.createSequentialGroup()
 							.addComponent(lblGx)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
 						.addGroup(gl_panel.createSequentialGroup()
+							.addGap(6)
 							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(textField, GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textField, GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblA)
+								.addComponent(lblGy))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+								.addComponent(textField_13, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+								.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
@@ -333,17 +419,21 @@ public class Window extends JPanel implements ActionListener {
 				.addGroup(gl_panel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel))
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblGx)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblGx))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblGy)
 						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(46, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textField_13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblA))
+					.addContainerGap(20, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
 		setLayout(groupLayout);

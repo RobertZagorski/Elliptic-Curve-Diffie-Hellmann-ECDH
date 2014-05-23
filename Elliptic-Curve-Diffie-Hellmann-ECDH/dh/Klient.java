@@ -40,6 +40,7 @@ public class Klient {
 		this.G=G;
 		this.n=n;
 		this.h=h;
+		
 	}
 	
 	/**
@@ -79,9 +80,10 @@ public class Klient {
 	/**
 	 * Generacja klucza publicznego z klucza prywatnego i generatora
 	 */
-	public void oblKluczaPublicznego()
+	public ECPunkt oblKluczaPublicznego()
 	{
-		kluczPubliczny = kluczPubliczny.wielokrotnoscPunktu(G,kluczPrywatny);
+		kluczPubliczny = G.wielokrotnoscPunktu(G,kluczPrywatny);
+		return kluczPubliczny;
 	}
 	
 	/**
@@ -90,7 +92,7 @@ public class Klient {
 	 */
 	public void oblKluczaTajnego()
 	{
-		kluczTajny = kluczTajny.wielokrotnoscPunktu(kluczPublicznyB,kluczPrywatny);
+		kluczTajny = G.wielokrotnoscPunktu(kluczPublicznyB,kluczPrywatny);
 	}
 	
 	/**
@@ -109,6 +111,11 @@ public class Klient {
 	public void ustawKluczPublicznyB(ECPunkt kluczB)
 	{
 		this.kluczPublicznyB = kluczB;
+	}
+	
+	public ECPunkt getGen()
+	{
+		return G;
 	}
 	
 }
