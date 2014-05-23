@@ -132,17 +132,19 @@ public class Window extends JPanel implements ActionListener {
 				BigInteger gy;
 				ECPunkt punktG;
 				BigInteger a2;
+				BigInteger a6;
 				BigInteger h;
 				try {
-					n = new BigInteger(textField.getText());
-					gx = new BigInteger(textField_1.getText());
-					gy = new BigInteger(textField_2.getText());
-					a2 = new BigInteger(textField_13.getText(),16);
+					n = new BigInteger(textField.getText(), 16);
+					gx = new BigInteger(textField_1.getText(), 16);
+					gy = new BigInteger(textField_2.getText(), 16);
+					a2 = new BigInteger(textField_13.getText(), 16);
+					a6 = new BigInteger(textField_13.getText(), 16);
 					///TODO Zmienic warto쒏 h
 					h = new BigInteger("2");
 					punktG = new ECPunkt(m,k,
 										 a2,
-										 new BigInteger("790408F2EEDAF392B012EDEFB3392F30F4327C0CA3F31FC383C422AA8C16", 16), // a6
+										 a6,
 										 gx,
 										 gy);
 
@@ -187,6 +189,7 @@ public class Window extends JPanel implements ActionListener {
 					textField_5.setText(klientA.kluczPubliczny.getPoint().getX().toBigInteger().toString());
 					textField_6.setText(klientA.kluczPubliczny.getPoint().getY().toBigInteger().toString());
 					listModel.addElement("Obliczono klucz publiczny u퓓tkownika A");
+					listModel.addElement("Przekazano klucz publiczny u퓓tkownika A stronie B");
 				}
 			}
 		});
@@ -257,19 +260,21 @@ public class Window extends JPanel implements ActionListener {
 				BigInteger gy;
 				ECPunkt punktG;
 				BigInteger a2;
+				BigInteger a6;
 				BigInteger h;
 				try {
 					int m = 239;
 					int k = 36;
-					n = new BigInteger(textField.getText());
-					gx = new BigInteger(textField_1.getText());
-					gy = new BigInteger(textField_2.getText());
-					a2 = new BigInteger(textField_13.getText(),16);
+					n = new BigInteger(textField.getText(), 16);
+					gx = new BigInteger(textField_1.getText(), 16);
+					gy = new BigInteger(textField_2.getText(), 16);
+					a2 = new BigInteger(textField_13.getText(), 16);
+					a6 = new BigInteger(textField_13.getText(), 16);
 					///TODO Zmienic warto쒏 h
 					h = new BigInteger("2");
 					punktG = new ECPunkt(m,k,
 										 a2,
-										 new BigInteger("790408F2EEDAF392B012EDEFB3392F30F4327C0CA3F31FC383C422AA8C16", 16), // a6
+										 a6,
 										 gx,
 										 gy);
 					
@@ -313,6 +318,7 @@ public class Window extends JPanel implements ActionListener {
 					textField_7.setText(klientB.kluczPubliczny.getPoint().getX().toBigInteger().toString());
 					textField_8.setText(klientB.kluczPubliczny.getPoint().getY().toBigInteger().toString());
 					listModel.addElement("Obliczono klucz publiczny u퓓tkownika B");
+					listModel.addElement("Przekazano klucz publiczny u퓓tkownika B stronie A");
 				}
 			}
 		});
