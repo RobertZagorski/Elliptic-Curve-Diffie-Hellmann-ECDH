@@ -135,7 +135,13 @@ public class Window extends JPanel implements ActionListener {
 					gy = new BigInteger(textField_2.getText());
 					///TODO Zmienic wartoœæ h
 					h = new BigInteger("2");
-					punktG = new ECPunkt(gx, gy, BigInteger.ONE,new BigInteger(n.multiply(h).toString()));
+					//TODO Trzeba zmieniæ
+					//punktG = new ECPunkt(gx, gy, BigInteger.ONE,new BigInteger(n.multiply(h).toString()));
+					punktG = new ECPunkt(239,36,
+							new BigInteger("32010857077C5431123A46B808906756F543423E8D27877578125778AC76", 16),
+							new BigInteger("790408F2EEDAF392B012EDEFB3392F30F4327C0CA3F31FC383C422AA8C16", 16),
+							new BigInteger("604399942292681484344954722575621779974285614280181861075722134673877277"),
+							new BigInteger("675317841546748718168801678160111506702021297638836949018311255830651653"));
 
 					
 					klientA = new Klient(punktG, n, h);
@@ -220,7 +226,13 @@ public class Window extends JPanel implements ActionListener {
 					gy = new BigInteger(textField_2.getText());
 					///TODO Zmienic wartoœæ h
 					h = new BigInteger("2");
-					punktG = new ECPunkt(gx, gy, BigInteger.ONE,new BigInteger(n.multiply(h).toString()));
+					//TODO Trzeba zmieniæ
+					//punktG = new ECPunkt(gx, gy, BigInteger.ONE,new BigInteger(n.multiply(h).toString()));
+					punktG = new ECPunkt(239,36,
+							new BigInteger("32010857077C5431123A46B808906756F543423E8D27877578125778AC76", 16),
+							new BigInteger("790408F2EEDAF392B012EDEFB3392F30F4327C0CA3F31FC383C422AA8C16", 16),
+							new BigInteger("604399942292681484344954722575621779974285614280181861075722134673877277"),
+							new BigInteger("675317841546748718168801678160111506702021297638836949018311255830651653"));
 					
 					klientB = new Klient(punktG, n, h);
 					klientB.genKluczaPrywatnego(n.bitLength());
