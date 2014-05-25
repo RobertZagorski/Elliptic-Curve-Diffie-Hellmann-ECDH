@@ -47,6 +47,8 @@ public class Window extends JPanel implements ActionListener {
 	private Klient klientA;
 	private Klient klientB;
 	private JTextField textField_13;
+	private JTextField textField_14;
+	private JTextField textField_15;
 	
 	public Window(main main)	{
 		this.mainframe = main;
@@ -125,9 +127,9 @@ public class Window extends JPanel implements ActionListener {
 		JButton btnGeneruj = new JButton("Generuj");
 		btnGeneruj.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int m = 239;
-				int k = 36;
-				BigInteger n;
+				int m;
+				int k;
+				//BigInteger n;
 				BigInteger gx;
 				BigInteger gy;
 				ECPunkt punktG;
@@ -135,11 +137,13 @@ public class Window extends JPanel implements ActionListener {
 				BigInteger a6;
 				BigInteger h;
 				try {
-					n = new BigInteger(textField.getText(), 16);
+					m = new Integer(textField_14.getText());
+					k = new Integer(textField.getText());
+					//n = new BigInteger(textField.getText(), 16);
 					gx = new BigInteger(textField_1.getText(), 16);
 					gy = new BigInteger(textField_2.getText(), 16);
 					a2 = new BigInteger(textField_13.getText(), 16);
-					a6 = new BigInteger(textField_13.getText(), 16);
+					a6 = new BigInteger(textField_15.getText(), 16);
 					///TODO Zmienic wartoœæ h
 					h = new BigInteger("2");
 					punktG = new ECPunkt(m,k,
@@ -148,14 +152,14 @@ public class Window extends JPanel implements ActionListener {
 										 gx,
 										 gy);
 
-					klientA = new Klient(punktG, n, h);
-					klientA.genKluczaPrywatnego(n.bitLength());
+					klientA = new Klient(punktG, h);
+					klientA.genKluczaPrywatnego(m);
 					textField_3.setText(klientA.kluczPrywatny.toString());
 					
 					listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika A.");
 					
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: n, Gx, Gy, a2.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: m, k, Gx, Gy, a2 i a6.", "B³¹d", JOptionPane.ERROR_MESSAGE);
 					e.printStackTrace();
 				}
 			}
@@ -255,7 +259,9 @@ public class Window extends JPanel implements ActionListener {
 		JButton btnGeneruj_1 = new JButton("Generuj");
 		btnGeneruj_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				BigInteger n;
+				int m;
+				int k;
+				//BigInteger n;
 				BigInteger gx;
 				BigInteger gy;
 				ECPunkt punktG;
@@ -263,13 +269,13 @@ public class Window extends JPanel implements ActionListener {
 				BigInteger a6;
 				BigInteger h;
 				try {
-					int m = 239;
-					int k = 36;
-					n = new BigInteger(textField.getText(), 16);
+					m = new Integer(textField_14.getText());
+					k = new Integer(textField.getText());
+					//n = new BigInteger(textField.getText(), 16);
 					gx = new BigInteger(textField_1.getText(), 16);
 					gy = new BigInteger(textField_2.getText(), 16);
 					a2 = new BigInteger(textField_13.getText(), 16);
-					a6 = new BigInteger(textField_13.getText(), 16);
+					a6 = new BigInteger(textField_15.getText(), 16);
 					///TODO Zmienic wartoœæ h
 					h = new BigInteger("2");
 					punktG = new ECPunkt(m,k,
@@ -278,14 +284,14 @@ public class Window extends JPanel implements ActionListener {
 										 gx,
 										 gy);
 					
-					klientB = new Klient(klientA.G, n, h);
-					klientB.genKluczaPrywatnego(n.bitLength());
+					klientB = new Klient(klientA.G, h);
+					klientB.genKluczaPrywatnego(m);
 					textField_4.setText(klientB.kluczPrywatny.toString());
 					
 					listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika B.");
 					
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: n, Gx, Gy, a2.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: m, k, Gx, Gy, a2 i a6.", "B³¹d", JOptionPane.ERROR_MESSAGE);
 					e.printStackTrace();
 				}
 			}
@@ -370,7 +376,7 @@ public class Window extends JPanel implements ActionListener {
 		panel_3.add(textField_12);
 		textField_12.setColumns(10);
 		
-		JLabel lblNewLabel = new JLabel("n: ");
+		JLabel lblNewLabel = new JLabel("k: ");
 		lblNewLabel.setFont(new Font("Tahoma", Font.ITALIC, 13));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
@@ -394,39 +400,63 @@ public class Window extends JPanel implements ActionListener {
 		
 		JLabel lblA = new JLabel("a2:");
 		lblA.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		
+		JLabel lblNewLabel_1 = new JLabel("m:");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		
+		textField_14 = new JTextField();
+		textField_14.setColumns(10);
+		
+		textField_15 = new JTextField();
+		textField_15.setColumns(10);
+		
+		JLabel lblA_1 = new JLabel("a6:");
+		lblA_1.setFont(new Font("Tahoma", Font.ITALIC, 13));
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(19)
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblGx)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addGap(6)
-							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(textField, GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lblA)
-								.addComponent(lblGy))
-							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGap(19)
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-								.addComponent(textField_13, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-								.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))))
+								.addGroup(gl_panel.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lblGx)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
+								.addGroup(gl_panel.createSequentialGroup()
+									.addGap(6)
+									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(textField, GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE)
+									.addGap(29)
+									.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(textField_14, GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE))
+								.addGroup(gl_panel.createSequentialGroup()
+									.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+										.addComponent(lblA)
+										.addComponent(lblGy))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+										.addComponent(textField_13, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+										.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)))))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addGap(23)
+							.addComponent(lblA_1, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textField_15, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel))
+						.addComponent(lblNewLabel)
+						.addComponent(lblNewLabel_1)
+						.addComponent(textField_14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -439,7 +469,11 @@ public class Window extends JPanel implements ActionListener {
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(textField_13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblA))
-					.addContainerGap(20, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textField_15, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblA_1))
+					.addContainerGap())
 		);
 		panel.setLayout(gl_panel);
 		setLayout(groupLayout);

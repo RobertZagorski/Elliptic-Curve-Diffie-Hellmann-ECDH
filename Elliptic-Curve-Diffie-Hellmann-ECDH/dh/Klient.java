@@ -16,7 +16,7 @@ public class Klient {
 	ECPunkt kluczPubliczny;
 	ECPunkt kluczPublicznyB;
 	ECPunkt G;
-	BigInteger n;
+	//BigInteger n;
 	BigInteger h;
 	ECPunkt kluczTajny;
 	
@@ -35,10 +35,9 @@ public class Klient {
 	 * @param h liczba warstw podgrupy
 	 * Liczba punktów generowanych przez dany generator jest równa n*h
 	 */
-	public Klient(ECPunkt G,BigInteger n,BigInteger h)
+	public Klient(ECPunkt G,BigInteger h)
 	{
 		this.G=G;
-		this.n=n;
 		this.h=h;
 		
 	}
@@ -63,13 +62,13 @@ public class Klient {
 			/**
 			 * Klucz prywatny jest losowany z zakresu [0; n-1]
 			 */
-			BigInteger maks = n.subtract(BigInteger.ONE);
+			//BigInteger maks = n.subtract(BigInteger.ONE);
 			while (true) {
 				BigInteger nowyKlucz = new BigInteger(b, random);
-				if (nowyKlucz.compareTo(maks) >= 0) {
+				/*if (nowyKlucz.compareTo(maks) >= 0) {
 					continue;
-				}
-				else if (nowyKlucz.compareTo(BigInteger.ONE) <= 0) {
+				}*/
+				if (nowyKlucz.compareTo(BigInteger.ONE) <= 0) {
 					continue;
 				}
 				kluczPrywatny = nowyKlucz;
