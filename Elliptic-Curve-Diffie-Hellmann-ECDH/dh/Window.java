@@ -1,8 +1,5 @@
 package dh;
 
-import dh.Klient;
-import dh.ECPunkt;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -29,7 +26,7 @@ import javax.swing.JScrollPane;
 public class Window extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	main mainframe;
+	mainFrame mainframe;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
@@ -50,7 +47,7 @@ public class Window extends JPanel implements ActionListener {
 	private JTextField textField_14;
 	private JTextField textField_15;
 	
-	public Window(main main)	{
+	public Window(mainFrame main)	{
 		this.mainframe = main;
 		this.requestFocusInWindow();
 		setDoubleBuffered(true);
@@ -74,8 +71,8 @@ public class Window extends JPanel implements ActionListener {
 				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
 		);
 		
-		final DefaultListModel listModel = new DefaultListModel();
-		JList list = new JList(listModel);
+		final DefaultListModel<String> listModel = new DefaultListModel<String>();
+		JList<String> list = new JList<String>(listModel);
 		scrollPane.setColumnHeaderView(list);
 		scrollPane.setViewportView(list);
 		panel_1.setLayout(gl_panel_1);
@@ -190,8 +187,8 @@ public class Window extends JPanel implements ActionListener {
 				}
 				else {
 					klientB.ustawKluczPublicznyB(klientA.oblKluczaPublicznego());
-					textField_5.setText(klientA.kluczPubliczny.getPoint().getX().toBigInteger().toString());
-					textField_6.setText(klientA.kluczPubliczny.getPoint().getY().toBigInteger().toString());
+					textField_5.setText(klientA.kluczPubliczny.X.toString());
+					textField_6.setText(klientA.kluczPubliczny.Y.toString());
 					listModel.addElement("Obliczono klucz publiczny u퓓tkownika A");
 					listModel.addElement("Przekazano klucz publiczny u퓓tkownika A stronie B");
 				}
@@ -226,8 +223,8 @@ public class Window extends JPanel implements ActionListener {
 				}
 				else {
 					klientA.oblKluczaTajnego();
-					textField_9.setText(klientA.kluczTajny.getPoint().getX().toBigInteger().toString());
-					textField_10.setText(klientA.kluczTajny.getPoint().getY().toBigInteger().toString());
+					textField_9.setText(klientA.kluczTajny.X.toString());
+					textField_10.setText(klientA.kluczTajny.Y.toString());
 					listModel.addElement("Obliczono klucz tajny u퓓tkownika A");
 				}
 			}
@@ -284,7 +281,7 @@ public class Window extends JPanel implements ActionListener {
 										 gx,
 										 gy);
 					
-					klientB = new Klient(klientA.G, h);
+					klientB = new Klient(punktG, h);
 					klientB.genKluczaPrywatnego(m);
 					textField_4.setText(klientB.kluczPrywatny.toString());
 					
@@ -321,8 +318,8 @@ public class Window extends JPanel implements ActionListener {
 				}
 				else {
 					klientA.ustawKluczPublicznyB(klientB.oblKluczaPublicznego());
-					textField_7.setText(klientB.kluczPubliczny.getPoint().getX().toBigInteger().toString());
-					textField_8.setText(klientB.kluczPubliczny.getPoint().getY().toBigInteger().toString());
+					textField_7.setText(klientB.kluczPubliczny.X.toString());
+					textField_8.setText(klientB.kluczPubliczny.Y.toString());
 					listModel.addElement("Obliczono klucz publiczny u퓓tkownika B");
 					listModel.addElement("Przekazano klucz publiczny u퓓tkownika B stronie A");
 				}
@@ -357,8 +354,8 @@ public class Window extends JPanel implements ActionListener {
 				}
 				else {
 					klientB.oblKluczaTajnego();
-					textField_11.setText(klientB.kluczTajny.getPoint().getX().toBigInteger().toString());
-					textField_12.setText(klientB.kluczTajny.getPoint().getY().toBigInteger().toString());
+					textField_11.setText(klientB.kluczTajny.X.toString());
+					textField_12.setText(klientB.kluczTajny.Y.toString());
 					listModel.addElement("Obliczono klucz tajny u퓓tkownika B");
 				}
 			}
