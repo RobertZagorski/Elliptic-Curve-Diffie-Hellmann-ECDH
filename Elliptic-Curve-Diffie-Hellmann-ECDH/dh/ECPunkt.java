@@ -1,5 +1,6 @@
 package dh;
 import java.math.BigInteger;
+import java.util.BitSet;
 
 /**
  * Klasa symbolizuj¹ca punkt krzywej eliptycznej przechowuj¹ca 
@@ -17,8 +18,14 @@ public class ECPunkt {
 	private BigInteger a6;
 	private int m;
 	private int k;
+
 	org.bouncycastle.math.ec.ECCurve curve;
 	org.bouncycastle.math.ec.ECPoint.F2m point;
+	
+	private GF2Elem x;
+	private GF2Elem y;
+	private GF2Elem z;
+	
 	
 	/***
 	 * Konstruktor punktu klasy ECPunkt. W celu wygenerowania punktu nale¿y podaæ równie¿
@@ -41,6 +48,11 @@ public class ECPunkt {
 		java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider()); 
 		curve = new org.bouncycastle.math.ec.ECCurve.F2m(m,k,a2,a6);
 		point = (org.bouncycastle.math.ec.ECPoint.F2m) curve.createPoint(gx,gy,false);
+		
+		//gx, gy przerobiæ na wsp rzutowe (gxR, gyR)
+		//x = GF2Elem(gxR, m, k);
+		//y = GF2Elem(gyR, m, k);
+		//z = ????
 	}
 	
 	/**
@@ -49,8 +61,8 @@ public class ECPunkt {
 	 */
 	public ECPunkt(ECPunkt Punkt)
 	{
-		gx=Punkt.getX();
-		gy=Punkt.getY();
+		gx=Punkt.getGx();
+		gy=Punkt.getGy();
 		a2=Punkt.getA2();
 		a6=Punkt.getA6();
 		m=Punkt.getm();
@@ -58,6 +70,10 @@ public class ECPunkt {
 		java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider()); 
 		curve = Punkt.getCurve();
 		point = Punkt.getPoint();//(org.bouncycastle.math.ec.ECPoint.F2m) curve.createPoint(Punkt.getX(),Punkt.getY(),false);
+		
+		//x = Punkt.x;
+		//y = Punkt.y;
+		//z = Punkt.z;
 	}
 	
 	/**
@@ -69,7 +85,36 @@ public class ECPunkt {
 	private ECPunkt podwojeniePunktu (ECPunkt P)
 	{
 		ECPunkt Q = new ECPunkt(P);
-		Q.setPoint((org.bouncycastle.math.ec.ECPoint.F2m)Q.getPoint().twice());
+		//Q.setPoint((org.bouncycastle.math.ec.ECPoint.F2m)Q.getPoint().twice());
+		
+		GF2Elem dwa = new GF2Elem(new BigInteger("2"), getm(), getk());
+		GF2Elem trzy = new GF2Elem(new BigInteger("3"), getm(), getk());
+		GF2Elem cztery = new GF2Elem(new BigInteger("4"), getm(), getk());
+		GF2Elem osiem = new GF2Elem(new BigInteger("8"), getm(), getk());
+		GF2Elem a2 = new GF2Elem(Q.a2, getm(), getk());
+		
+		GF2Elem A1 = ( Q.x.square() ).multiply(trzy.bB);
+		GF2Elem A2 = ( Q.z.square() ).multiply(a2.bB);
+		GF2Elem A = A1.add(A2.bB);
+		GF2Elem B = Q.y.multiply(Q.z.bB);
+		GF2Elem C = ( Q.x.multiply(Q.y.bB) ).multiply(B.bB);
+		GF2Elem D1 = A.square();
+		GF2Elem D2 = C.multiply(osiem.bB);
+		GF2Elem D = D1.add(D2.bB);
+		
+		Q.x = ( dwa.multiply(B.bB) ).multiply(D.bB);
+		GF2Elem temp1 = C.multiply(cztery.bB);
+		temp1 = temp1.add(D.bB);
+		temp1 = temp1.multiply(A.bB);
+		GF2Elem temp2 = ( Q.y.square() ).multiply(osiem.bB);
+		temp2 = ( B.square() ).multiply(temp2.bB);
+		Q.y = temp1.add(temp2.bB);
+		Q.z = (( B.square() ).multiply(B.bB)).multiply(osiem.bB);
+		
+		//x, y przerobiæ na wsp afiniczne (xA, yA)
+		//Q.setGx(Q.xA.b);
+		//Q.setGy(Q.yA.b);
+		
 		return Q;
 	}
 	
@@ -83,7 +128,33 @@ public class ECPunkt {
 	private ECPunkt sumaPunktow (ECPunkt P,ECPunkt Q)
 	{
 		ECPunkt wynik = new ECPunkt(P);
-		wynik.setPoint((org.bouncycastle.math.ec.ECPoint.F2m)P.getPoint().add(Q.getPoint()));
+		//wynik.setPoint((org.bouncycastle.math.ec.ECPoint.F2m)P.getPoint().add(Q.getPoint()));
+		
+		GF2Elem dwa = new GF2Elem(new BigInteger("2"), getm(), getk());
+		
+		GF2Elem A1 = Q.y.multiply(P.z.bB);
+		GF2Elem A2 = P.y.multiply(Q.z.bB);
+		GF2Elem A = A1.add(A2.bB);
+		GF2Elem B1 = Q.x.multiply(P.z.bB);
+		GF2Elem B2 = P.x.multiply(Q.z.bB);
+		GF2Elem B = B1.add(B2.bB);
+		GF2Elem C1 = ( ( A.square() ).multiply(P.z.bB) ).multiply(Q.z.bB);
+		GF2Elem C2 = ( B.square() ).multiply(B.bB);
+		GF2Elem C3 = ( ( ( B.square() ).multiply(dwa.bB) ).multiply(P.x.bB) ).multiply(Q.z.bB);
+		GF2Elem C = ( C1.add(C2.bB) ).add(C3.bB);
+		
+		wynik.x = B.multiply(C.bB);
+		wynik.z = ( ( ( B.square() ).multiply(B.bB) ).multiply(P.z.bB) ).multiply(Q.z.bB);
+		GF2Elem temp1 = ( ( B.square() ).multiply(P.x.bB) ).multiply(Q.z.bB);
+		temp1 = temp1.add(C.bB);
+		temp1 = temp1.multiply(A.bB);
+		GF2Elem temp2 = ( ( ( B.square() ).multiply(B.bB) ).multiply(P.y.bB) ).multiply(Q.y.bB);
+		wynik.y = temp1.add(temp2.bB);
+		
+		//x, y przerobiæ na wsp afiniczne (xA, yA)
+		//Q.setGx(Q.xA.b);
+		//Q.setGy(Q.yA.b);
+		
 		return wynik;
 	}
 	
@@ -113,7 +184,7 @@ public class ECPunkt {
 	 * Funkcja zwracaj¹ca wspó³rzêdn¹ horyzontaln¹ generatora liczb w ciele binarnym
 	 * @return wspó³rzêdna horyzontalna generatora liczb
 	 */
-	public BigInteger getX()
+	public BigInteger getGx()
 	{
 		return this.gx;
 	}
@@ -122,7 +193,7 @@ public class ECPunkt {
 	 * Funkcja ustalaj¹ca wartoœæ wspó³rzêdnej horyzontaln¹ generatora liczb w ciele binarnym
 	 * @param x liczba, która ma byæ now¹ wspó³rzêdn¹ horyzontaln¹ generatora liczb
 	 */
-	public void setX(BigInteger x)
+	public void setGx(BigInteger x)
 	{
 		this.gx=x;
 	}
@@ -131,7 +202,7 @@ public class ECPunkt {
 	 * Funkcja zwracaj¹ca wspó³rzêdn¹ horyzontaln¹ generatora liczb w ciele binarnym
 	 * @return wspó³rzêdna horyzontalna generatora liczb
 	 */
-	public BigInteger getY()
+	public BigInteger getGy()
 	{
 		return this.gy;
 	}
@@ -140,7 +211,7 @@ public class ECPunkt {
 	 * Funkcja ustalaj¹ca wartoœæ wspó³rzêdnej wertykaln¹ generatora liczb w ciele binarnym
 	 * @param x liczba, która ma byæ now¹ wspó³rzêdn¹ wertykaln¹ generatora liczb
 	 */
-	public void setY(BigInteger y)
+	public void setGy(BigInteger y)
 	{
 		this.gy=y;
 	}
@@ -252,5 +323,37 @@ public class ECPunkt {
 	{
 		point=point2;
 	}
+	
+	
+	/*public boolean lezyNaEC() {
+		BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE);
+		BigInteger THREE = TWO.add(BigInteger.ONE);
+		BigInteger modulo = TWO.pow(m).add(TWO.pow(k)).add(BigInteger.ONE);
+		
+		BigInteger left;
+		BigInteger right;
+		
+		
+		left = gy.modPow(TWO, modulo);
+		left = left.add(gx.multiply(gy).mod(modulo)).mod(modulo);
+		
+		right = gx.modPow(THREE, modulo);
+		right = right.add(a2.multiply(gx.modPow(TWO, modulo)).mod(modulo)).mod(modulo);
+		right = right.add(a6).mod(modulo);
+		
+		left = gy.pow(2);
+		left = left.add(gx.multiply(gy));
+		
+		right = gx.pow(3);
+		right = right.add(a2.multiply(gx.pow(2)));
+		right = right.add(a6);
+		
+		if (left == right) {
+			return true;
+		} else {
+			return false;
+		}
+	}*/
+	
 }
 

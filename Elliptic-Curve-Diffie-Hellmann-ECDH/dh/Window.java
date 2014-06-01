@@ -155,8 +155,8 @@ public class Window extends JPanel implements ActionListener {
 					klientA = new Klient(punktG, h);
 					klientA.genKluczaPrywatnego(m);
 					textField_3.setText(klientA.kluczPrywatny.toString());
-					
 					listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika A.");
+					
 					
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: m, k, Gx, Gy, a2 i a6.", "B³¹d", JOptionPane.ERROR_MESSAGE);
@@ -284,7 +284,7 @@ public class Window extends JPanel implements ActionListener {
 										 gx,
 										 gy);
 					
-					klientB = new Klient(klientA.G, h);
+					klientB = new Klient(punktG, h);
 					klientB.genKluczaPrywatnego(m);
 					textField_4.setText(klientB.kluczPrywatny.toString());
 					
@@ -497,4 +497,5 @@ public class Window extends JPanel implements ActionListener {
 		}
 		else JOptionPane.showMessageDialog(mainframe, "Wyst¹pi³ b³¹d. Spróbuj ponownie");		
 	}
+	
 }
