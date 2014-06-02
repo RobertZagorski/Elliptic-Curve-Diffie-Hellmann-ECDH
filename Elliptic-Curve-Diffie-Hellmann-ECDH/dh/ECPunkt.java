@@ -1,6 +1,6 @@
 package dh;
+
 import java.math.BigInteger;
-import java.util.BitSet;
 
 /**
  * Klasa symbolizuj¹ca punkt krzywej eliptycznej przechowuj¹ca 
@@ -12,20 +12,18 @@ import java.util.BitSet;
  */
 public class ECPunkt {
 
-	private BigInteger gx;
-	private BigInteger gy;
-	private BigInteger a2;
-	private BigInteger a6;
-	private int m;
-	private int k;
-
-	org.bouncycastle.math.ec.ECCurve curve;
-	org.bouncycastle.math.ec.ECPoint.F2m point;
+	private static final BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE); 
+	BigInteger gx;
+	BigInteger gy;
+	BigInteger modulo;
+	BigInteger a2;
+	BigInteger a6;
+	int m;
+	int k;
 	
-	private GF2Elem x;
-	private GF2Elem y;
-	private GF2Elem z;
-	
+	GF2Elem X;
+	GF2Elem Y;
+	GF2Elem Z;
 	
 	/***
 	 * Konstruktor punktu klasy ECPunkt. W celu wygenerowania punktu nale¿y podaæ równie¿
@@ -39,20 +37,17 @@ public class ECPunkt {
 	 */
 	public ECPunkt(int M,int K,BigInteger A2, BigInteger A6,BigInteger xG,BigInteger yG)
 	{
+		//TODO sprawdzaæ czy d³ugoœæ bitowa liczby jest <= m
 		gx=xG;
 		gy=yG;
+		X=new GF2Elem(xG,M,K);
+		Y=new GF2Elem(yG,M,K);
 		a2=A2;
 		a6=A6;
 		m=M;
 		k=K;
-		java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider()); 
-		curve = new org.bouncycastle.math.ec.ECCurve.F2m(m,k,a2,a6);
-		point = (org.bouncycastle.math.ec.ECPoint.F2m) curve.createPoint(gx,gy,false);
-		
-		//gx, gy przerobiæ na wsp rzutowe (gxR, gyR)
-		//x = GF2Elem(gxR, m, k);
-		//y = GF2Elem(gyR, m, k);
-		//z = ????
+		modulo = TWO.pow(m).subtract(TWO.pow(k)).add(BigInteger.ONE);
+		Z = new GF2Elem(new BigInteger("2"), m, k);
 	}
 	
 	/**
@@ -61,19 +56,16 @@ public class ECPunkt {
 	 */
 	public ECPunkt(ECPunkt Punkt)
 	{
-		gx=Punkt.getGx();
-		gy=Punkt.getGy();
-		a2=Punkt.getA2();
-		a6=Punkt.getA6();
-		m=Punkt.getm();
-		k=Punkt.getk();
-		java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider()); 
-		curve = Punkt.getCurve();
-		point = Punkt.getPoint();//(org.bouncycastle.math.ec.ECPoint.F2m) curve.createPoint(Punkt.getX(),Punkt.getY(),false);
-		
-		//x = Punkt.x;
-		//y = Punkt.y;
-		//z = Punkt.z;
+		gx=Punkt.gx;
+		gy=Punkt.gy;
+		a2=Punkt.a2;
+		a6=Punkt.a6;
+		m=Punkt.m;
+		k=Punkt.k;
+		X=new GF2Elem(Punkt.X);
+		Y=new GF2Elem(Punkt.Y);
+		Z=new GF2Elem(Punkt.Z);
+		//modulo = Punkt.modulo;
 	}
 	
 	/**
@@ -84,38 +76,59 @@ public class ECPunkt {
 	 */
 	private ECPunkt podwojeniePunktu (ECPunkt P)
 	{
+		
+		if (P.X.b.equals(BigInteger.ZERO) && P.Y.b.equals(BigInteger.ZERO))
+		{
+			return P;
+		}
+		///////////////////F2m-wspó³rzêdne rzutowe/////////
 		ECPunkt Q = new ECPunkt(P);
-		//Q.setPoint((org.bouncycastle.math.ec.ECPoint.F2m)Q.getPoint().twice());
 		
-		GF2Elem dwa = new GF2Elem(new BigInteger("2"), getm(), getk());
-		GF2Elem trzy = new GF2Elem(new BigInteger("3"), getm(), getk());
-		GF2Elem cztery = new GF2Elem(new BigInteger("4"), getm(), getk());
-		GF2Elem osiem = new GF2Elem(new BigInteger("8"), getm(), getk());
-		GF2Elem a2 = new GF2Elem(Q.a2, getm(), getk());
+		GF2Elem dwa = new GF2Elem(new BigInteger("2"), m, k);
+		GF2Elem trzy = new GF2Elem(new BigInteger("3"), m, k);
+		GF2Elem cztery = new GF2Elem(new BigInteger("4"), m, k);
+		GF2Elem osiem = new GF2Elem(new BigInteger("8"), m, k);
+		GF2Elem a2 = new GF2Elem(Q.a2, m, k);
 		
-		GF2Elem A1 = ( Q.x.square() ).multiply(trzy.bB);
-		GF2Elem A2 = ( Q.z.square() ).multiply(a2.bB);
-		GF2Elem A = A1.add(A2.bB);
-		GF2Elem B = Q.y.multiply(Q.z.bB);
-		GF2Elem C = ( Q.x.multiply(Q.y.bB) ).multiply(B.bB);
-		GF2Elem D1 = A.square();
-		GF2Elem D2 = C.multiply(osiem.bB);
-		GF2Elem D = D1.add(D2.bB);
+		GF2Elem A1 = new GF2Elem(Q.X);		( A1.square() ).multiply(trzy.bB);
+		GF2Elem A2 = new GF2Elem(Q.Z);		( A2.square() ).multiply(a2.bB);
+		GF2Elem A = new GF2Elem(A1);		A.add(A2.bB);
+		GF2Elem B = new GF2Elem(Q.Y);		B.multiply(Q.Z.bB);
+		GF2Elem C = new GF2Elem(Q.X);		( C.multiply(Q.Y.bB) ).multiply(B.bB);
+		GF2Elem D1 = new GF2Elem(A);		D1.square();
+		GF2Elem D2 = new GF2Elem(C);		D2.multiply(osiem.bB);
+		GF2Elem D = new GF2Elem(D1);		D.add(D2.bB);
 		
-		Q.x = ( dwa.multiply(B.bB) ).multiply(D.bB);
-		GF2Elem temp1 = C.multiply(cztery.bB);
-		temp1 = temp1.add(D.bB);
-		temp1 = temp1.multiply(A.bB);
-		GF2Elem temp2 = ( Q.y.square() ).multiply(osiem.bB);
-		temp2 = ( B.square() ).multiply(temp2.bB);
-		Q.y = temp1.add(temp2.bB);
-		Q.z = (( B.square() ).multiply(B.bB)).multiply(osiem.bB);
-		
-		//x, y przerobiæ na wsp afiniczne (xA, yA)
-		//Q.setGx(Q.xA.b);
-		//Q.setGy(Q.yA.b);
-		
+		Q.X = dwa;							( Q.X.multiply(B.bB) ).multiply(D.bB);
+		GF2Elem temp1 = C;					temp1.multiply(cztery.bB);
+		temp1.add(D.bB);
+		temp1.multiply(A.bB);
+		GF2Elem temp2 = Q.Y;				( temp2.square() ).multiply(osiem.bB);
+											temp2.multiply(B.square().bB);
+		Q.Y = temp1;						Q.Y.add(temp2.bB);
+		Q.Z = B;							(( Q.Z.square() ).multiply(B.bB)).multiply(osiem.bB);
 		return Q;
+		////////////////////F2m///////////////////////////
+//		BigInteger lambda = P.getY().divide(P.getX()).mod(modulo);
+//		lambda=lambda.add(P.getX()).mod(modulo);
+//		BigInteger x3 = lambda.modPow(TWO,modulo);
+//		x3=x3.add(lambda).mod(modulo);
+//		x3=x3.add(a2).mod(modulo);
+//		BigInteger y3 = lambda.add(BigInteger.ONE).mod(modulo);
+//		y3=y3.multiply(x3).mod(modulo);
+//		y3 =y3.add(P.getX().modPow(TWO,modulo)).mod(modulo);
+//		P.setX(x3);
+//		P.setY(y3);
+//		return P;
+		/////////////////////Fp//////////////////////////
+//		BigInteger lambda =(P.X.modPow(TWO,modulo)).multiply(TWO.add(BigInteger.ONE)).mod(modulo);
+//		lambda=lambda.add(a2);
+//		lambda=lambda.multiply((P.Y.multiply(TWO)).mod(modulo).modInverse(modulo)).mod(modulo);
+//		BigInteger x3 = lambda.modPow(TWO,modulo).subtract(P.X.multiply(TWO).mod(modulo)).mod(modulo);
+//		BigInteger y3 = P.X.subtract(x3).mod(modulo).multiply(lambda).mod(modulo).subtract(P.Y).mod(modulo);
+//		P.X=x3;
+//		P.Y=y3;
+//		return P;
 	}
 	
 	/**
@@ -125,38 +138,82 @@ public class ECPunkt {
 	 * @param q drugi punkt
 	 * @return punkt bêd¹cy sum¹ dwóch punktów krzywej eliptycznej
 	 */
-	private ECPunkt sumaPunktow (ECPunkt P,ECPunkt Q)
+	private ECPunkt sumaPunktow (ECPunkt Q,ECPunkt P)
 	{
+		if (Q.X.b.equals(P.X.b) && Q.Y.b.equals(P.Y.b))
+		{
+			return podwojeniePunktu(Q);
+		}
+		if (Q.X.b.equals(BigInteger.ZERO) && Q.Y.b.equals(BigInteger.ZERO))
+		{
+			return new ECPunkt(P);
+		}
+		/////////////////F2m - wspó³rzêdne rzutowe////////////////
 		ECPunkt wynik = new ECPunkt(P);
-		//wynik.setPoint((org.bouncycastle.math.ec.ECPoint.F2m)P.getPoint().add(Q.getPoint()));
+		GF2Elem dwa = new GF2Elem(new BigInteger("2"), m, k);
 		
-		GF2Elem dwa = new GF2Elem(new BigInteger("2"), getm(), getk());
+		GF2Elem A1 = new GF2Elem(Q.Y);		A1.multiply(P.Z.bB);
+		GF2Elem A2 = new GF2Elem(P.Y);		A2.multiply(Q.Z.bB);
+		GF2Elem A = new GF2Elem(A1);		A.add(A2.bB);
+		GF2Elem B1 = new GF2Elem(Q.X);		B1.multiply(P.Z.bB);
+		GF2Elem B2 = new GF2Elem(P.X);		B2.multiply(Q.Z.bB);
+		GF2Elem B = new GF2Elem(B1);		B.add(B2.bB);
+		GF2Elem C1 = new GF2Elem(A);		( ( C1.square() ).multiply(P.Z.bB) ).multiply(Q.Z.bB);
+		GF2Elem C2 = new GF2Elem(B);		( C2.square() ).multiply(B.bB);
+		GF2Elem C3 = new GF2Elem(B);		( ( ( C3.square() ).multiply(dwa.bB) ).multiply(P.X.bB) ).multiply(Q.Z.bB);
+		GF2Elem C = new GF2Elem(C1);		( C.add(C2.bB) ).add(C3.bB);
 		
-		GF2Elem A1 = Q.y.multiply(P.z.bB);
-		GF2Elem A2 = P.y.multiply(Q.z.bB);
-		GF2Elem A = A1.add(A2.bB);
-		GF2Elem B1 = Q.x.multiply(P.z.bB);
-		GF2Elem B2 = P.x.multiply(Q.z.bB);
-		GF2Elem B = B1.add(B2.bB);
-		GF2Elem C1 = ( ( A.square() ).multiply(P.z.bB) ).multiply(Q.z.bB);
-		GF2Elem C2 = ( B.square() ).multiply(B.bB);
-		GF2Elem C3 = ( ( ( B.square() ).multiply(dwa.bB) ).multiply(P.x.bB) ).multiply(Q.z.bB);
-		GF2Elem C = ( C1.add(C2.bB) ).add(C3.bB);
-		
-		wynik.x = B.multiply(C.bB);
-		wynik.z = ( ( ( B.square() ).multiply(B.bB) ).multiply(P.z.bB) ).multiply(Q.z.bB);
-		GF2Elem temp1 = ( ( B.square() ).multiply(P.x.bB) ).multiply(Q.z.bB);
-		temp1 = temp1.add(C.bB);
-		temp1 = temp1.multiply(A.bB);
-		GF2Elem temp2 = ( ( ( B.square() ).multiply(B.bB) ).multiply(P.y.bB) ).multiply(Q.y.bB);
-		wynik.y = temp1.add(temp2.bB);
-		
-		//x, y przerobiæ na wsp afiniczne (xA, yA)
-		//Q.setGx(Q.xA.b);
-		//Q.setGy(Q.yA.b);
-		
+		wynik.X = new GF2Elem(B);			X.multiply(C.bB);
+		wynik.Z = new GF2Elem(B);			( ( ( Z.square() ).multiply(B.bB) ).multiply(P.Z.bB) ).multiply(Q.Z.bB);
+		GF2Elem temp1 = new GF2Elem(B);		( ( temp1.square() ).multiply(P.X.bB) ).multiply(Q.Z.bB);
+		temp1.add(C.bB);
+		temp1.multiply(A.bB);
+		GF2Elem temp2 = new GF2Elem(B);		( ( ( temp2.square() ).multiply(B.bB) ).multiply(P.Y.bB) ).multiply(Q.Y.bB);
+		wynik.Y = new GF2Elem(temp1);		wynik.Y.add(temp2.bB);
 		return wynik;
+//		///////////////////////F2m/////////////////////////////////
+//		BigInteger lambda = (Q.getY().add(P.getY()).mod(modulo) );
+//		lambda = lambda.divide((Q.getX().add(P.getX()))).mod(modulo);
+//		BigInteger x3 = lambda.modPow(TWO,modulo);
+//		x3=x3.add(lambda).mod(modulo);
+//		x3=x3.add(Q.getX()).mod(modulo);
+//		x3=x3.add(P.getX()).mod(modulo);
+//		x3=x3.add(this.a2).mod(modulo);
+//		BigInteger y3 = Q.getX().add(x3).mod(modulo);
+//		y3=y3.multiply(lambda).mod(modulo);
+//		y3=y3.add(x3).mod(modulo);
+//		y3=y3.add(Q.getY()).mod(modulo);
+//		Q.setX(x3);
+//		Q.setY(y3);
+//		return Q;
+		///////////////////////Fp///////////////////////////////
+//		BigInteger lambda =P.Y.subtract(Q.Y).mod(modulo);
+//		lambda=lambda.multiply(P.X.subtract(Q.X).mod(modulo).modInverse(modulo)).mod(modulo);
+//		BigInteger x3 = lambda.modPow(TWO,modulo).subtract(Q.X).subtract(P.X).mod(modulo);
+//		BigInteger y3 = Q.X.subtract(x3).mod(modulo).multiply(lambda).mod(modulo).subtract(Q.Y).mod(modulo);
+//		Q.X=x3;
+//		Q.Y=y3;
+//		return Q;
 	}
+	
+//	private BigInteger addShOp(BigInteger a, BigInteger b)
+//	{
+//		String atemp = a.toString(2);
+//		String btemp = b.toString(2);
+//		int[] aInBits = new int[a.bitLength()];
+//		int[] bInBits = new int[b.bitLength()];
+//		for (int i=0;i<this.getX().bitLength();i++)
+//		{	
+//			aInBits[i] = (int)atemp.charAt(i);
+//			bInBits[i] = (int)btemp.charAt(i);
+//		}
+//		for (int i = 0; i < b.bitLength(); i++)
+//		{
+//			aInBits[i] ^= bInBits[i];
+//		}
+//		a = new BigInteger(Arrays.toString(aInBits));
+//		return a;
+//	}
 	
 	/**
 	 * Obliczenie wielokrotnoœci punktu krzywej eliptycznej metod¹ 
@@ -168,192 +225,34 @@ public class ECPunkt {
 	 */
 	public ECPunkt wielokrotnoscPunktu(ECPunkt P, BigInteger k)
 	{
-		ECPunkt Q = new ECPunkt(P);
-		Q.setPoint((org.bouncycastle.math.ec.ECPoint.F2m)curve.getInfinity());
+		P.wspAfiniczneNaRzutowe();
+		ECPunkt Q = new ECPunkt(this.m, this.k, this.a2, this.a6, BigInteger.ZERO, BigInteger.ZERO);
 		String kInBits = k.toString(2);
 		for (int j=kInBits.length()-1;j>=0;j--)
 		{
 			Q = podwojeniePunktu(Q);
-			if(kInBits.charAt(j) == '1') 
+			if(kInBits.charAt(j) == '1')
 				Q = sumaPunktow(Q,P);
 		}
+		Q.wspRzutoweNaAfiniczne();
 		return Q;
 	}
 	
 	/**
-	 * Funkcja zwracaj¹ca wspó³rzêdn¹ horyzontaln¹ generatora liczb w ciele binarnym
-	 * @return wspó³rzêdna horyzontalna generatora liczb
+	 * Konwersja wspó³rzêdnych z rzutowych na afiniczne 
 	 */
-	public BigInteger getGx()
+	public void wspRzutoweNaAfiniczne()
 	{
-		return this.gx;
+		this.X = this.X.multiply(this.Z.bB);
+		this.Y = this.Y.multiply(this.Z.bB);
 	}
 	
 	/**
-	 * Funkcja ustalaj¹ca wartoœæ wspó³rzêdnej horyzontaln¹ generatora liczb w ciele binarnym
-	 * @param x liczba, która ma byæ now¹ wspó³rzêdn¹ horyzontaln¹ generatora liczb
+	 * Konwesja wspó³rzêdnych z afinicznych na rzutowe
 	 */
-	public void setGx(BigInteger x)
+	public void wspAfiniczneNaRzutowe()
 	{
-		this.gx=x;
+		this.X = this.X.multiply((this.Z.inverse()).bB);
+		this.Y = this.Y.multiply((this.Z.inverse()).bB);
 	}
-
-	/**
-	 * Funkcja zwracaj¹ca wspó³rzêdn¹ horyzontaln¹ generatora liczb w ciele binarnym
-	 * @return wspó³rzêdna horyzontalna generatora liczb
-	 */
-	public BigInteger getGy()
-	{
-		return this.gy;
-	}
-	
-	/**
-	 * Funkcja ustalaj¹ca wartoœæ wspó³rzêdnej wertykaln¹ generatora liczb w ciele binarnym
-	 * @param x liczba, która ma byæ now¹ wspó³rzêdn¹ wertykaln¹ generatora liczb
-	 */
-	public void setGy(BigInteger y)
-	{
-		this.gy=y;
-	}
-	
-	/**
-	 * Fukcja zwracaj¹ca parametr a2 krzywej eliptycznej
-	 * @return parametr a2 krzywej eliptycznej
-	 */
-	public BigInteger getA2()
-	{
-		return this.a2;
-	}
-	
-	/**
-	 * Funkcja ustalaj¹ca wartoœæ parametru a2 krzywej eliptycznej
-	 * @param a2 nowa wartoœæ parametru a2 krzywej eliptycznej
-	 */
-	public void setA2(BigInteger a2)
-	{
-		this.a2=a2;
-	}
-	
-	/**
-	 * Fukcja zwracaj¹ca parametr a2 krzywej eliptycznej
-	 * @return parametr a2 krzywej eliptycznej
-	 */
-	public BigInteger getA6()
-	{
-		return this.a6;
-	}
-	
-	/**
-	 * Funkcja ustalaj¹ca wartoœæ parametru a6 krzywej eliptycznej
-	 * @param a2 nowa wartoœæ parametru a6 krzywej eliptycznej
-	 */
-	public void setA6(BigInteger a6)
-	{
-		this.a6=a6;
-	}
-	
-	/**
-	 * Funkcja zwracaj¹ca maksymaln¹ liczbê bitów cia³a binarnego
-	 * @return liczba bitów cia³a binarnego
-	 */
-	public int getm()
-	{
-		return this.m;
-	}
-	
-	/**
-	 * Funkcja ustalaj¹ca maksymaln¹ liczbê bitów cia³a binarnego
-	 * @param m liczba bitów cia³a binarnego
-	 */
-	public void setm(int m)
-	{
-		this.m=m;
-	}
-	
-	/**
-	 * Funkcja zwracaj¹ca wyk³adnik œrodkowego wyrazu wielomianu modulo
-	 * @return wyk³adnik œrodkowego wyrazu wielomianu modulo
-	 */
-	public int getk()
-	{
-		return this.k;
-	}
-	
-	/**
-	 * Funkcja ustalaj¹ca wyk³adnik œrodkowego wyrazu wielomianu modulo
-	 * @param k wyk³adnik œrodkowego wyrazu wielomianu modulo
-	 */
-	public void setk(int k)
-	{
-		this.k=k;
-	}
-	
-	/**
-	 * Funkcja zwracaj¹ca obiekt krzywej eliptycznej
-	 * @return obiekt krzywej eliptycznej
-	 */
-	public org.bouncycastle.math.ec.ECCurve getCurve()
-	{
-		return this.curve;
-	}
-	
-	/**
-	 * Funkcja ustalaj¹ca obiekt krzywej eliptycznej 
-	 * @param curve nowa krzywa elityczna
-	 */
-	public void setCurve(org.bouncycastle.math.ec.ECCurve curve)
-	{
-		this.curve=curve;
-	}
-	
-	/**
-	 * Funkcja zwracaj¹ca punkt krzywej eliptycznej nale¿¹cy do obiektu tej klasy
-	 * @return punkt krzywej eliptycznej
-	 */
-	public org.bouncycastle.math.ec.ECPoint.F2m getPoint()
-	{
-		return this.point;
-	}
-	
-	/**
-	 * Funkcja ustalaj¹ca wartoœæ punktu krzywej elitycznej tego obiektu klasy ECPunkt
-	 * @param point2 nowy punkt
-	 */
-	public void setPoint(org.bouncycastle.math.ec.ECPoint.F2m point2)
-	{
-		point=point2;
-	}
-	
-	
-	/*public boolean lezyNaEC() {
-		BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE);
-		BigInteger THREE = TWO.add(BigInteger.ONE);
-		BigInteger modulo = TWO.pow(m).add(TWO.pow(k)).add(BigInteger.ONE);
-		
-		BigInteger left;
-		BigInteger right;
-		
-		
-		left = gy.modPow(TWO, modulo);
-		left = left.add(gx.multiply(gy).mod(modulo)).mod(modulo);
-		
-		right = gx.modPow(THREE, modulo);
-		right = right.add(a2.multiply(gx.modPow(TWO, modulo)).mod(modulo)).mod(modulo);
-		right = right.add(a6).mod(modulo);
-		
-		left = gy.pow(2);
-		left = left.add(gx.multiply(gy));
-		
-		right = gx.pow(3);
-		right = right.add(a2.multiply(gx.pow(2)));
-		right = right.add(a6);
-		
-		if (left == right) {
-			return true;
-		} else {
-			return false;
-		}
-	}*/
-	
 }
-

@@ -3,51 +3,65 @@ package dh;
 import java.math.BigInteger;
 
 /**
- * Klasa implementujπca element cia≥a {@link GF(2^m)}. 
- * W klasie zdefiniowano operacje na ciele binarnym: dodawanie, mnoøenie, podnoszenie
- * do kwadratu. Dodatkowo zaimplementowano konwersjÍ liczby w postaci binarnej 
- * zaimplementowanej jako {@link int}[] na liczbÍ typu {@link BigInteger}. <p>
- * DO implementacji operacji modulo wykorzystywany jest trÛjmian postaci {@link x^m+x^k+1}
+ * Klasa implementujƒÖca element cia≈Ça {@link GF(2^m)}. 
+ * W klasie zdefiniowano operacje na ciele binarnym: dodawanie, mno≈ºenie, podnoszenie
+ * do kwadratu. Dodatkowo zaimplementowano konwersjƒô liczby w postaci binarnej 
+ * zaimplementowanej jako {@link int}[] na liczbƒô typu {@link BigInteger}. <p>
+ * DO implementacji operacji modulo wykorzystywany jest tr√≥jmian postaci {@link x^m+x^k+1}
  */
 
 public class GF2Elem {
-	/**Rozmiar cyklicznej grupy multiplikatywnej, na ktÛrej zaimplementowano dany element*/
+	/**Rozmiar cyklicznej grupy multiplikatywnej, na kt√≥rej zaimplementowano dany element*/
 	private static final int FIELDSIZE = 2;
 	/**Liczba opisywana przez obiekt tej klasy typu {@link BigInteger}*/
 	BigInteger b;
 	/**Liczba opisywana przez obiekt tej klasy w postaci {@link int}[]*/
 	int[] bB;
-	/**Wyk≥adnik najwyøszego sk≥adnika wielomianu modulo dla cia≥a - rzπd wielomianu*/
+	/**Wyk≈Çadnik najwy≈ºszego sk≈Çadnika wielomianu modulo dla cia≈Ça - rzƒÖd wielomianu*/
 	int m;
-	/**Element úrodkowy wielomianu modulo dla cia≥a*/
+	/**Element ≈õrodkowy wielomianu modulo dla cia≈Ça*/
 	int k;
 	
 	/***
 	 * Konstruktor klasy {@link GF2Elem}
-	 * @param bi Liczba typu {@link BigInteger} przechowujπca obiekt w formanie innym niø binarnym
-	 * @param mm Wyk≥adnik najwyøszego sk≥adnika wielomianu modulo dla cia≥a - rzπd wielomianu
-	 * @param kk Element úrodkowy wielomianu modulo dla cia≥a
+	 * @param bi Liczba typu {@link BigInteger} przechowujƒÖca obiekt w formanie innym ni≈º binarnym
+	 * @param mm Wyk≈Çadnik najwy≈ºszego sk≈Çadnika wielomianu modulo dla cia≈Ça - rzƒÖd wielomianu
+	 * @param kk Element ≈õrodkowy wielomianu modulo dla cia≈Ça
 	 */
 	public GF2Elem(BigInteger bi, int mm, int kk)
 	{
-		b=bi;
+		if (bi.equals(BigInteger.ZERO))
+			b=BigInteger.ZERO;
+		else
+			b=new BigInteger(bi.toString());
 		m=mm;
 		k=kk;
+		bB=bigIntToIntArray(b);
+	}
+	
+	public GF2Elem(GF2Elem copy)
+	{
+		if (copy.b.equals(BigInteger.ZERO))
+			this.b=BigInteger.ZERO;
+		else
+			this.b=new BigInteger(copy.b.toString());
+		this.m=copy.m;
+		this.k=copy.k;
 		bB=bigIntToIntArray(b);
 	}
 
 	  
 	  /**
-	   * Funkcja zwracajπca liczbÍ elementÛw w ciele
-	   * @return liczba elementÛw w ciele (domyúlnie 2)
+	   * Funkcja zwracajƒÖca liczbƒô element√≥w w ciele
+	   * @return liczba element√≥w w ciele (domy≈õlnie 2)
 	   */
 	  public int getFieldSize() {
 	    return FIELDSIZE;
 	  }
 	  
 	  /***
-	   * Funkcja zwracajπca d≥ugoúÊ binarnπ liczby przechowywanej w obiekcie typu {@link GF2Elem}
-	   * @return d≥ugoúÊ binarna liczby przechowywanej w obiekcie typu {@link GF2Elem}
+	   * Funkcja zwracajƒÖca d≈Çugo≈õƒá binarnƒÖ liczby przechowywanej w obiekcie typu {@link GF2Elem}
+	   * @return d≈Çugo≈õƒá binarna liczby przechowywanej w obiekcie typu {@link GF2Elem}
 	   */
 	  public int getLength()
 	  {
@@ -55,9 +69,9 @@ public class GF2Elem {
 	  }
 	  
 	  /**
-	   * Dodawanie binarne dwÛch liczb typu {@link int}
-	   * @param x liczba typu {@link int} - pierwszy sk≥adnik
-	   * @param y liczba typu {@link int} - drugi sk≥adnik
+	   * Dodawanie binarne dw√≥ch liczb typu {@link int}
+	   * @param x liczba typu {@link int} - pierwszy sk≈Çadnik
+	   * @param y liczba typu {@link int} - drugi sk≈Çadnik
 	   * @return wynik sumy binarnej liczb {@link x} oraz {@link y}
 	   */
 	  public int add(int x, int y) {
@@ -66,12 +80,12 @@ public class GF2Elem {
 	  }
 	  
 	/**
-	   * Obliczanie sumy dwÛch wielomianÛw. Indeks w tablicy typu {@link int} odpowiada 
-	   * wyk≥adnikowi elementowi wejúciowemu. Na przyk≥ad element {@link p[0]} odpowiada
-	   * sk≥adnikowi wolnemu wielomianu. Implementacja operacji XOR w ciele GF{2^m}
-	   * @param p wielomian wejúciowy
-	   * @param q wielomian wejúciowy
-	   * @return wielomina reprezenujπcy wynik operacji p+q
+	   * Obliczanie sumy dw√≥ch wielomian√≥w. Indeks w tablicy typu {@link int} odpowiada 
+	   * wyk≈Çadnikowi elementowi wej≈õciowemu. Na przyk≈Çad element {@link p[0]} odpowiada
+	   * sk≈Çadnikowi wolnemu wielomianu. Implementacja operacji XOR w ciele GF{2^m}
+	   * @param p wielomian wej≈õciowy
+	   * @param q wielomian wej≈õciowy
+	   * @return wielomina reprezenujƒÖcy wynik operacji p+q
 	   */
 	  public GF2Elem add(int[] q) {
 	    int len = Math.max(this.getLength(), q.length);
@@ -91,12 +105,12 @@ public class GF2Elem {
 	  }
 	  
 	  /**
-	   * Obliczanie iloczynu dwÛch wielomianÛw. Indeks w tablicy typu {@link int} odpowiada 
-	   * wyk≥adnikowi elementowi wejúciowemu. Na przyk≥ad element {@link p[0]} odpowiada
-	   * sk≥adnikowi wolnemu wielomianu. Implementacja operacji AND w ciele GF{2^m}
-	   * @param p wielomian wejúciowy
-	   * @param q wielomian wejúciowy
-	   * @return wielomina reprezenujπcy wynik operacji p*q
+	   * Obliczanie iloczynu dw√≥ch wielomian√≥w. Indeks w tablicy typu {@link int} odpowiada 
+	   * wyk≈Çadnikowi elementowi wej≈õciowemu. Na przyk≈Çad element {@link p[0]} odpowiada
+	   * sk≈Çadnikowi wolnemu wielomianu. Implementacja operacji AND w ciele GF{2^m}
+	   * @param p wielomian wej≈õciowy
+	   * @param q wielomian wej≈õciowy
+	   * @return wielomina reprezenujƒÖcy wynik operacji p*q
 	   */
 	  public GF2Elem multiply(int[] q) {
 	    int len = this.getLength() + q.length - 1;
@@ -117,7 +131,7 @@ public class GF2Elem {
 	  
 	  /**
 	   * Redukcja wielomianu przechowywanego w elemenencie {@link GF2Elem#bB} przez
-	   * wielomian modulo zdefiniowany przez wyk≥adniki {@link GF2Elem#m} oraz {@link GF2Elem#k}
+	   * wielomian modulo zdefiniowany przez wyk≈Çadniki {@link GF2Elem#m} oraz {@link GF2Elem#k}
 	   * @return
 	   */
 	  public GF2Elem reduce()
@@ -126,8 +140,6 @@ public class GF2Elem {
 		  {
 			  this.bB[m+i] = add(this.bB[m+i],this.bB[i]);
 			  this.bB[m-k+i] = add(this.bB[m-k+i],this.bB[i]);
-			  //this.bB[2*m-2-(i-m)] = add(this.bB[2*m-2-(i-m)],this.bB[2*m-2-i]);
-			  //this.bB[2*m-2-(i-m+k)] = add(this.bB[2*m-2-(i-m+k)],this.bB[2*m-2-i]);
 		  }
 		  int[] result = new int[m+1];
 		  for (int i=0;i<m;i++)
@@ -140,7 +152,7 @@ public class GF2Elem {
 
 	  /**
 	   * Operacja podnoszenia wielomianu przechowywanego w elemenencie {@link GF2Elem#bB}
-	   * @return obiekt typu {@link GF2Elem} przechowujπcy liczbÍ w formacie binarnym
+	   * @return obiekt typu {@link GF2Elem} przechowujƒÖcy liczbƒô w formacie binarnym
 	   */
 	  public GF2Elem square()
 	  {
@@ -181,8 +193,8 @@ public class GF2Elem {
 	  
 	  /**
 	   * Konwersja liczby z postaci binarnej do obiektu {@link BigInteger}
-	   * @param input tablica zawierajπca bity liczby przeznaczonej do konwersji
-	   * @return obiekt {@link BigInteger} zawierajπcy przechowywanπ liczbÍ
+	   * @param input tablica zawierajƒÖca bity liczby przeznaczonej do konwersji
+	   * @return obiekt {@link BigInteger} zawierajƒÖcy przechowywanƒÖ liczbƒô
 	   */
 	  public BigInteger intArraytoBigInteger (int[] input)
 	  {
@@ -194,5 +206,140 @@ public class GF2Elem {
 		  BigInteger bi = new BigInteger(bigInt,2);
 		  return bi;
 	  }
-
+	  
+	  /**
+	   * Inwersja modulo liczby zawartej w {@link GF2Elem#bB}.
+	   * Inwersja przeprowadzana jest przy pomocy rozszerzonego algorytmu Euklidesa
+	   * Wielomian modulo zdefiniowany jest poprzez wyk≈Çadniki {@link GF2Elem#m}
+	   * oraz {@link GF2Elem#k}.
+	   * @return obiekt {@link GF2Elem} przechowujƒÖcy zmiennƒÖ {@link GF2Elem#bB} w postaci
+	   * binarnej bƒôdƒÖcy inwersjƒÖ modulo wielomianu pierwotnego
+	   */
+	  public GF2Elem inverse()
+	  {
+		  int[] u=this.bB;
+		  int[] v=new int[u.length];
+		  int[] g1=new int[u.length];
+		  int[] g2=new int[u.length];
+		  int[] temp=new int[u.length];
+		  int[] z=new int[u.length];
+		  for (int i=0;i<v.length;i++)
+		  {
+			  v[i]=0;
+			  g1[i]=0;
+			  g2[i]=0;
+			  temp[i]=0;
+			  z[i]=0;
+		  }
+		  v[0]=1;
+		  v[this.m]=1;
+		  v[this.m-this.k]=1;
+		  g1[m]=1;
+		  boolean end=false;
+		  int degv,degu,j;
+		  while(end==false)
+		  {
+			  degu=0;degv=0;
+			  while(u[degu++]==0);
+			  while(v[degv++]==0);
+			  //j=deg(u)-deg(v)
+			  degu=this.m-degu;
+			  degv=this.m-degv;
+			  j=degu-degv;
+			  if (j<0)
+			  {
+				  //u‚Üîv
+				  temp=u;
+				  u=v;
+				  v=temp;
+				  //g1‚Üîg2
+				  temp=g1;
+				  g1=g2;
+				  g2=temp;
+				  //j‚Üê-j
+				  j=0-j;
+			  }
+			  //u‚Üêu+z^j*v;
+			  z[m-j]=1;
+			  u=reduce(add(u,multiply(z,v)));
+			  //g1‚Üêg1+z^j*g2;
+			  g1=reduce(add(g1,multiply(z,g2)));		  
+			  //u!=1
+			  int sum=0;
+			  for (int i=0;i<=m;i++)
+				  sum+=u[i];
+			  if (u[m]==1)
+				  end=true;
+			  if (sum==1 && end==true)
+				  end=true;
+			  else
+				  end=false;
+			  for (int i=0; i< z.length; i++)
+				  z[i]=0;
+		  }
+		  this.bB = g1;
+		  this.b = intArraytoBigInteger(this.bB);
+		  return this;
+	  }
+	  
+	  /**
+	   * Prywatna metoda s≈Çu≈ºƒÖca do obliczenia iloczynu dw√≥ch wielomian√≥w
+	   * Wykorzystywana w funkcji {@link GF2Elem#inverse}
+	   * @param p wielomian
+	   * @param q wielomian
+	   * @return wynik mno≈ºenia p*q
+	   */
+	  private int[] multiply(int[] p, int[] q) 
+	  {
+		  int len = p.length + q.length - 1;
+		  int[] result = new int[len];
+		  for (int i = 0; i < len; i++) 
+		      result[i] = 0;
+		  for (int i = 0; i < p.length; i++) 
+		      for (int j = 0; j < q.length; j++)
+		    	  result[i + j] = result[i + j]^p[i]*q[j];
+		  return result;
+	}
+	  
+	/**
+	 * Redukcja wielomianu modulo wielomian zdefiniowany przez wyk≈Çadniki
+	 * {@link GF2Elem#m} oraz {@link GF2Elem#k}. Wykorzystywana w algorytmie
+	 * {@link GF2Elem#inverse}.
+	 * @param p wielomian przeznaczony do redukcji
+	 * @return wielomian zredukowany
+	 */
+	private int[] reduce(int[] p)
+	{
+		for (int i = 0 ; i<=m; i++)
+		{
+			p[m+i] = add(p[m+i],p[i]);
+			p[m-k+i] = add(p[m-k+i],p[i]);
+		}
+		int[] result = new int[m+1];
+		for (int i=0;i<m;i++)
+			result[i+1] = p[i+m+1];
+		return result;
+	}
+	
+	/**
+	 * Suma dw√≥ch wielomian√≥w. Wykorzystywana w funkcji {@link GF2Elem#inverse}
+	 * @param p pierwszy sk≈Çadnik
+	 * @param q drugi sk≈Çadnik
+	 * @return suma dw√≥ch wielomian√≥w
+	 */
+	private int[] add(int[] p, int[] q) 
+	{
+		int len = Math.max(p.length, q.length);
+	    int[] result = new int[len];
+	    for (int i = 0; i < len; i++) 
+	    {
+	      if (i < p.length && i < q.length) 
+	    	  result[len-i-1] = add(p[p.length-i-1], q[q.length-i-1]);
+	      else if (i < p.length) 
+	    	  result[len-i-1] = p[p.length-i-1];
+	      else 
+	    	  result[len-i-1] = q[q.length-i-1];
+	    }
+	    return result;
+	 }
 }

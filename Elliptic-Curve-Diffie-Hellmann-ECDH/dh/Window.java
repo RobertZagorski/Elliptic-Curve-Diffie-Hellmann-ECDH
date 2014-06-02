@@ -1,8 +1,5 @@
 package dh;
 
-import dh.Klient;
-import dh.ECPunkt;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -29,7 +26,7 @@ import javax.swing.JScrollPane;
 public class Window extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	main mainframe;
+	mainFrame mainframe;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
@@ -50,7 +47,7 @@ public class Window extends JPanel implements ActionListener {
 	private JTextField textField_14;
 	private JTextField textField_15;
 	
-	public Window(main main)	{
+	public Window(mainFrame main)	{
 		this.mainframe = main;
 		this.requestFocusInWindow();
 		setDoubleBuffered(true);
@@ -74,8 +71,8 @@ public class Window extends JPanel implements ActionListener {
 				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
 		);
 		
-		final DefaultListModel listModel = new DefaultListModel();
-		JList list = new JList(listModel);
+		final DefaultListModel<String> listModel = new DefaultListModel<String>();
+		JList<String> list = new JList<String>(listModel);
 		scrollPane.setColumnHeaderView(list);
 		scrollPane.setViewportView(list);
 		panel_1.setLayout(gl_panel_1);
@@ -155,8 +152,8 @@ public class Window extends JPanel implements ActionListener {
 					klientA = new Klient(punktG, h);
 					klientA.genKluczaPrywatnego(m);
 					textField_3.setText(klientA.kluczPrywatny.toString());
-					listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika A.");
 					
+					listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika A.");
 					
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: m, k, Gx, Gy, a2 i a6.", "B³¹d", JOptionPane.ERROR_MESSAGE);
@@ -190,8 +187,8 @@ public class Window extends JPanel implements ActionListener {
 				}
 				else {
 					klientB.ustawKluczPublicznyB(klientA.oblKluczaPublicznego());
-					textField_5.setText(klientA.kluczPubliczny.getPoint().getX().toBigInteger().toString());
-					textField_6.setText(klientA.kluczPubliczny.getPoint().getY().toBigInteger().toString());
+					textField_5.setText(klientA.kluczPubliczny.X.b.toString());
+					textField_6.setText(klientA.kluczPubliczny.Y.b.toString());
 					listModel.addElement("Obliczono klucz publiczny u¿ytkownika A");
 					listModel.addElement("Przekazano klucz publiczny u¿ytkownika A stronie B");
 				}
@@ -226,8 +223,8 @@ public class Window extends JPanel implements ActionListener {
 				}
 				else {
 					klientA.oblKluczaTajnego();
-					textField_9.setText(klientA.kluczTajny.getPoint().getX().toBigInteger().toString());
-					textField_10.setText(klientA.kluczTajny.getPoint().getY().toBigInteger().toString());
+					textField_9.setText(klientA.kluczTajny.X.b.toString());
+					textField_10.setText(klientA.kluczTajny.Y.b.toString());
 					listModel.addElement("Obliczono klucz tajny u¿ytkownika A");
 				}
 			}
@@ -321,8 +318,8 @@ public class Window extends JPanel implements ActionListener {
 				}
 				else {
 					klientA.ustawKluczPublicznyB(klientB.oblKluczaPublicznego());
-					textField_7.setText(klientB.kluczPubliczny.getPoint().getX().toBigInteger().toString());
-					textField_8.setText(klientB.kluczPubliczny.getPoint().getY().toBigInteger().toString());
+					textField_7.setText(klientB.kluczPubliczny.X.b.toString());
+					textField_8.setText(klientB.kluczPubliczny.Y.b.toString());
 					listModel.addElement("Obliczono klucz publiczny u¿ytkownika B");
 					listModel.addElement("Przekazano klucz publiczny u¿ytkownika B stronie A");
 				}
@@ -357,8 +354,8 @@ public class Window extends JPanel implements ActionListener {
 				}
 				else {
 					klientB.oblKluczaTajnego();
-					textField_11.setText(klientB.kluczTajny.getPoint().getX().toBigInteger().toString());
-					textField_12.setText(klientB.kluczTajny.getPoint().getY().toBigInteger().toString());
+					textField_11.setText(klientB.kluczTajny.X.b.toString());
+					textField_12.setText(klientB.kluczTajny.Y.b.toString());
 					listModel.addElement("Obliczono klucz tajny u¿ytkownika B");
 				}
 			}
@@ -497,5 +494,4 @@ public class Window extends JPanel implements ActionListener {
 		}
 		else JOptionPane.showMessageDialog(mainframe, "Wyst¹pi³ b³¹d. Spróbuj ponownie");		
 	}
-	
 }
