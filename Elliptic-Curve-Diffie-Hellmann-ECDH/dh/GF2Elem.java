@@ -240,8 +240,24 @@ public class GF2Elem {
 		  while(end==false)
 		  {
 			  degu=0;degv=0;
-			  while(u[degu++]==0);
-			  while(v[degv++]==0);
+			  while(u[degu]==0) 
+			  {
+				  degu++;
+				  if(degu == u.length-1)
+				  {
+					  degu=0;
+					  break;
+				  }
+			  }
+			  while(v[degv]==0)
+			  {
+				  degv++;
+				  if(degv == v.length-1)
+				  {
+					  degv=0;
+					  break;
+				  }
+			  }
 			  //j=deg(u)-deg(v)
 			  degu=this.m-degu;
 			  degv=this.m-degv;

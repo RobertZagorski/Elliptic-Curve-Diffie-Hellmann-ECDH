@@ -68,7 +68,7 @@ public class Klient {
 				/*if (nowyKlucz.compareTo(maks) >= 0) {
 					continue;
 				}*/
-				if (nowyKlucz.compareTo(BigInteger.ONE) <= 0) {
+				if (nowyKlucz.compareTo(BigInteger.ONE) <= 0 ) {
 					continue;
 				}
 				kluczPrywatny = nowyKlucz;
@@ -81,8 +81,8 @@ public class Klient {
 	 */
 	public ECPunkt oblKluczaPublicznego()
 	{
-		kluczPubliczny = G.wielokrotnoscPunktu(G,kluczPrywatny);
-		return kluczPubliczny;
+		kluczPubliczny = new ECPunkt( G.wielokrotnoscPunktu(G, new BigInteger(kluczPrywatny.toString()) ) );
+		return new ECPunkt(kluczPubliczny);
 	}
 	
 	/**
@@ -91,7 +91,7 @@ public class Klient {
 	 */
 	public void oblKluczaTajnego()
 	{
-		kluczTajny = G.wielokrotnoscPunktu(kluczPublicznyB,kluczPrywatny);
+		kluczTajny = new ECPunkt(G.wielokrotnoscPunktu( kluczPublicznyB, new BigInteger(kluczPrywatny.toString()) ) );
 	}
 	
 	/**

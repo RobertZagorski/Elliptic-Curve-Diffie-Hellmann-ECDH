@@ -82,44 +82,45 @@ public class ECPunkt {
 			return P;
 		}
 		///////////////////F2m-wspó³rzêdne rzutowe/////////
-		ECPunkt Q = new ECPunkt(P);
-		
-		GF2Elem dwa = new GF2Elem(new BigInteger("2"), m, k);
-		GF2Elem trzy = new GF2Elem(new BigInteger("3"), m, k);
-		GF2Elem cztery = new GF2Elem(new BigInteger("4"), m, k);
-		GF2Elem osiem = new GF2Elem(new BigInteger("8"), m, k);
-		GF2Elem a2 = new GF2Elem(Q.a2, m, k);
-		
-		GF2Elem A1 = new GF2Elem(Q.X);		( A1.square() ).multiply(trzy.bB);
-		GF2Elem A2 = new GF2Elem(Q.Z);		( A2.square() ).multiply(a2.bB);
-		GF2Elem A = new GF2Elem(A1);		A.add(A2.bB);
-		GF2Elem B = new GF2Elem(Q.Y);		B.multiply(Q.Z.bB);
-		GF2Elem C = new GF2Elem(Q.X);		( C.multiply(Q.Y.bB) ).multiply(B.bB);
-		GF2Elem D1 = new GF2Elem(A);		D1.square();
-		GF2Elem D2 = new GF2Elem(C);		D2.multiply(osiem.bB);
-		GF2Elem D = new GF2Elem(D1);		D.add(D2.bB);
-		
-		Q.X = dwa;							( Q.X.multiply(B.bB) ).multiply(D.bB);
-		GF2Elem temp1 = C;					temp1.multiply(cztery.bB);
-		temp1.add(D.bB);
-		temp1.multiply(A.bB);
-		GF2Elem temp2 = Q.Y;				( temp2.square() ).multiply(osiem.bB);
-											temp2.multiply(B.square().bB);
-		Q.Y = temp1;						Q.Y.add(temp2.bB);
-		Q.Z = B;							(( Q.Z.square() ).multiply(B.bB)).multiply(osiem.bB);
-		return Q;
+//		ECPunkt Q = new ECPunkt(P);
+//		
+//		GF2Elem dwa = new GF2Elem(new BigInteger("2"), m, k);
+//		GF2Elem trzy = new GF2Elem(new BigInteger("3"), m, k);
+//		GF2Elem cztery = new GF2Elem(new BigInteger("4"), m, k);
+//		GF2Elem osiem = new GF2Elem(new BigInteger("8"), m, k);
+//		GF2Elem a2 = new GF2Elem(Q.a2, m, k);
+//		GF2Elem a6 = new GF2Elem(Q.a6, m, k);
+//		
+//		Q.Z = new GF2Elem(P.Z);				Q.Z.square().multiply(P.X.bB);
+//		
+//		GF2Elem A2 = new GF2Elem(Q.Z);		( A2.square() ).multiply(a2.bB);
+//		GF2Elem A = new GF2Elem(A1);		A.add(A2.bB);
+//		GF2Elem B = new GF2Elem(Q.Y);		B.multiply(Q.Z.bB);
+//		GF2Elem C = new GF2Elem(Q.X);		( C.multiply(Q.Y.bB) ).multiply(B.bB);
+//		GF2Elem D1 = new GF2Elem(A);		D1.square();
+//		GF2Elem D2 = new GF2Elem(C);		D2.multiply(osiem.bB);
+//		GF2Elem D = new GF2Elem(D1);		D.add(D2.bB);
+//		
+//		Q.X = new GF2Elem(dwa);				( Q.X.multiply(B.bB) ).multiply(D.bB);
+//		GF2Elem temp1 = new GF2Elem(C);		temp1.multiply(cztery.bB);
+//											temp1.add(D.bB);
+//											temp1.multiply(A.bB);
+//		GF2Elem temp2 = new GF2Elem(Q.Y);	( temp2.square() ).multiply(osiem.bB);
+//											temp2.multiply(B.square().bB);
+//		Q.Y = new GF2Elem(temp1);			Q.Y.add(temp2.bB);
+//		Q.Z = new GF2Elem(B);				(( Q.Z.square() ).multiply(B.bB)).multiply(osiem.bB);
+//		return Q;
 		////////////////////F2m///////////////////////////
-//		BigInteger lambda = P.getY().divide(P.getX()).mod(modulo);
-//		lambda=lambda.add(P.getX()).mod(modulo);
-//		BigInteger x3 = lambda.modPow(TWO,modulo);
-//		x3=x3.add(lambda).mod(modulo);
-//		x3=x3.add(a2).mod(modulo);
-//		BigInteger y3 = lambda.add(BigInteger.ONE).mod(modulo);
-//		y3=y3.multiply(x3).mod(modulo);
-//		y3 =y3.add(P.getX().modPow(TWO,modulo)).mod(modulo);
-//		P.setX(x3);
-//		P.setY(y3);
-//		return P;
+		ECPunkt Q = new ECPunkt(P);
+		GF2Elem a2 = new GF2Elem(Q.a2, m, k);
+		GF2Elem a6 = new GF2Elem(Q.a6, m, k);
+		GF2Elem temp1 = new GF2Elem(P.X);		temp1.inverse();
+		GF2Elem lambda = new GF2Elem(P.Y);		lambda.multiply(temp1.bB).add(P.X.bB);
+		GF2Elem x1squared = new GF2Elem(P.X);	x1squared.square();	
+		GF2Elem temp3 = new GF2Elem(x1squared);	temp3.inverse();
+		Q.X = new GF2Elem(a6);					Q.X.multiply(temp3.bB).add(x1squared.bB);
+		Q.Y = new GF2Elem(lambda);				Q.Y.multiply(Q.X.bB).add(x1squared.bB).add(Q.X.bB);
+		return Q;
 		/////////////////////Fp//////////////////////////
 //		BigInteger lambda =(P.X.modPow(TWO,modulo)).multiply(TWO.add(BigInteger.ONE)).mod(modulo);
 //		lambda=lambda.add(a2);
@@ -149,43 +150,42 @@ public class ECPunkt {
 			return new ECPunkt(P);
 		}
 		/////////////////F2m - wspó³rzêdne rzutowe////////////////
-		ECPunkt wynik = new ECPunkt(P);
-		GF2Elem dwa = new GF2Elem(new BigInteger("2"), m, k);
-		
-		GF2Elem A1 = new GF2Elem(Q.Y);		A1.multiply(P.Z.bB);
-		GF2Elem A2 = new GF2Elem(P.Y);		A2.multiply(Q.Z.bB);
-		GF2Elem A = new GF2Elem(A1);		A.add(A2.bB);
-		GF2Elem B1 = new GF2Elem(Q.X);		B1.multiply(P.Z.bB);
-		GF2Elem B2 = new GF2Elem(P.X);		B2.multiply(Q.Z.bB);
-		GF2Elem B = new GF2Elem(B1);		B.add(B2.bB);
-		GF2Elem C1 = new GF2Elem(A);		( ( C1.square() ).multiply(P.Z.bB) ).multiply(Q.Z.bB);
-		GF2Elem C2 = new GF2Elem(B);		( C2.square() ).multiply(B.bB);
-		GF2Elem C3 = new GF2Elem(B);		( ( ( C3.square() ).multiply(dwa.bB) ).multiply(P.X.bB) ).multiply(Q.Z.bB);
-		GF2Elem C = new GF2Elem(C1);		( C.add(C2.bB) ).add(C3.bB);
-		
-		wynik.X = new GF2Elem(B);			X.multiply(C.bB);
-		wynik.Z = new GF2Elem(B);			( ( ( Z.square() ).multiply(B.bB) ).multiply(P.Z.bB) ).multiply(Q.Z.bB);
-		GF2Elem temp1 = new GF2Elem(B);		( ( temp1.square() ).multiply(P.X.bB) ).multiply(Q.Z.bB);
-		temp1.add(C.bB);
-		temp1.multiply(A.bB);
-		GF2Elem temp2 = new GF2Elem(B);		( ( ( temp2.square() ).multiply(B.bB) ).multiply(P.Y.bB) ).multiply(Q.Y.bB);
-		wynik.Y = new GF2Elem(temp1);		wynik.Y.add(temp2.bB);
-		return wynik;
+//		ECPunkt wynik = new ECPunkt(P);
+//		
+//		GF2Elem lambda1 = new GF2Elem(P.Z);		lambda1.square().multiply(Q.X.bB);
+//		GF2Elem lambda2 = new GF2Elem(Q.Z);		lambda2.square().multiply(P.X.bB);
+//		GF2Elem lambda3 = new GF2Elem(lambda1);	lambda3.add(lambda2.bB);
+//		GF2Elem lambda4 = new GF2Elem(P.Z);		lambda4.square().multiply(P.Z.bB).multiply(Q.Y.bB);
+//		GF2Elem lambda5 = new GF2Elem(Q.Z);		lambda5.square().multiply(Q.Z.bB).multiply(P.Y.bB);
+//		GF2Elem lambda6 = new GF2Elem(lambda4);	lambda6.add(lambda5.bB);
+//		GF2Elem lambda7 = new GF2Elem(Q.Z);		lambda7.multiply(lambda3.bB);
+//		GF2Elem temp1 = new GF2Elem(P.X);		temp1.multiply(lambda6.bB);
+//		GF2Elem temp2 = new GF2Elem(P.Y);		temp2.multiply(lambda7.bB);
+//		GF2Elem lambda8 = new GF2Elem(temp1);	temp1.multiply(temp2.bB);
+//		
+//		wynik.Z = new GF2Elem(P.Z);			wynik.Z.multiply(lambda7.bB);
+//		GF2Elem lambda9 = new GF2Elem(wynik.Z);	lambda9.add(lambda6.bB);
+//		
+//		GF2Elem a2 = new GF2Elem(Q.a2, m, k);
+//		GF2Elem temp3 = new GF2Elem(wynik.Z);	temp3.square().multiply(a2.bB);
+//		GF2Elem temp4 = new GF2Elem(lambda6);	temp4.multiply(lambda9.bB);
+//		wynik.X = new GF2Elem(lambda3);			wynik.X.square().multiply(lambda3.bB);
+//												wynik.X.add(temp4.bB).add(temp3.bB);
+//		
+//		GF2Elem temp5 = new GF2Elem(lambda7);	temp5.square().multiply(lambda8.bB);
+//		wynik.Y = new GF2Elem(wynik.X);			wynik.Y.multiply(lambda9.bB);
+//												wynik.Y.add(temp5.bB);
+//		return wynik;
 //		///////////////////////F2m/////////////////////////////////
-//		BigInteger lambda = (Q.getY().add(P.getY()).mod(modulo) );
-//		lambda = lambda.divide((Q.getX().add(P.getX()))).mod(modulo);
-//		BigInteger x3 = lambda.modPow(TWO,modulo);
-//		x3=x3.add(lambda).mod(modulo);
-//		x3=x3.add(Q.getX()).mod(modulo);
-//		x3=x3.add(P.getX()).mod(modulo);
-//		x3=x3.add(this.a2).mod(modulo);
-//		BigInteger y3 = Q.getX().add(x3).mod(modulo);
-//		y3=y3.multiply(lambda).mod(modulo);
-//		y3=y3.add(x3).mod(modulo);
-//		y3=y3.add(Q.getY()).mod(modulo);
-//		Q.setX(x3);
-//		Q.setY(y3);
-//		return Q;
+		GF2Elem a2 = new GF2Elem(Q.a2, m, k);
+		GF2Elem temp1 = new GF2Elem(Q.Y);		temp1.add(P.Y.bB);
+		GF2Elem temp2 = new GF2Elem(Q.X);		temp2.add(P.X.bB);
+												temp2.inverse();
+		GF2Elem lambda = new GF2Elem(temp1);	lambda.multiply(temp2.bB);
+		ECPunkt wynik = new ECPunkt(P);
+		wynik.X = new GF2Elem(lambda);			wynik.X.square().add(lambda.bB).add(Q.X.bB).add(P.X.bB).add(a2.bB);
+		wynik.Y = new GF2Elem(Q.X);				wynik.Y.add(wynik.X.bB).multiply(lambda.bB).add(wynik.X.bB).add(Q.Y.bB);
+		return wynik;
 		///////////////////////Fp///////////////////////////////
 //		BigInteger lambda =P.Y.subtract(Q.Y).mod(modulo);
 //		lambda=lambda.multiply(P.X.subtract(Q.X).mod(modulo).modInverse(modulo)).mod(modulo);
@@ -225,7 +225,7 @@ public class ECPunkt {
 	 */
 	public ECPunkt wielokrotnoscPunktu(ECPunkt P, BigInteger k)
 	{
-		P.wspAfiniczneNaRzutowe();
+		//P.wspAfiniczneNaRzutowe();
 		ECPunkt Q = new ECPunkt(this.m, this.k, this.a2, this.a6, BigInteger.ZERO, BigInteger.ZERO);
 		String kInBits = k.toString(2);
 		for (int j=kInBits.length()-1;j>=0;j--)
@@ -234,7 +234,7 @@ public class ECPunkt {
 			if(kInBits.charAt(j) == '1')
 				Q = sumaPunktow(Q,P);
 		}
-		Q.wspRzutoweNaAfiniczne();
+		//Q.wspRzutoweNaAfiniczne();
 		return Q;
 	}
 	
