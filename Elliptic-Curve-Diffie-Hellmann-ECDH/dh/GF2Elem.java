@@ -39,6 +39,10 @@ public class GF2Elem {
 		bB=bigIntToIntArray(b);
 	}
 	
+	/**
+	 * Konstruktor kopiujący klasy {@link GF2Elem}
+	 * @param copy obiekt kopiowany
+	 */
 	public GF2Elem(GF2Elem copy)
 	{
 		if (copy.b.equals(BigInteger.ZERO))
@@ -81,13 +85,14 @@ public class GF2Elem {
 	  
 	/**
 	   * Obliczanie sumy dwóch wielomianów. Indeks w tablicy typu {@link int} odpowiada 
-	   * wykładnikowi elementowi wejściowemu. Na przykład element {@link p[0]} odpowiada
+	   * wykładnikowi elementowi wejściowemu. Na przykład element {@link p[m]} odpowiada
 	   * składnikowi wolnemu wielomianu. Implementacja operacji XOR w ciele GF{2^m}
-	   * @param p wielomian wejściowy
-	   * @param q wielomian wejściowy
+	   * @param Q wielomian, którego wartość jest składnikiem sumy
 	   * @return wielomina reprezenujący wynik operacji p+q
 	   */
-	  public GF2Elem add(int[] q) {
+	  public GF2Elem add(GF2Elem Q) 
+	  {
+		int[] q = Q.bB;
 	    int len = Math.max(this.getLength(), q.length);
 	    int[] result = new int[len];
 	    for (int i = 0; i < len; i++) {
@@ -106,13 +111,14 @@ public class GF2Elem {
 	  
 	  /**
 	   * Obliczanie iloczynu dwóch wielomianów. Indeks w tablicy typu {@link int} odpowiada 
-	   * wykładnikowi elementowi wejściowemu. Na przykład element {@link p[0]} odpowiada
+	   * wykładnikowi elementowi wejściowemu. Na przykład element {@link p[m]} odpowiada
 	   * składnikowi wolnemu wielomianu. Implementacja operacji AND w ciele GF{2^m}
-	   * @param p wielomian wejściowy
-	   * @param q wielomian wejściowy
+	   * @param Q element ciała, którego wartość jest składnikiem iloczynu
 	   * @return wielomina reprezenujący wynik operacji p*q
 	   */
-	  public GF2Elem multiply(int[] q) {
+	  public GF2Elem multiply(GF2Elem Q) 
+	  {
+		int[] q = Q.bB;
 	    int len = this.getLength() + q.length - 1;
 	    int[] result = new int[len];
 	    for (int i = 0; i < len; i++) {
@@ -208,14 +214,16 @@ public class GF2Elem {
 	  }
 	  
 	  /**
-	   * Inwersja modulo liczby zawartej w {@link GF2Elem#bB}.
-	   * Inwersja przeprowadzana jest przy pomocy rozszerzonego algorytmu Euklidesa
+	   * Inwersja modulo liczby zawartej w {@link GF2Elem#bB} 
+	   * (szukanie liczby spełniającej równanie {@link ax≡1(mod n)}).
+	   * Inwersja przeprowadzana jest przy pomocy rozszerzonego algorytmu Euklidesa.
 	   * Wielomian modulo zdefiniowany jest poprzez wykładniki {@link GF2Elem#m}
 	   * oraz {@link GF2Elem#k}.
 	   * @return obiekt {@link GF2Elem} przechowujący zmienną {@link GF2Elem#bB} w postaci
 	   * binarnej będący inwersją modulo wielomianu pierwotnego
+	 * @throws Exception wyjątek rzucany jest jeśli liczba nie jest względnie pierwsza z wielomianem modulo
 	   */
-	  public GF2Elem inverse()
+	  public GF2Elem inverse() throws Exception
 	  {
 		  int[] u=this.bB;
 		  int[] v=new int[u.length];
@@ -234,6 +242,9 @@ public class GF2Elem {
 		  v[0]=1;
 		  v[this.m]=1;
 		  v[this.m-this.k]=1;
+		  // Jeśli liczby a oraz n (wielomian modulo)
+		  if (!this.b.gcd(intArraytoBigInteger(v)).equals(BigInteger.ONE))
+			  throw new Exception("Wielomian, który należy odwrócić nie jest względnie pierwszy z wielomianem modulo");
 		  g1[m]=1;
 		  boolean end=false;
 		  int degv,degu,j;
@@ -243,18 +254,18 @@ public class GF2Elem {
 			  while(u[degu]==0) 
 			  {
 				  degu++;
-				  if(degu == u.length-1)
+				  if(degu == u.length)
 				  {
-					  degu=0;
+					  degu=u.length-1;
 					  break;
 				  }
 			  }
 			  while(v[degv]==0)
 			  {
 				  degv++;
-				  if(degv == v.length-1)
+				  if(degv == v.length)
 				  {
-					  degv=0;
+					  degv=v.length-1;
 					  break;
 				  }
 			  }

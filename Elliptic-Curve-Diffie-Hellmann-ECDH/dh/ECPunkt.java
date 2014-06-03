@@ -112,14 +112,21 @@ public class ECPunkt {
 //		return Q;
 		////////////////////F2m///////////////////////////
 		ECPunkt Q = new ECPunkt(P);
-		GF2Elem a2 = new GF2Elem(Q.a2, m, k);
 		GF2Elem a6 = new GF2Elem(Q.a6, m, k);
-		GF2Elem temp1 = new GF2Elem(P.X);		temp1.inverse();
-		GF2Elem lambda = new GF2Elem(P.Y);		lambda.multiply(temp1.bB).add(P.X.bB);
+		GF2Elem temp1 = new GF2Elem(P.X);		try {
+													temp1.inverse();
+												} catch (Exception e) {
+													e.printStackTrace();
+												}
+		GF2Elem lambda = new GF2Elem(P.Y);		lambda.multiply(temp1).add(P.X);
 		GF2Elem x1squared = new GF2Elem(P.X);	x1squared.square();	
-		GF2Elem temp3 = new GF2Elem(x1squared);	temp3.inverse();
-		Q.X = new GF2Elem(a6);					Q.X.multiply(temp3.bB).add(x1squared.bB);
-		Q.Y = new GF2Elem(lambda);				Q.Y.multiply(Q.X.bB).add(x1squared.bB).add(Q.X.bB);
+		GF2Elem temp3 = new GF2Elem(x1squared);	try {
+													temp3.inverse();
+												} catch (Exception e) {
+													e.printStackTrace();
+												}
+		Q.X = new GF2Elem(a6);					Q.X.multiply(temp3).add(x1squared);
+		Q.Y = new GF2Elem(lambda);				Q.Y.multiply(Q.X).add(x1squared).add(Q.X);
 		return Q;
 		/////////////////////Fp//////////////////////////
 //		BigInteger lambda =(P.X.modPow(TWO,modulo)).multiply(TWO.add(BigInteger.ONE)).mod(modulo);
@@ -178,13 +185,17 @@ public class ECPunkt {
 //		return wynik;
 //		///////////////////////F2m/////////////////////////////////
 		GF2Elem a2 = new GF2Elem(Q.a2, m, k);
-		GF2Elem temp1 = new GF2Elem(Q.Y);		temp1.add(P.Y.bB);
-		GF2Elem temp2 = new GF2Elem(Q.X);		temp2.add(P.X.bB);
-												temp2.inverse();
-		GF2Elem lambda = new GF2Elem(temp1);	lambda.multiply(temp2.bB);
+		GF2Elem temp1 = new GF2Elem(Q.Y);		temp1.add(P.Y);
+		GF2Elem temp2 = new GF2Elem(Q.X);		temp2.add(P.X);
+												try {
+													temp2.inverse();
+												} catch (Exception e) {
+													e.printStackTrace();
+												}
+		GF2Elem lambda = new GF2Elem(temp1);	lambda.multiply(temp2);
 		ECPunkt wynik = new ECPunkt(P);
-		wynik.X = new GF2Elem(lambda);			wynik.X.square().add(lambda.bB).add(Q.X.bB).add(P.X.bB).add(a2.bB);
-		wynik.Y = new GF2Elem(Q.X);				wynik.Y.add(wynik.X.bB).multiply(lambda.bB).add(wynik.X.bB).add(Q.Y.bB);
+		wynik.X = new GF2Elem(lambda);			wynik.X.square().add(lambda).add(Q.X).add(P.X).add(a2);
+		wynik.Y = new GF2Elem(Q.X);				wynik.Y.add(wynik.X).multiply(lambda).add(wynik.X).add(Q.Y);
 		return wynik;
 		///////////////////////Fp///////////////////////////////
 //		BigInteger lambda =P.Y.subtract(Q.Y).mod(modulo);
@@ -195,26 +206,7 @@ public class ECPunkt {
 //		Q.Y=y3;
 //		return Q;
 	}
-	
-//	private BigInteger addShOp(BigInteger a, BigInteger b)
-//	{
-//		String atemp = a.toString(2);
-//		String btemp = b.toString(2);
-//		int[] aInBits = new int[a.bitLength()];
-//		int[] bInBits = new int[b.bitLength()];
-//		for (int i=0;i<this.getX().bitLength();i++)
-//		{	
-//			aInBits[i] = (int)atemp.charAt(i);
-//			bInBits[i] = (int)btemp.charAt(i);
-//		}
-//		for (int i = 0; i < b.bitLength(); i++)
-//		{
-//			aInBits[i] ^= bInBits[i];
-//		}
-//		a = new BigInteger(Arrays.toString(aInBits));
-//		return a;
-//	}
-	
+
 	/**
 	 * Obliczenie wielokrotnoœci punktu krzywej eliptycznej metod¹ 
 	 * przesuwaj¹cych siê okienek (sliding windows)
@@ -239,20 +231,24 @@ public class ECPunkt {
 	}
 	
 	/**
-	 * Konwersja wspó³rzêdnych z rzutowych na afiniczne 
+	 * Konwersja wspó³rzêdnych z rzutowych na afiniczne: P(X*Z,Y*Z)
 	 */
 	public void wspRzutoweNaAfiniczne()
 	{
-		this.X = this.X.multiply(this.Z.bB);
-		this.Y = this.Y.multiply(this.Z.bB);
+		this.X = this.X.multiply(this.Z);
+		this.Y = this.Y.multiply(this.Z);
 	}
 	
 	/**
-	 * Konwesja wspó³rzêdnych z afinicznych na rzutowe
+	 * Konwesja wspó³rzêdnych z afinicznych na rzutowe: P(X/Z,Y,Z)
 	 */
 	public void wspAfiniczneNaRzutowe()
 	{
-		this.X = this.X.multiply((this.Z.inverse()).bB);
-		this.Y = this.Y.multiply((this.Z.inverse()).bB);
+		try {
+			this.X = this.X.multiply((this.Z.inverse()));
+			this.Y = this.Y.multiply((this.Z.inverse()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

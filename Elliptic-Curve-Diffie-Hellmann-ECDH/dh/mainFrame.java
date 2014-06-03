@@ -42,32 +42,13 @@ public class mainFrame extends JFrame {
             
         });
 		
-		//Pobranie rozdzielczoï¿½ci ekranu
-		dims = new Dimension();
-		dims = getResolution(dims);
-		
-		/*Ustawienie rozmiarï¿½w ramki na odpowiednie i w odpowiednim
-		miejscu na ekranie*/
-		//setPreferredSize(dims);
-		setLocation(100, 0);
-		
-		/**Tworzenie i dodawanie panelu g³ówwnego menu przy pomocy klasy {@link Menu}*/
+		/*Tworzenie i dodawanie panelu g³ówwnego menu przy pomocy klasy {@link Menu}*/
 		Window = new Window(this);
 		add(Window);
 		this.pack();
 		this.setFocusable(true);
 	}
-	
-	private Dimension getResolution (Dimension dims)	{
-		dims.width = (Toolkit.getDefaultToolkit().getScreenSize().width);
-		dims.width /= 2;
-		dims.width -=14;
-		dims.height = (Toolkit.getDefaultToolkit().getScreenSize().height)*5;
-		dims.height /= 6;
-		dims.height -= 10;
-		return dims;
-	}
-	
+
 	/**
 	 * @param args
 	 */
