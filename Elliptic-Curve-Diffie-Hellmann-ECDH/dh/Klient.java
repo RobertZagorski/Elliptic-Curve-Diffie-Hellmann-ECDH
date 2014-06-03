@@ -64,7 +64,7 @@ public class Klient {
 			 */
 			//BigInteger maks = n.subtract(BigInteger.ONE);
 			while (true) {
-				BigInteger nowyKlucz = new BigInteger(b, random);
+				BigInteger nowyKlucz = new BigInteger(b-1, random);
 				/*if (nowyKlucz.compareTo(maks) >= 0) {
 					continue;
 				}*/

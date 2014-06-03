@@ -148,9 +148,10 @@ public class GF2Elem {
 			  this.bB[m-k+i] = add(this.bB[m-k+i],this.bB[i]);
 		  }
 		  int[] result = new int[m+1];
-		  for (int i=0;i<m;i++)
+		  result[0]=0;
+		  for (int i=1;i<=m;i++)
 		  {
-			  result[i+1] = this.bB[i+m+1];
+			  result[i] = this.bB[i+m];
 		  }
 		  this.bB = result;
 		  return this;

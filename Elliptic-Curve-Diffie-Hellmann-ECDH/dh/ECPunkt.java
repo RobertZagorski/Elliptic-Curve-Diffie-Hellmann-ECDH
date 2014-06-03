@@ -74,13 +74,10 @@ public class ECPunkt {
 	 * @param p punkt, który nale¿y podwoiæ
 	 * @return wynik operacji podwajania punktu
 	 */
-	private ECPunkt podwojeniePunktu (ECPunkt P)
-	{
-		
+	public ECPunkt podwojeniePunktu (ECPunkt P)
+	{	
 		if (P.X.b.equals(BigInteger.ZERO) && P.Y.b.equals(BigInteger.ZERO))
-		{
 			return P;
-		}
 		///////////////////F2m-wspó³rzêdne rzutowe/////////
 //		ECPunkt Q = new ECPunkt(P);
 //		
@@ -146,16 +143,14 @@ public class ECPunkt {
 	 * @param q drugi punkt
 	 * @return punkt bêd¹cy sum¹ dwóch punktów krzywej eliptycznej
 	 */
-	private ECPunkt sumaPunktow (ECPunkt Q,ECPunkt P)
+	public ECPunkt sumaPunktow (ECPunkt Q,ECPunkt P)
 	{
 		if (Q.X.b.equals(P.X.b) && Q.Y.b.equals(P.Y.b))
-		{
 			return podwojeniePunktu(Q);
-		}
 		if (Q.X.b.equals(BigInteger.ZERO) && Q.Y.b.equals(BigInteger.ZERO))
-		{
 			return new ECPunkt(P);
-		}
+		else if (P.X.b.equals(BigInteger.ZERO) && P.Y.b.equals(BigInteger.ZERO))
+			return new ECPunkt(Q);
 		/////////////////F2m - wspó³rzêdne rzutowe////////////////
 //		ECPunkt wynik = new ECPunkt(P);
 //		
@@ -217,16 +212,25 @@ public class ECPunkt {
 	 */
 	public ECPunkt wielokrotnoscPunktu(ECPunkt P, BigInteger k)
 	{
-		//P.wspAfiniczneNaRzutowe();
+//		//P.wspAfiniczneNaRzutowe();
 		ECPunkt Q = new ECPunkt(this.m, this.k, this.a2, this.a6, BigInteger.ZERO, BigInteger.ZERO);
 		String kInBits = k.toString(2);
-		for (int j=kInBits.length()-1;j>=0;j--)
+		int i=0;
+		for (int j=0;j<kInBits.length();j++)
 		{
 			Q = podwojeniePunktu(Q);
+			i*=2;
+			System.out.print("P");
 			if(kInBits.charAt(j) == '1')
+			{
 				Q = sumaPunktow(Q,P);
+				System.out.print("D");
+				i++;
+			}
 		}
 		//Q.wspRzutoweNaAfiniczne();
+		System.out.println("");
+		System.out.println(i);
 		return Q;
 	}
 	
