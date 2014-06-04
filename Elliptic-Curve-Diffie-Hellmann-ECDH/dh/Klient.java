@@ -3,21 +3,28 @@ import dh.ECPunkt;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+
 /**
  * Klasa klienta odopowiadaj¹ca za generowanie kluczy publicznych 
  * i prywatnych klientów
  * @author Vitali Karpinski
  * @author Robert Zagórski
- *
  */
 public class Klient {
 
+	/**Klucz prywatny u¿ytkownika. Liczba typu {@link BigInteger} o d³ugoœci zadeklarowanej
+	 * jako argument funkcji {@link Klient#genKluczaPrywatnego}*/
 	BigInteger kluczPrywatny;
+	/**Klucz publiczny u¿ytkownika. Obiekt typu {@link ECPunkt}. Obliczany w funkcji
+	 *{@link Klient#oblKluczaPublicznego}*/
 	ECPunkt kluczPubliczny;
+	/**Klucz publiczny drugiej strony. Przekazywany w celu ustalenia wspólnego klucza.
+	 * Ustawiany w funkcji {@link Klient#ustawKluczPublicznyB}*/
 	ECPunkt kluczPublicznyB;
+	/**Punkt startowy generowania punktów na krzywej eliptycznej*/
 	ECPunkt G;
-	//BigInteger n;
-	BigInteger h;
+	/**Klucz bêd¹cy wynikem dzia³ania algorytmu. Ustawiany w funkcji 
+	 * {@link Klient#oblKluczaTajnego}*/
 	ECPunkt kluczTajny;
 	
 	/**
@@ -31,14 +38,10 @@ public class Klient {
 	 * Konstuktor klasy Klient pozwalaj¹cy na zapisanie parametrów
 	 * pocz¹tkowych algorytmu obliczania kluczy ECDH
 	 * @param G Generator grupy punktów krzywej eliptycznej
-	 * @param n rz¹d generatora, du¿a liczba pierwsza
-	 * @param h liczba warstw podgrupy
-	 * Liczba punktów generowanych przez dany generator jest równa n*h
 	 */
-	public Klient(ECPunkt G,BigInteger h)
+	public Klient(ECPunkt G)
 	{
 		this.G=G;
-		this.h=h;
 		
 	}
 	

@@ -16,9 +16,15 @@ import javax.swing.UIManager;
  */
 public class mainFrame extends JFrame {
 
+	/**Domyœlny numer ID klasy*/
 	private static final long serialVersionUID = 1L;
+	/**Obiekt okna programu typu {@link Window}*/
 	private JPanel Window;
 	
+	/**
+	 * Konstruktor domyœlny klasy {@link mainFrame}
+	 * @param name nazwa okna programu  
+	 */
 	public mainFrame(String name)	{
 		super(name);
 		//Tworzenie nowego okna i dodanie funkcjonalnoï¿½ci zamykania
@@ -45,6 +51,7 @@ public class mainFrame extends JFrame {
 	}
 
 	/**
+	 * Punkt startowy programu
 	 * @param args
 	 */
 	public static void main(String[] args) {

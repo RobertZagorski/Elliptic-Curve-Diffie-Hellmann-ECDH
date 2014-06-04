@@ -126,30 +126,37 @@ public class Window extends JPanel implements ActionListener {
 			public void actionPerformed(ActionEvent arg0) {
 				int m;
 				int k;
-				//BigInteger n;
-				BigInteger gx;
-				BigInteger gy;
+				BigInteger gx = BigInteger.ZERO;
+				BigInteger gy = BigInteger.ZERO;
+				BigInteger a2 = BigInteger.ZERO;
+				BigInteger a6 = BigInteger.ZERO;
 				ECPunkt punktG;
-				BigInteger a2;
-				BigInteger a6;
-				BigInteger h;
 				try {
 					m = new Integer(textField_14.getText());
 					k = new Integer(textField.getText());
-					//n = new BigInteger(textField.getText(), 16);
-					gx = new BigInteger(textField_1.getText(), 16);
-					gy = new BigInteger(textField_2.getText(), 16);
-					a2 = new BigInteger(textField_13.getText(), 16);
-					a6 = new BigInteger(textField_15.getText(), 16);
-					///TODO Zmienic wartoœæ h
-					h = new BigInteger("2");
-					punktG = new ECPunkt(m,k,
-										 a2,
-										 a6,
-										 gx,
-										 gy);
+					try
+					{
+						gx = new BigInteger(textField_1.getText(), 16);
+						gy = new BigInteger(textField_2.getText(), 16);
+						a2 = new BigInteger(textField_13.getText(), 16);
+						a6 = new BigInteger(textField_15.getText(), 16);
+						if (gx.toString(2).length() > m || gy.toString(2).length() > m || 
+							a2.toString(2).length() > m || a6.toString(2).length() > m)
+						{
+							throw new IllegalArgumentException("Wartoœci parametrów wykraczaj¹ poza zakres");
+						}
+					}
+					catch (NumberFormatException e)
+					{
+						JOptionPane.showMessageDialog(null, "Wprowadzone parametry nie s¹ w HEX", "B³¹d", JOptionPane.ERROR_MESSAGE);
+					}
+					catch (IllegalArgumentException e)
+					{
+						JOptionPane.showMessageDialog(null, e.getMessage(), "B³¹d", JOptionPane.ERROR_MESSAGE);
+					}
+					punktG = new ECPunkt(m,k,a2,a6,gx,gy);
 
-					klientA = new Klient(punktG, h);
+					klientA = new Klient(punktG);
 					klientA.genKluczaPrywatnego(m);
 					textField_3.setText(klientA.kluczPrywatny.toString());
 					
@@ -258,30 +265,29 @@ public class Window extends JPanel implements ActionListener {
 			public void actionPerformed(ActionEvent arg0) {
 				int m;
 				int k;
-				//BigInteger n;
-				BigInteger gx;
-				BigInteger gy;
+				BigInteger gx = BigInteger.ZERO;
+				BigInteger gy = BigInteger.ZERO;
+				BigInteger a2 = BigInteger.ZERO;
+				BigInteger a6 = BigInteger.ZERO;
 				ECPunkt punktG;
-				BigInteger a2;
-				BigInteger a6;
-				BigInteger h;
 				try {
 					m = new Integer(textField_14.getText());
 					k = new Integer(textField.getText());
-					//n = new BigInteger(textField.getText(), 16);
-					gx = new BigInteger(textField_1.getText(), 16);
-					gy = new BigInteger(textField_2.getText(), 16);
-					a2 = new BigInteger(textField_13.getText(), 16);
-					a6 = new BigInteger(textField_15.getText(), 16);
-					///TODO Zmienic wartoœæ h
-					h = new BigInteger("2");
-					punktG = new ECPunkt(m,k,
-										 a2,
-										 a6,
-										 gx,
-										 gy);
+					try
+					{
+						gx = new BigInteger(textField_1.getText(), 16);
+						gy = new BigInteger(textField_2.getText(), 16);
+						a2 = new BigInteger(textField_13.getText(), 16);
+						a6 = new BigInteger(textField_15.getText(), 16);
+					}
+					catch (NumberFormatException e)
+					{
+						JOptionPane.showMessageDialog(null, "Wprowadzone parametry nie s¹ w HEX", "B³¹d", JOptionPane.ERROR_MESSAGE);
+
+					}
+					punktG = new ECPunkt(m,k,a2,a6,gx,gy);
 					
-					klientB = new Klient(punktG, h);
+					klientB = new Klient(punktG);
 					klientB.genKluczaPrywatnego(m);
 					textField_4.setText(klientB.kluczPrywatny.toString());
 					
