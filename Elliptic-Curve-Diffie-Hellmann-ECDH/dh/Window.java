@@ -472,7 +472,7 @@ public class Window extends JPanel implements ActionListener {
 		BigInteger gy = BigInteger.ZERO;
 		BigInteger a2 = BigInteger.ZERO;
 		BigInteger a6 = BigInteger.ZERO;
-		ECPunkt punktG;
+		ECPunkt punktG = null;
 		try {
 			m = new Integer(textField_14.getText());
 			k = new Integer(textField.getText());
@@ -484,9 +484,15 @@ public class Window extends JPanel implements ActionListener {
 				a6 = new BigInteger(textField_15.getText(), 16);
 				if (gx.toString(2).length() > m || gy.toString(2).length() > m || 
 					a2.toString(2).length() > m || a6.toString(2).length() > m)
-				{
 					throw new IllegalArgumentException("Wartoœci parametrów wykraczaj¹ poza zakres");
-				}
+				punktG = new ECPunkt(m,k,a2,a6,gx,gy);
+				if (!punktG.naEC())
+					throw new IllegalArgumentException("Generator nie nale¿y do zbioru punktów krzywej eliptycznej");
+				klientA = new Klient(punktG);
+				klientA.genKluczaPrywatnego(m);
+				textField_3.setText(klientA.kluczPrywatny.toString());
+				
+				listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika A.");
 			}
 			catch (NumberFormatException e)
 			{
@@ -495,15 +501,7 @@ public class Window extends JPanel implements ActionListener {
 			catch (IllegalArgumentException e)
 			{
 				JOptionPane.showMessageDialog(null, e.getMessage(), "B³¹d", JOptionPane.ERROR_MESSAGE);
-			}
-			punktG = new ECPunkt(m,k,a2,a6,gx,gy);
-
-			klientA = new Klient(punktG);
-			klientA.genKluczaPrywatnego(m);
-			textField_3.setText(klientA.kluczPrywatny.toString());
-			
-			listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika A.");
-			
+			}	
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: m, k, Gx, Gy, a2 i a6.", "B³¹d", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
@@ -532,19 +530,26 @@ public class Window extends JPanel implements ActionListener {
 				gy = new BigInteger(textField_2.getText(), 16);
 				a2 = new BigInteger(textField_13.getText(), 16);
 				a6 = new BigInteger(textField_15.getText(), 16);
+				if (gx.toString(2).length() > m || gy.toString(2).length() > m || 
+					a2.toString(2).length() > m || a6.toString(2).length() > m)
+					throw new IllegalArgumentException("Wartoœci parametrów wykraczaj¹ poza zakres");
+				punktG = new ECPunkt(m,k,a2,a6,gx,gy);
+				if (!punktG.naEC())
+					throw new IllegalArgumentException("Generator nie nale¿y do zbioru punktów krzywej eliptycznej");
+				klientB = new Klient(punktG);
+				klientB.genKluczaPrywatnego(m);
+				textField_4.setText(klientB.kluczPrywatny.toString());
+				
+				listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika B.");
 			}
 			catch (NumberFormatException e)
 			{
 				JOptionPane.showMessageDialog(null, "Wprowadzone parametry nie s¹ w HEX", "B³¹d", JOptionPane.ERROR_MESSAGE);
-
 			}
-			punktG = new ECPunkt(m,k,a2,a6,gx,gy);
-			
-			klientB = new Klient(punktG);
-			klientB.genKluczaPrywatnego(m);
-			textField_4.setText(klientB.kluczPrywatny.toString());
-			
-			listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika B.");
+			catch (IllegalArgumentException e)
+			{
+				JOptionPane.showMessageDialog(null, e.getMessage(), "B³¹d", JOptionPane.ERROR_MESSAGE);
+			}
 			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: m, k, Gx, Gy, a2 i a6.", "B³¹d", JOptionPane.ERROR_MESSAGE);

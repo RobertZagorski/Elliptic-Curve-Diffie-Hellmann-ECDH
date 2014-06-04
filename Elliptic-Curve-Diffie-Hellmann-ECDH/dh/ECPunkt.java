@@ -13,37 +13,25 @@ import java.math.BigInteger;
 public class ECPunkt {
 
 	private static final BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE); 
-	/**
-	 * Wspó³rzêdna horyzontalna generatora liczb w ciele.
-	 */
+	/**Wspó³rzêdna horyzontalna generatora liczb w ciele.*/
 	BigInteger gx;
-	/**
-	 * Wspó³rzêdna wertykalna generatora liczb w ciele.
-	 */
+	/**Wspó³rzêdna wertykalna generatora liczb w ciele.*/
 	BigInteger gy;
-	/**
-	 * Wielomian modulo w ciele (x^m + x^k + 1).
-	 */
+	/**Wielomian modulo w ciele (x^m + x^k + 1).*/
 	BigInteger modulo;
-	/**
-	 * Parametr krzywej eliptycznej.
-	 */
+	/**Parametr krzywej eliptycznej.*/
 	BigInteger a2;
-	/**
-	 * Parametr krzywej eliptycznej - wolny wyraz.
-	 */
+	/**Parametr krzywej eliptycznej - wolny wyraz.*/
 	BigInteger a6;
-	/**
-	 * D³ugoœæ bitowa cia³a binarnego.
-	 */
+	/**D³ugoœæ bitowa cia³a binarnego.*/
 	int m;
-	/**
-	 * Wyk³adnik œrodkowy wielomianu modulo w ciele (x^m + x^k + 1).
-	 */
+	/**Wyk³adnik œrodkowy wielomianu modulo w ciele (x^m + x^k + 1).*/
 	int k;
-	
+	/**Obiekt reprezentuj¹cy wspó³rzêdn¹ X we wspó³rzêdnych afiniczych*/
 	GF2Elem X;
+	/**Obiekt reprezentuj¹cy wspó³rzêdn¹ Y we wspó³rzêdnych afinicznych*/
 	GF2Elem Y;
+	/**Obiekt reprezentuj¹cy wspó³rzêdn¹ Y we wspó³rzêdnych rzutowych*/
 	GF2Elem Z;
 	
 	/***
@@ -58,16 +46,15 @@ public class ECPunkt {
 	 */
 	public ECPunkt(int M,int K,BigInteger A2, BigInteger A6,BigInteger xG,BigInteger yG)
 	{
-		//TODO sprawdzaæ czy d³ugoœæ bitowa liczby jest <= m
 		gx=xG;
 		gy=yG;
-		X=new GF2Elem(xG,M,K);
-		Y=new GF2Elem(yG,M,K);
 		a2=A2;
 		a6=A6;
 		m=M;
 		k=K;
 		modulo = TWO.pow(m).subtract(TWO.pow(k)).add(BigInteger.ONE);
+		X=new GF2Elem(xG,M,K);
+		Y=new GF2Elem(yG,M,K);
 		Z = new GF2Elem(new BigInteger("2"), m, k);
 	}
 	
@@ -86,7 +73,7 @@ public class ECPunkt {
 		X=new GF2Elem(Punkt.X);
 		Y=new GF2Elem(Punkt.Y);
 		Z=new GF2Elem(Punkt.Z);
-		//modulo = Punkt.modulo;
+		modulo = Punkt.modulo;
 	}
 	
 	/**
@@ -269,4 +256,31 @@ public class ECPunkt {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Sprawdzenie, czy punkt okreœlony przez wspó³rzêdne ({@link ECPunkt#X},{@link ECPunkt#Y}) le¿y na krzywej
+	 * okreœlonej przez równanie Y^2 + XY = X^3 + a2X^2 + a6
+	 * @return
+	 */
+	public boolean naEC() {	 		
+	 		GF2Elem left = new GF2Elem(this.Y);
+	 		GF2Elem right = new GF2Elem(this.X);
+	 		GF2Elem a2 = new GF2Elem(this.a2,m,k);
+	 		GF2Elem a6 = new GF2Elem(this.a6,m,k);
+	 		GF2Elem temp = new GF2Elem(this.X);
+	 		GF2Elem temp2 = new GF2Elem(this.X);
+	 		
+	 		left.square();
+	 		temp.multiply(this.Y);
+	 		left.add(temp);
+	 		
+	 		right.square().multiply(this.X);
+	 		temp2.square().multiply(a2);
+	 		right.add(temp2).add(a6);
+	 		
+	 		if (left.b.equals(right.b)) 
+	 			return true; 
+	 		else 
+	 			return false;
+	 	}
 }

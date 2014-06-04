@@ -28,6 +28,13 @@ public class Klient {
 	ECPunkt kluczTajny;
 	
 	/**
+	 * Domyœlna wartoœæ rzêdu punktu G. Jest u¿ywana je¿eli u¿ytkownik nie poda³ inn¹.
+	 * Zestandaryzowana dla krzywej eleptycznej B-163.
+	 */
+	public static final BigInteger DEFAULT_N = 
+			new BigInteger("5846006549323611672814742442876390689256843201587");
+	
+	/**
 	 * Konstuktor klasy Klient pozwalaj¹cy na zapisanie parametrów
 	 * pocz¹tkowych algorytmu obliczania kluczy ECDH
 	 * @param G Generator grupy punktów krzywej eliptycznej
@@ -48,21 +55,22 @@ public class Klient {
 	
 	/**
 	 * Funkcja generuj¹ca klucz prywatny u¿ytkownika (du¿a liczbê pierwsz¹ 
-	 * o zadanej liczbie bitów). Liczba jest losowana z przedzia³u [1, (2^m)-1].
+	 * o zadanej liczbie bitów)
 	 * @param b liczba bitów
 	 */
 	public void genKluczaPrywatnego(int b)
 	{
 			SecureRandom random = new SecureRandom();
 			
-			BigInteger TWO = new BigInteger("2");
-			BigInteger n = TWO.pow(b);
-			BigInteger maks = n.subtract(BigInteger.ONE);
+			/**
+			 * Klucz prywatny jest losowany z zakresu [0; n-1]
+			 */
+			//BigInteger maks = n.subtract(BigInteger.ONE);
 			while (true) {
 				BigInteger nowyKlucz = new BigInteger(b-1, random);
-				if (nowyKlucz.compareTo(maks) >= 0) {
+				/*if (nowyKlucz.compareTo(maks) >= 0) {
 					continue;
-				}
+				}*/
 				if (nowyKlucz.compareTo(BigInteger.ONE) <= 0 ) {
 					continue;
 				}

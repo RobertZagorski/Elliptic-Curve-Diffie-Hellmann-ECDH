@@ -22,7 +22,7 @@ public class mainFrame extends JFrame {
 	private JPanel Window;
 	
 	/**
-	 * Konstruktor klasy {@link mainFrame}
+	 * Konstruktor domyœlny klasy {@link mainFrame}
 	 * @param name nazwa okna programu  
 	 */
 	public mainFrame(String name)	{
