@@ -284,13 +284,13 @@ public class GF2Elem {
 				  temp=g1;
 				  g1=g2;
 				  g2=temp;
-				  //j‚Üê-j
+				  //j‚Ü-j
 				  j=0-j;
 			  }
-			  //u‚Üêu+z^j*v;
+			  //u‚Üu+z^j*v;
 			  z[m-j]=1;
 			  u=reduce(add(u,multiply(z,v)));
-			  //g1‚Üêg1+z^j*g2;
+			  //g1‚Üg1+z^j*g2;
 			  g1=reduce(add(g1,multiply(z,g2)));		  
 			  //u!=1
 			  int sum=0;

@@ -13,12 +13,33 @@ import java.math.BigInteger;
 public class ECPunkt {
 
 	private static final BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE); 
+	/**
+	 * Wspó³rzêdna horyzontalna generatora liczb w ciele.
+	 */
 	BigInteger gx;
+	/**
+	 * Wspó³rzêdna wertykalna generatora liczb w ciele.
+	 */
 	BigInteger gy;
+	/**
+	 * Wielomian modulo w ciele (x^m + x^k + 1).
+	 */
 	BigInteger modulo;
+	/**
+	 * Parametr krzywej eliptycznej.
+	 */
 	BigInteger a2;
+	/**
+	 * Parametr krzywej eliptycznej - wolny wyraz.
+	 */
 	BigInteger a6;
+	/**
+	 * D³ugoœæ bitowa cia³a binarnego.
+	 */
 	int m;
+	/**
+	 * Wyk³adnik œrodkowy wielomianu modulo w ciele (x^m + x^k + 1).
+	 */
 	int k;
 	
 	GF2Elem X;
@@ -215,22 +236,15 @@ public class ECPunkt {
 //		//P.wspAfiniczneNaRzutowe();
 		ECPunkt Q = new ECPunkt(this.m, this.k, this.a2, this.a6, BigInteger.ZERO, BigInteger.ZERO);
 		String kInBits = k.toString(2);
-		int i=0;
 		for (int j=0;j<kInBits.length();j++)
 		{
 			Q = podwojeniePunktu(Q);
-			i*=2;
-			System.out.print("P");
 			if(kInBits.charAt(j) == '1')
 			{
 				Q = sumaPunktow(Q,P);
-				System.out.print("D");
-				i++;
 			}
 		}
 		//Q.wspRzutoweNaAfiniczne();
-		System.out.println("");
-		System.out.println(i);
 		return Q;
 	}
 	

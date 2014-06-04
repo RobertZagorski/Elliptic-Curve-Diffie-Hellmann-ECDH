@@ -22,31 +22,121 @@ import javax.swing.JList;
 import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
 
-
+/**
+ * Klasa odpowiadaj¹ca za budowê GUI programu. Za wczytanie danych 
+ * wejœciowych oraz za wyœwietlanie wyników obliczeñ.
+ * @author Vitali Karpinski
+ * @author Robert Zagórski
+ */
 public class Window extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Obiekt klasy startowej aplikacji.
+	 */
 	mainFrame mainframe;
+	
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField;
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_1;
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_2;
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_3;
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_4;
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_5;
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_6;
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_7;
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_8;
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_9;
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_10;
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_11;
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_12;
 	
+	/**
+	 * Obiket reprezentuj¹cy u¿ytkownika A w algorytmie DH
+	 */
 	private Klient klientA;
+	/**
+	 * Obiket reprezentuj¹cy u¿ytkownika B w algorytmie DH
+	 */
 	private Klient klientB;
+	
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_13;
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_14;
+	/**
+	 * Pole tekstowe niezbêdne do wczytywania oraz 
+	 * wyœwietlania danych algorytmu DH.
+	 */
 	private JTextField textField_15;
 	
+	/**
+	 * Obiekt potrzebny do wyœwietlania króków algorytmu DH.
+	 */
+	private DefaultListModel<String> listModel;
+	
+	/**
+	 * Konstruktor klasy Window. Tworzy g³ówne okienko aplikacji oraz
+	 * potrzebne elementy GUI. 
+	 * @param main
+	 */
 	public Window(mainFrame main)	{
 		this.mainframe = main;
 		this.requestFocusInWindow();
@@ -71,7 +161,7 @@ public class Window extends JPanel implements ActionListener {
 				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
 		);
 		
-		final DefaultListModel<String> listModel = new DefaultListModel<String>();
+		listModel = new DefaultListModel<String>();
 		JList<String> list = new JList<String>(listModel);
 		scrollPane.setColumnHeaderView(list);
 		scrollPane.setViewportView(list);
@@ -124,48 +214,7 @@ public class Window extends JPanel implements ActionListener {
 		JButton btnGeneruj = new JButton("Generuj");
 		btnGeneruj.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int m;
-				int k;
-				BigInteger gx = BigInteger.ZERO;
-				BigInteger gy = BigInteger.ZERO;
-				BigInteger a2 = BigInteger.ZERO;
-				BigInteger a6 = BigInteger.ZERO;
-				ECPunkt punktG;
-				try {
-					m = new Integer(textField_14.getText());
-					k = new Integer(textField.getText());
-					try
-					{
-						gx = new BigInteger(textField_1.getText(), 16);
-						gy = new BigInteger(textField_2.getText(), 16);
-						a2 = new BigInteger(textField_13.getText(), 16);
-						a6 = new BigInteger(textField_15.getText(), 16);
-						if (gx.toString(2).length() > m || gy.toString(2).length() > m || 
-							a2.toString(2).length() > m || a6.toString(2).length() > m)
-						{
-							throw new IllegalArgumentException("Wartoœci parametrów wykraczaj¹ poza zakres");
-						}
-					}
-					catch (NumberFormatException e)
-					{
-						JOptionPane.showMessageDialog(null, "Wprowadzone parametry nie s¹ w HEX", "B³¹d", JOptionPane.ERROR_MESSAGE);
-					}
-					catch (IllegalArgumentException e)
-					{
-						JOptionPane.showMessageDialog(null, e.getMessage(), "B³¹d", JOptionPane.ERROR_MESSAGE);
-					}
-					punktG = new ECPunkt(m,k,a2,a6,gx,gy);
-
-					klientA = new Klient(punktG);
-					klientA.genKluczaPrywatnego(m);
-					textField_3.setText(klientA.kluczPrywatny.toString());
-					
-					listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika A.");
-					
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: m, k, Gx, Gy, a2 i a6.", "B³¹d", JOptionPane.ERROR_MESSAGE);
-					e.printStackTrace();
-				}
+				daneGenPrivA();
 			}
 		});
 		btnGeneruj.setLocation(259, 27);
@@ -189,16 +238,7 @@ public class Window extends JPanel implements ActionListener {
 		JButton btnOblicz = new JButton("Oblicz");
 		btnOblicz.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (klientA == null || klientA.G == null || klientA.kluczPrywatny == null) {
-					JOptionPane.showMessageDialog(null, "Nale¿y wygenerowaæ klucz prywatny u¿ytkownika A.", "B³¹d", JOptionPane.ERROR_MESSAGE);
-				}
-				else {
-					klientB.ustawKluczPublicznyB(klientA.oblKluczaPublicznego());
-					textField_5.setText(klientA.kluczPubliczny.X.b.toString());
-					textField_6.setText(klientA.kluczPubliczny.Y.b.toString());
-					listModel.addElement("Obliczono klucz publiczny u¿ytkownika A");
-					listModel.addElement("Przekazano klucz publiczny u¿ytkownika A stronie B");
-				}
+				genPubA();
 			}
 		});
 		btnOblicz.setBounds(259, 94, 78, 23);
@@ -222,18 +262,7 @@ public class Window extends JPanel implements ActionListener {
 		JButton btnOblicz_2 = new JButton("Oblicz");
 		btnOblicz_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (klientA == null || klientA.kluczPrywatny == null) {
-					JOptionPane.showMessageDialog(null, "Nale¿y wygenerowaæ klucz prywatny u¿ytkownika A.", "B³¹d", JOptionPane.ERROR_MESSAGE);
-				}
-				else if (klientA.kluczPublicznyB == null) {
-					JOptionPane.showMessageDialog(null, "Nale¿y obliczyæ klucz publiczny u¿ytkownika B.", "B³¹d", JOptionPane.ERROR_MESSAGE);
-				}
-				else {
-					klientA.oblKluczaTajnego();
-					textField_9.setText(klientA.kluczTajny.X.b.toString());
-					textField_10.setText(klientA.kluczTajny.Y.b.toString());
-					listModel.addElement("Obliczono klucz tajny u¿ytkownika A");
-				}
+				genTajnA();
 			}
 		});
 		btnOblicz_2.setBounds(258, 192, 78, 23);
@@ -263,40 +292,7 @@ public class Window extends JPanel implements ActionListener {
 		JButton btnGeneruj_1 = new JButton("Generuj");
 		btnGeneruj_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int m;
-				int k;
-				BigInteger gx = BigInteger.ZERO;
-				BigInteger gy = BigInteger.ZERO;
-				BigInteger a2 = BigInteger.ZERO;
-				BigInteger a6 = BigInteger.ZERO;
-				ECPunkt punktG;
-				try {
-					m = new Integer(textField_14.getText());
-					k = new Integer(textField.getText());
-					try
-					{
-						gx = new BigInteger(textField_1.getText(), 16);
-						gy = new BigInteger(textField_2.getText(), 16);
-						a2 = new BigInteger(textField_13.getText(), 16);
-						a6 = new BigInteger(textField_15.getText(), 16);
-					}
-					catch (NumberFormatException e)
-					{
-						JOptionPane.showMessageDialog(null, "Wprowadzone parametry nie s¹ w HEX", "B³¹d", JOptionPane.ERROR_MESSAGE);
-
-					}
-					punktG = new ECPunkt(m,k,a2,a6,gx,gy);
-					
-					klientB = new Klient(punktG);
-					klientB.genKluczaPrywatnego(m);
-					textField_4.setText(klientB.kluczPrywatny.toString());
-					
-					listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika B.");
-					
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: m, k, Gx, Gy, a2 i a6.", "B³¹d", JOptionPane.ERROR_MESSAGE);
-					e.printStackTrace();
-				}
+				daneGenPrivB();
 			}
 		});
 		btnGeneruj_1.setBounds(257, 27, 78, 23);
@@ -319,16 +315,7 @@ public class Window extends JPanel implements ActionListener {
 		JButton btnOblicz_1 = new JButton("Oblicz");
 		btnOblicz_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (klientB == null || klientB.G == null || klientB.kluczPrywatny == null) {
-					JOptionPane.showMessageDialog(null, "Nale¿y wygenerowaæ klucz prywatny u¿ytkownika B.", "B³¹d", JOptionPane.ERROR_MESSAGE);
-				}
-				else {
-					klientA.ustawKluczPublicznyB(klientB.oblKluczaPublicznego());
-					textField_7.setText(klientB.kluczPubliczny.X.b.toString());
-					textField_8.setText(klientB.kluczPubliczny.Y.b.toString());
-					listModel.addElement("Obliczono klucz publiczny u¿ytkownika B");
-					listModel.addElement("Przekazano klucz publiczny u¿ytkownika B stronie A");
-				}
+				genPubB();
 			}
 		});
 		btnOblicz_1.setBounds(257, 94, 78, 23);
@@ -352,18 +339,7 @@ public class Window extends JPanel implements ActionListener {
 		JButton btnNewButton = new JButton("Oblicz");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (klientB == null || klientB.kluczPrywatny == null) {
-					JOptionPane.showMessageDialog(null, "Nale¿y wygenerowaæ klucz prywatny u¿ytkownika B.", "B³¹d", JOptionPane.ERROR_MESSAGE);
-				}
-				else if (klientB.kluczPublicznyB == null) {
-					JOptionPane.showMessageDialog(null, "Nale¿y obliczyæ klucz publiczny u¿ytkownika A.", "B³¹d", JOptionPane.ERROR_MESSAGE);
-				}
-				else {
-					klientB.oblKluczaTajnego();
-					textField_11.setText(klientB.kluczTajny.X.b.toString());
-					textField_12.setText(klientB.kluczTajny.Y.b.toString());
-					listModel.addElement("Obliczono klucz tajny u¿ytkownika B");
-				}
+				genTajnB();
 			}
 		});
 		btnNewButton.setBounds(258, 192, 78, 23);
@@ -482,6 +458,172 @@ public class Window extends JPanel implements ActionListener {
 		setLayout(groupLayout);
 		mainframe.setTitle("ECDH");
 		
+	}
+	
+	/**
+	 * Funkcja odpowiadaj¹ca za wczytanie danych 
+	 * wejœciowych niezbêdnych do obliczeñ oraz uruchomienia algorytmu
+	 * obliczaj¹cego klucz prywatny u¿ytkownika A.
+	 */
+	private void daneGenPrivA() {
+		int m;
+		int k;
+		BigInteger gx = BigInteger.ZERO;
+		BigInteger gy = BigInteger.ZERO;
+		BigInteger a2 = BigInteger.ZERO;
+		BigInteger a6 = BigInteger.ZERO;
+		ECPunkt punktG;
+		try {
+			m = new Integer(textField_14.getText());
+			k = new Integer(textField.getText());
+			try
+			{
+				gx = new BigInteger(textField_1.getText(), 16);
+				gy = new BigInteger(textField_2.getText(), 16);
+				a2 = new BigInteger(textField_13.getText(), 16);
+				a6 = new BigInteger(textField_15.getText(), 16);
+				if (gx.toString(2).length() > m || gy.toString(2).length() > m || 
+					a2.toString(2).length() > m || a6.toString(2).length() > m)
+				{
+					throw new IllegalArgumentException("Wartoœci parametrów wykraczaj¹ poza zakres");
+				}
+			}
+			catch (NumberFormatException e)
+			{
+				JOptionPane.showMessageDialog(null, "Wprowadzone parametry nie s¹ w HEX", "B³¹d", JOptionPane.ERROR_MESSAGE);
+			}
+			catch (IllegalArgumentException e)
+			{
+				JOptionPane.showMessageDialog(null, e.getMessage(), "B³¹d", JOptionPane.ERROR_MESSAGE);
+			}
+			punktG = new ECPunkt(m,k,a2,a6,gx,gy);
+
+			klientA = new Klient(punktG);
+			klientA.genKluczaPrywatnego(m);
+			textField_3.setText(klientA.kluczPrywatny.toString());
+			
+			listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika A.");
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: m, k, Gx, Gy, a2 i a6.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Funkcja odpowiadaj¹ca za wczytanie danych 
+	 * wejœciowych niezbêdnych do obliczeñ oraz uruchomienia algorytmu
+	 * obliczaj¹cego klucz prywatny u¿ytkownika B.
+	 */
+	private void daneGenPrivB() {
+		int m;
+		int k;
+		BigInteger gx = BigInteger.ZERO;
+		BigInteger gy = BigInteger.ZERO;
+		BigInteger a2 = BigInteger.ZERO;
+		BigInteger a6 = BigInteger.ZERO;
+		ECPunkt punktG;
+		try {
+			m = new Integer(textField_14.getText());
+			k = new Integer(textField.getText());
+			try
+			{
+				gx = new BigInteger(textField_1.getText(), 16);
+				gy = new BigInteger(textField_2.getText(), 16);
+				a2 = new BigInteger(textField_13.getText(), 16);
+				a6 = new BigInteger(textField_15.getText(), 16);
+			}
+			catch (NumberFormatException e)
+			{
+				JOptionPane.showMessageDialog(null, "Wprowadzone parametry nie s¹ w HEX", "B³¹d", JOptionPane.ERROR_MESSAGE);
+
+			}
+			punktG = new ECPunkt(m,k,a2,a6,gx,gy);
+			
+			klientB = new Klient(punktG);
+			klientB.genKluczaPrywatnego(m);
+			textField_4.setText(klientB.kluczPrywatny.toString());
+			
+			listModel.addElement("Wygenerowano klucz prywatny u¿ytkownika B.");
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Nale¿y podaæ parametry: m, k, Gx, Gy, a2 i a6.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Funkcja odpowiadaj¹ca za uruchomienia algorytmu obliczenia
+	 * klucza publicznego u¿ytkownika A oraz przes³anie 
+	 * tego klucza u¿ytkownikowi B.
+	 */
+	private void genPubA() {
+		if (klientA == null || klientA.G == null || klientA.kluczPrywatny == null) {
+			JOptionPane.showMessageDialog(null, "Nale¿y wygenerowaæ klucz prywatny u¿ytkownika A.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+		}
+		else {
+			klientB.ustawKluczPublicznyB(klientA.oblKluczaPublicznego());
+			textField_5.setText(klientA.kluczPubliczny.X.b.toString());
+			textField_6.setText(klientA.kluczPubliczny.Y.b.toString());
+			listModel.addElement("Obliczono klucz publiczny u¿ytkownika A");
+			listModel.addElement("Przekazano klucz publiczny u¿ytkownika A stronie B");
+		}
+	}
+	
+	/**
+	 * Funkcja odpowiadaj¹ca za uruchomienia algorytmu obliczenia
+	 * klucza publicznego u¿ytkownika B oraz przes³anie 
+	 * tego klucza u¿ytkownikowi A.
+	 */
+	private void genPubB() {
+		if (klientB == null || klientB.G == null || klientB.kluczPrywatny == null) {
+			JOptionPane.showMessageDialog(null, "Nale¿y wygenerowaæ klucz prywatny u¿ytkownika B.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+		}
+		else {
+			klientA.ustawKluczPublicznyB(klientB.oblKluczaPublicznego());
+			textField_7.setText(klientB.kluczPubliczny.X.b.toString());
+			textField_8.setText(klientB.kluczPubliczny.Y.b.toString());
+			listModel.addElement("Obliczono klucz publiczny u¿ytkownika B");
+			listModel.addElement("Przekazano klucz publiczny u¿ytkownika B stronie A");
+		}
+	}
+	
+	/**
+	 * Funkcja odpowiadaj¹ca za uruchomienia algorytmu obliczenia
+	 * klucza tajnego po stronie u¿ytkownika A.
+	 */
+	private void genTajnA() {
+		if (klientA == null || klientA.kluczPrywatny == null) {
+			JOptionPane.showMessageDialog(null, "Nale¿y wygenerowaæ klucz prywatny u¿ytkownika A.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+		}
+		else if (klientA.kluczPublicznyB == null) {
+			JOptionPane.showMessageDialog(null, "Nale¿y obliczyæ klucz publiczny u¿ytkownika B.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+		}
+		else {
+			klientA.oblKluczaTajnego();
+			textField_9.setText(klientA.kluczTajny.X.b.toString());
+			textField_10.setText(klientA.kluczTajny.Y.b.toString());
+			listModel.addElement("Obliczono klucz tajny u¿ytkownika A");
+		}
+	}
+	
+	/**
+	 * Funkcja odpowiadaj¹ca za uruchomienia algorytmu obliczenia
+	 * klucza tajnego po stronie u¿ytkownika B.
+	 */
+	private void genTajnB() {
+		if (klientB == null || klientB.kluczPrywatny == null) {
+			JOptionPane.showMessageDialog(null, "Nale¿y wygenerowaæ klucz prywatny u¿ytkownika B.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+		}
+		else if (klientB.kluczPublicznyB == null) {
+			JOptionPane.showMessageDialog(null, "Nale¿y obliczyæ klucz publiczny u¿ytkownika A.", "B³¹d", JOptionPane.ERROR_MESSAGE);
+		}
+		else {
+			klientB.oblKluczaTajnego();
+			textField_11.setText(klientB.kluczTajny.X.b.toString());
+			textField_12.setText(klientB.kluczTajny.Y.b.toString());
+			listModel.addElement("Obliczono klucz tajny u¿ytkownika B");
+		}
 	}
 
 	@Override
