@@ -79,7 +79,7 @@ public class ECPunkt {
 	/**
 	 * Funkcja pozwalaj¹ca na operacjê podwojenia punktu na krzywej eliptycznej
 	 * Q=[2]P
-	 * @param p punkt, który nale¿y podwoiæ
+	 * @param P punkt, który nale¿y podwoiæ
 	 * @return wynik operacji podwajania punktu
 	 */
 	public ECPunkt podwojeniePunktu (ECPunkt P)
@@ -138,8 +138,8 @@ public class ECPunkt {
 	/**
 	 * Suma dwóch ró¿nych punktów nale¿¹cych do krzywej eliptycznej
 	 * Q = P1 + P2 
-	 * @param p pierwszy punkt
-	 * @param q drugi punkt
+	 * @param Q pierwszy punkt
+	 * @param P drugi punkt
 	 * @return punkt bêd¹cy sum¹ dwóch punktów krzywej eliptycznej
 	 */
 	public ECPunkt sumaPunktow (ECPunkt Q,ECPunkt P)
@@ -228,7 +228,7 @@ public class ECPunkt {
 	}
 	
 	/**
-	 * Konwesja wspó³rzêdnych z afinicznych na rzutowe: P(X/Z,Y,Z)
+	 * Konwesja wspó³rzêdnych z afinicznych na rzutowe: P(X/Z,Y/Z)
 	 */
 	public void wspAfiniczneNaRzutowe()
 	{
@@ -243,7 +243,7 @@ public class ECPunkt {
 	/**
 	 * Sprawdzenie, czy punkt okreœlony przez wspó³rzêdne ({@link ECPunkt#X},{@link ECPunkt#Y}) le¿y na krzywej
 	 * okreœlonej przez równanie Y^2 + XY = X^3 + a2X^2 + a6
-	 * @return
+	 * @return zmienna typu {@code boolean} wskazuj¹ca czy punkt nale¿y do zbioru punktów krzywej eliptycznej
 	 */
 	public boolean naEC() {	 		
 	 		GF2Elem left = new GF2Elem(this.Y);

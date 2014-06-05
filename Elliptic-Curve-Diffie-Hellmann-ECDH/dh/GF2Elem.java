@@ -3,30 +3,30 @@ package dh;
 import java.math.BigInteger;
 
 /**
- * Klasa implementujÄ…ca element ciaÅ‚a {@link GF(2^m)}. 
- * W klasie zdefiniowano operacje na ciele binarnym: dodawanie, mnoÅ¼enie, podnoszenie
- * do kwadratu. Dodatkowo zaimplementowano konwersjÄ™ liczby w postaci binarnej 
- * zaimplementowanej jako {@link int}[] na liczbÄ™ typu {@link BigInteger}. <p>
- * DO implementacji operacji modulo wykorzystywany jest trÃ³jmian postaci {@link x^m+x^k+1}
+ * Klasa implementuj¹ca element cia³a {@code GF(2^m)}. 
+ * W klasie zdefiniowano operacje na ciele binarnym: dodawanie, mno¿enie, podnoszenie
+ * do kwadratu. Dodatkowo zaimplementowano konwersjê liczby w postaci binarnej 
+ * zaimplementowanej jako {@code int[]} na liczbE typu {@link BigInteger}. <p>
+ * Do implementacji operacji modulo wykorzystywany jest trójmian postaci {@code x^m+x^k+1}
  */
 
 public class GF2Elem {
-	/**Rozmiar cyklicznej grupy multiplikatywnej, na ktÃ³rej zaimplementowano dany element*/
+	/**Rozmiar cyklicznej grupy multiplikatywnej, na której zaimplementowano dany element*/
 	private static final int FIELDSIZE = 2;
 	/**Liczba opisywana przez obiekt tej klasy typu {@link BigInteger}*/
 	BigInteger b;
-	/**Liczba opisywana przez obiekt tej klasy w postaci {@link int}[]*/
+	/**Liczba opisywana przez obiekt tej klasy w postaci {@code int[]}*/
 	int[] bB;
-	/**WykÅ‚adnik najwyÅ¼szego skÅ‚adnika wielomianu modulo dla ciaÅ‚a - rzÄ…d wielomianu*/
+	/**Wyk³adnik najwy¿szego sk³adnika wielomianu modulo dla cia³a - rz¹d wielomianu*/
 	int m;
-	/**Element Å›rodkowy wielomianu modulo dla ciaÅ‚a*/
+	/**Element œrodkowy wielomianu modulo dla cia³a*/
 	int k;
 	
 	/***
 	 * Konstruktor klasy {@link GF2Elem}
-	 * @param bi Liczba typu {@link BigInteger} przechowujÄ…ca obiekt w formanie innym niÅ¼ binarnym
-	 * @param mm WykÅ‚adnik najwyÅ¼szego skÅ‚adnika wielomianu modulo dla ciaÅ‚a - rzÄ…d wielomianu
-	 * @param kk Element Å›rodkowy wielomianu modulo dla ciaÅ‚a
+	 * @param bi Liczba typu {@link BigInteger} przechowuj¹ca obiekt w formanie innym ni¿ binarnym
+	 * @param mm Wyk³adnik najwy¿szego sk³adnika wielomianu modulo dla cia³a - rz¹d wielomianu
+	 * @param kk Element œrodkowy wielomianu modulo dla cia³a
 	 */
 	public GF2Elem(BigInteger bi, int mm, int kk)
 	{
@@ -40,7 +40,7 @@ public class GF2Elem {
 	}
 	
 	/**
-	 * Konstruktor kopiujÄ…cy klasy {@link GF2Elem}
+	 * Konstruktor kopiuj¹cy klasy {@link GF2Elem}
 	 * @param copy obiekt kopiowany
 	 */
 	public GF2Elem(GF2Elem copy)
@@ -56,16 +56,16 @@ public class GF2Elem {
 
 	  
 	  /**
-	   * Funkcja zwracajÄ…ca liczbÄ™ elementÃ³w w ciele
-	   * @return liczba elementÃ³w w ciele (domyÅ›lnie 2)
+	   * Funkcja zwracaj¹ca liczbê elementów w ciele
+	   * @return liczba elementów w ciele (domyœlnie 2)
 	   */
 	  public int rozmiarGrupySkonczonej() {
 	    return FIELDSIZE;
 	  }
 	  
 	  /***
-	   * Funkcja zwracajÄ…ca dÅ‚ugoÅ›Ä‡ binarnÄ… liczby przechowywanej w obiekcie typu {@link GF2Elem}
-	   * @return dÅ‚ugoÅ›Ä‡ binarna liczby przechowywanej w obiekcie typu {@link GF2Elem}
+	   * Funkcja zwracaj¹ca d³ugoœæ binarn¹ liczby przechowywanej w obiekcie typu {@link GF2Elem}
+	   * @return d³ugoœæ binarna liczby przechowywanej w obiekcie typu {@link GF2Elem}
 	   */
 	  public int dlugoscBitowa()
 	  {
@@ -73,10 +73,10 @@ public class GF2Elem {
 	  }
 	  
 	  /**
-	   * Dodawanie binarne dwÃ³ch liczb typu {@link int}
-	   * @param x liczba typu {@link int} - pierwszy skÅ‚adnik
-	   * @param y liczba typu {@link int} - drugi skÅ‚adnik
-	   * @return wynik sumy binarnej liczb {@link x} oraz {@link y}
+	   * Dodawanie binarne dwóch liczb typu {@code int}
+	   * @param x liczba typu {@code int} - pierwszy sk³adnik
+	   * @param y liczba typu {@code int} - drugi sk³adnik
+	   * @return wynik sumy binarnej liczb
 	   */
 	  public int dodaj(int x, int y) {
 		    assert(x >= 0 && x < rozmiarGrupySkonczonej() && y >= 0 && y < rozmiarGrupySkonczonej());
@@ -84,11 +84,11 @@ public class GF2Elem {
 	  }
 	  
 	/**
-	   * Obliczanie sumy dwÃ³ch wielomianÃ³w. Indeks w tablicy typu {@link int} odpowiada 
-	   * wykÅ‚adnikowi elementowi wejÅ›ciowemu. Na przykÅ‚ad element {@link p[m]} odpowiada
-	   * skÅ‚adnikowi wolnemu wielomianu. Implementacja operacji XOR w ciele GF{2^m}
-	   * @param Q wielomian, ktÃ³rego wartoÅ›Ä‡ jest skÅ‚adnikiem sumy
-	   * @return wielomina reprezenujÄ…cy wynik operacji p+q
+	   * Obliczanie sumy dwóch wielomianÃ³w. Indeks w tablicy typu {@code int} odpowiada 
+	   * wyk³adnikowi elementowi wejœciowemu. Na przyk³ad element {@code p[m]} odpowiada
+	   * sk³adnikowi wolnemu wielomianu. Implementacja operacji XOR w ciele GF{2^m}
+	   * @param Q wielomian, którego wartoœæ jest sk³adnikiem sumy
+	   * @return wielomina reprezenuj¹cy wynik operacji p+q
 	   */
 	  public GF2Elem dodaj(GF2Elem Q) 
 	  {
@@ -110,11 +110,11 @@ public class GF2Elem {
 	  }
 	  
 	  /**
-	   * Obliczanie iloczynu dwÃ³ch wielomianÃ³w. Indeks w tablicy typu {@link int} odpowiada 
-	   * wykÅ‚adnikowi elementowi wejÅ›ciowemu. Na przykÅ‚ad element {@link p[m]} odpowiada
-	   * skÅ‚adnikowi wolnemu wielomianu. Implementacja operacji AND w ciele GF{2^m}
-	   * @param Q element ciaÅ‚a, ktÃ³rego wartoÅ›Ä‡ jest skÅ‚adnikiem iloczynu
-	   * @return wielomina reprezenujÄ…cy wynik operacji p*q
+	   * Obliczanie iloczynu dwóch wielomianów. Indeks w tablicy typu {@code int} odpowiada 
+	   * wyk³adnikowi elementowi wejœciowemu. Na przyk³ad element {@code p[m]} odpowiada
+	   * sk³adnikowi wolnemu wielomianu. Implementacja operacji AND w ciele GF{2^m}
+	   * @param Q element cia³a, którego wartoœæ jest sk³adnikiem iloczynu
+	   * @return wielomina reprezenuj¹cy wynik operacji p*q
 	   */
 	  public GF2Elem pomnoz(GF2Elem Q) 
 	  {
@@ -137,8 +137,8 @@ public class GF2Elem {
 	  
 	  /**
 	   * Redukcja wielomianu przechowywanego w elemenencie {@link GF2Elem#bB} przez
-	   * wielomian modulo zdefiniowany przez wykÅ‚adniki {@link GF2Elem#m} oraz {@link GF2Elem#k}
-	   * @return
+	   * wielomian modulo zdefiniowany przez wyk³adniki {@link GF2Elem#m} oraz {@link GF2Elem#k}
+	   * @return Obiekt typu {@link GF2Elem} reprezentuj¹cy zredukowany wielomian
 	   */
 	  public GF2Elem redukuj()
 	  {
@@ -159,7 +159,7 @@ public class GF2Elem {
 
 	  /**
 	   * Operacja podnoszenia do kwadratu wielomianu przechowywanego w elemenencie {@link GF2Elem#bB}
-	   * @return obiekt typu {@link GF2Elem} przechowujÄ…cy liczbÄ™ w formacie binarnym
+	   * @return obiekt typu {@link GF2Elem} przechowuj¹cy liczbê w formacie binarnym
 	   */
 	  public GF2Elem doKwadratu()
 	  {
@@ -200,8 +200,8 @@ public class GF2Elem {
 	  
 	  /**
 	   * Konwersja liczby z postaci binarnej do obiektu {@link BigInteger}
-	   * @param input tablica zawierajÄ…ca bity liczby przeznaczonej do konwersji
-	   * @return obiekt {@link BigInteger} zawierajÄ…cy przechowywanÄ… liczbÄ™
+	   * @param input tablica zawieraj¹ca bity liczby przeznaczonej do konwersji
+	   * @return obiekt {@link BigInteger} zawieraj¹cy przechowywan¹ liczbê
 	   */
 	  public BigInteger intArraytoBigInteger (int[] input)
 	  {
@@ -216,13 +216,13 @@ public class GF2Elem {
 	  
 	  /**
 	   * Inwersja modulo liczby zawartej w {@link GF2Elem#bB} 
-	   * (szukanie liczby speÅ‚niajÄ…cej rÃ³wnanie {@link axâ‰¡1(mod n)}).
+	   * (szukanie liczby spe³niaj¹cej równanie {@code ax=1(mod n)}).
 	   * Inwersja przeprowadzana jest przy pomocy rozszerzonego algorytmu Euklidesa.
-	   * Wielomian modulo zdefiniowany jest poprzez wykÅ‚adniki {@link GF2Elem#m}
+	   * Wielomian modulo zdefiniowany jest poprzez wyk³adniki {@link GF2Elem#m}
 	   * oraz {@link GF2Elem#k}.
-	   * @return obiekt {@link GF2Elem} przechowujÄ…cy zmiennÄ… {@link GF2Elem#bB} w postaci
-	   * binarnej bÄ™dÄ…cy inwersjÄ… modulo wielomianu pierwotnego
-	 * @throws Exception wyjÄ…tek rzucany jest jeÅ›li liczba nie jest wzglÄ™dnie pierwsza z wielomianem modulo
+	   * @return obiekt {@link GF2Elem} przechowuj¹cy zmienn¹ {@link GF2Elem#bB} w postaci
+	   * binarnej bêd¹cy inwersj¹ modulo wielomianu pierwotnego
+	 * @throws Exception wyj¹tek rzucany jest jeœli wielomian przeznaczony do inwersji nie jest wzglêdnie pierwsza z wielomianem modulo
 	   */
 	  public GF2Elem odwrocModulo() throws Exception
 	  {
@@ -243,9 +243,9 @@ public class GF2Elem {
 		  v[0]=1;
 		  v[this.m]=1;
 		  v[this.m-this.k]=1;
-		  // JeÅ›li liczby a oraz n (wielomian modulo)
+		  // Jeœli liczby a oraz n (wielomian modulo) nie s¹ wzglêdnie pierwsze
 		  if (!this.b.gcd(intArraytoBigInteger(v)).equals(BigInteger.ONE))
-			  throw new Exception("Wielomian, ktÃ³ry naleÅ¼y odwrÃ³ciÄ‡ nie jest wzglÄ™dnie pierwszy z wielomianem modulo");
+			  throw new Exception("Wielomian, który nale¿y odwróciæ nie jest wzglêdnie pierwszy z wielomianem modulo");
 		  g1[m]=1;
 		  boolean end=false;
 		  int degv,degu,j;
@@ -284,14 +284,14 @@ public class GF2Elem {
 				  temp=g1;
 				  g1=g2;
 				  g2=temp;
-				  //jâ†-j
+				  //j<- -j
 				  j=0-j;
 			  }
-			  //uâ†u+z^j*v;
+			  //u<- u+z^j*v;
 			  z[m-j]=1;
-			  u=zredukuj(dodaj(u,pomnoz(z,v)));
-			  //g1â†g1+z^j*g2;
-			  g1=zredukuj(dodaj(g1,pomnoz(z,g2)));		  
+			  u=redukuj(dodaj(u,pomnoz(z,v)));
+			  //g1<- g1+z^j*g2;
+			  g1=redukuj(dodaj(g1,pomnoz(z,g2)));		  
 			  //u!=1
 			  int sum=0;
 			  for (int i=0;i<=m;i++)
@@ -311,8 +311,8 @@ public class GF2Elem {
 	  }
 	  
 	  /**
-	   * Prywatna metoda sÅ‚uÅ¼Ä…ca do obliczenia iloczynu dwÃ³ch wielomianÃ³w
-	   * Wykorzystywana w funkcji {@link GF2Elem#inverse}
+	   * Prywatna metoda s³u¿¹ca do obliczenia iloczynu dwóch wielomianów
+	   * Wykorzystywana w funkcji {@link GF2Elem#odwrocModulo}
 	   * @param p wielomian
 	   * @param q wielomian
 	   * @return wynik mnoÅ¼enia p*q
@@ -330,13 +330,13 @@ public class GF2Elem {
 	}
 	  
 	/**
-	 * Redukcja wielomianu modulo wielomian zdefiniowany przez wykÅ‚adniki
+	 * Redukcja wielomianu modulo wielomian zdefiniowany przez wyk³adniki
 	 * {@link GF2Elem#m} oraz {@link GF2Elem#k}. Wykorzystywana w algorytmie
-	 * {@link GF2Elem#inverse}.
+	 * {@link GF2Elem#odwrocModulo}.
 	 * @param p wielomian przeznaczony do redukcji
 	 * @return wielomian zredukowany
 	 */
-	private int[] zredukuj(int[] p)
+	private int[] redukuj(int[] p)
 	{
 		for (int i = 0 ; i<=m; i++)
 		{
@@ -350,10 +350,10 @@ public class GF2Elem {
 	}
 	
 	/**
-	 * Suma dwÃ³ch wielomianÃ³w. Wykorzystywana w funkcji {@link GF2Elem#inverse}
-	 * @param p pierwszy skÅ‚adnik
-	 * @param q drugi skÅ‚adnik
-	 * @return suma dwÃ³ch wielomianÃ³w
+	 * Suma dwóch wielomianów. Wykorzystywana w funkcji {@link GF2Elem#odwrocModulo}
+	 * @param p pierwszy sk³adnik
+	 * @param q drugi sk³adnik
+	 * @return suma dwóch wielomianów
 	 */
 	private int[] dodaj(int[] p, int[] q) 
 	{
