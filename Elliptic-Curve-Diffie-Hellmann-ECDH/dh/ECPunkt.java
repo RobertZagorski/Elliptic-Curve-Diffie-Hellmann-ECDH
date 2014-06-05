@@ -12,7 +12,7 @@ import java.math.BigInteger;
  */
 public class ECPunkt {
 
-	private static final BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE); 
+	private static final BigInteger TWO = (BigInteger.ONE.add(BigInteger.ONE)); 
 	/**Wspó³rzêdna horyzontalna generatora liczb w ciele.*/
 	BigInteger gx;
 	/**Wspó³rzêdna wertykalna generatora liczb w ciele.*/
@@ -52,7 +52,7 @@ public class ECPunkt {
 		a6=A6;
 		m=M;
 		k=K;
-		modulo = TWO.pow(m).subtract(TWO.pow(k)).add(BigInteger.ONE);
+		modulo = TWO.pow(m).add(TWO.pow(k)).add(BigInteger.ONE);
 		X=new GF2Elem(xG,M,K);
 		Y=new GF2Elem(yG,M,K);
 		Z = new GF2Elem(new BigInteger("2"), m, k);

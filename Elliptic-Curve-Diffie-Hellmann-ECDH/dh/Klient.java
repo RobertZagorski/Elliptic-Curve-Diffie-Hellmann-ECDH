@@ -100,10 +100,11 @@ public class Klient {
 	/**
 	 * Funkcja przekszta³caj¹ca klucz tajny uzgodniony w trakcie sesji 
 	 * (punkt na krzywej eliptycznej) na ci¹g bitowy
+	 * @return wspólny dla obu klientów klucz sesji
 	 */
-	public void genklucz01()
+	public String genklucz01()
 	{
-		
+		return kluczTajny.X.add(kluczTajny.Y).b.toString(2);
 	}
 	
 	/**

@@ -478,6 +478,10 @@ public class Window extends JPanel implements ActionListener {
 			k = new Integer(textField.getText());
 			try
 			{
+				if (k>=m)
+					throw new IllegalArgumentException("Wyk³adnik k nie mo¿e byæ wiêkszy ni¿ m");
+				if (m<=1)
+					throw new IllegalArgumentException("Wyk³adnik k nie mo¿e byæ wiêkszy ni¿ m");
 				gx = new BigInteger(textField_1.getText(), 16);
 				gy = new BigInteger(textField_2.getText(), 16);
 				a2 = new BigInteger(textField_13.getText(), 16);
@@ -488,6 +492,14 @@ public class Window extends JPanel implements ActionListener {
 				punktG = new ECPunkt(m,k,a2,a6,gx,gy);
 				if (!punktG.naEC())
 					throw new IllegalArgumentException("Generator nie nale¿y do zbioru punktów krzywej eliptycznej");
+				//////////////////////////////Sprawdzenie nieprzywiedlnoœci wielomianu modulo
+//				Polynomial p = new Polynomial();
+//				p=p.setDegree(new BigInteger(Integer.toString(m)));
+//				p=p.setDegree(new BigInteger(Integer.toString(k)));
+//				p=p.setDegree(BigInteger.ZERO);
+//				if (p.isReducible())
+//					throw new IllegalArgumentException("Wielomian modulo cia³a nie jest nieprzywiedlny");
+//				/////////////////////////////////////////////////////////////////////////////
 				klientA = new Klient(punktG);
 				klientA.genKluczaPrywatnego(m);
 				textField_3.setText(klientA.kluczPrywatny.toString());
@@ -496,7 +508,7 @@ public class Window extends JPanel implements ActionListener {
 			}
 			catch (NumberFormatException e)
 			{
-				JOptionPane.showMessageDialog(null, "Wprowadzone parametry nie s¹ w HEX", "B³¹d", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Wprowadzone parametry nie s¹ w kodzie HEX", "B³¹d", JOptionPane.ERROR_MESSAGE);
 			}
 			catch (IllegalArgumentException e)
 			{
@@ -526,6 +538,10 @@ public class Window extends JPanel implements ActionListener {
 			k = new Integer(textField.getText());
 			try
 			{
+				if (k>=m)
+					throw new IllegalArgumentException("Wyk³adnik k nie mo¿e byæ wiêkszy ni¿ m");
+				if (m<=1)
+					throw new IllegalArgumentException("Wyk³adnik k nie mo¿e byæ wiêkszy ni¿ m");
 				gx = new BigInteger(textField_1.getText(), 16);
 				gy = new BigInteger(textField_2.getText(), 16);
 				a2 = new BigInteger(textField_13.getText(), 16);
@@ -536,6 +552,14 @@ public class Window extends JPanel implements ActionListener {
 				punktG = new ECPunkt(m,k,a2,a6,gx,gy);
 				if (!punktG.naEC())
 					throw new IllegalArgumentException("Generator nie nale¿y do zbioru punktów krzywej eliptycznej");
+				//////////////////////////////Sprawdzenie nieprzywiedlnoœci wielomianu modulo
+//				Polynomial p = new Polynomial();
+//				p=p.setDegree(new BigInteger(Integer.toString(m)));
+//				p=p.setDegree(new BigInteger(Integer.toString(k)));
+//				p=p.setDegree(BigInteger.ZERO);
+//				if (p.isReducible())
+//					throw new IllegalArgumentException("Wielomian modulo cia³a nie jest nieprzywiedlny");
+//				/////////////////////////////////////////////////////////////////////////////
 				klientB = new Klient(punktG);
 				klientB.genKluczaPrywatnego(m);
 				textField_4.setText(klientB.kluczPrywatny.toString());
@@ -544,7 +568,7 @@ public class Window extends JPanel implements ActionListener {
 			}
 			catch (NumberFormatException e)
 			{
-				JOptionPane.showMessageDialog(null, "Wprowadzone parametry nie s¹ w HEX", "B³¹d", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Wprowadzone parametry nie s¹ w kodzie HEX", "B³¹d", JOptionPane.ERROR_MESSAGE);
 			}
 			catch (IllegalArgumentException e)
 			{
@@ -632,19 +656,6 @@ public class Window extends JPanel implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if ("Dodaj".equals(e.getActionCommand()))
-		{
-			
-		}
-		else if ("Usuñ".equals(e.getActionCommand()))
-		{
-
-		}
-		else if ("Zakoñcz".equals(e.getActionCommand()))
-		{
-			
-		}
-		else JOptionPane.showMessageDialog(mainframe, "Wyst¹pi³ b³¹d. Spróbuj ponownie");		
+	public void actionPerformed(ActionEvent e) {		
 	}
 }
