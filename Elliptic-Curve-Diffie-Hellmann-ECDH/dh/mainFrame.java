@@ -176,7 +176,7 @@ public class mainFrame extends JFrame {
 					  	klientA.oblKluczaTajnego();
 					  	klientB.oblKluczaTajnego();
 					  	GF2Elem xCord = new GF2Elem(klientA.kluczTajny.X);
-					  	if (xCord.add(klientB.kluczTajny.X).b.equals(BigInteger.ZERO))
+					  	if (xCord.dodaj(klientB.kluczTajny.X).b.equals(BigInteger.ZERO))
 					  	{
 					  		///Algorytm zadzia³a³ poprawnie
 					  		strOut = strOut.concat("////////////////////////////////////////"+"\r\n");

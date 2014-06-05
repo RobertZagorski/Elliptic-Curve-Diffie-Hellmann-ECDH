@@ -119,29 +119,20 @@ public class ECPunkt {
 		ECPunkt Q = new ECPunkt(P);
 		GF2Elem a6 = new GF2Elem(Q.a6, m, k);
 		GF2Elem temp1 = new GF2Elem(P.X);		try {
-													temp1.inverse();
+													temp1.odwrocModulo();
 												} catch (Exception e) {
 													e.printStackTrace();
 												}
-		GF2Elem lambda = new GF2Elem(P.Y);		lambda.multiply(temp1).add(P.X);
-		GF2Elem x1squared = new GF2Elem(P.X);	x1squared.square();	
+		GF2Elem lambda = new GF2Elem(P.Y);		lambda.pomnoz(temp1).dodaj(P.X);
+		GF2Elem x1squared = new GF2Elem(P.X);	x1squared.doKwadratu();	
 		GF2Elem temp3 = new GF2Elem(x1squared);	try {
-													temp3.inverse();
+													temp3.odwrocModulo();
 												} catch (Exception e) {
 													e.printStackTrace();
 												}
-		Q.X = new GF2Elem(a6);					Q.X.multiply(temp3).add(x1squared);
-		Q.Y = new GF2Elem(lambda);				Q.Y.multiply(Q.X).add(x1squared).add(Q.X);
+		Q.X = new GF2Elem(a6);					Q.X.pomnoz(temp3).dodaj(x1squared);
+		Q.Y = new GF2Elem(lambda);				Q.Y.pomnoz(Q.X).dodaj(x1squared).dodaj(Q.X);
 		return Q;
-		/////////////////////Fp//////////////////////////
-//		BigInteger lambda =(P.X.modPow(TWO,modulo)).multiply(TWO.add(BigInteger.ONE)).mod(modulo);
-//		lambda=lambda.add(a2);
-//		lambda=lambda.multiply((P.Y.multiply(TWO)).mod(modulo).modInverse(modulo)).mod(modulo);
-//		BigInteger x3 = lambda.modPow(TWO,modulo).subtract(P.X.multiply(TWO).mod(modulo)).mod(modulo);
-//		BigInteger y3 = P.X.subtract(x3).mod(modulo).multiply(lambda).mod(modulo).subtract(P.Y).mod(modulo);
-//		P.X=x3;
-//		P.Y=y3;
-//		return P;
 	}
 	
 	/**
@@ -188,26 +179,18 @@ public class ECPunkt {
 //		return wynik;
 //		///////////////////////F2m/////////////////////////////////
 		GF2Elem a2 = new GF2Elem(Q.a2, m, k);
-		GF2Elem temp1 = new GF2Elem(Q.Y);		temp1.add(P.Y);
-		GF2Elem temp2 = new GF2Elem(Q.X);		temp2.add(P.X);
+		GF2Elem temp1 = new GF2Elem(Q.Y);		temp1.dodaj(P.Y);
+		GF2Elem temp2 = new GF2Elem(Q.X);		temp2.dodaj(P.X);
 												try {
-													temp2.inverse();
+													temp2.odwrocModulo();
 												} catch (Exception e) {
 													e.printStackTrace();
 												}
-		GF2Elem lambda = new GF2Elem(temp1);	lambda.multiply(temp2);
+		GF2Elem lambda = new GF2Elem(temp1);	lambda.pomnoz(temp2);
 		ECPunkt wynik = new ECPunkt(P);
-		wynik.X = new GF2Elem(lambda);			wynik.X.square().add(lambda).add(Q.X).add(P.X).add(a2);
-		wynik.Y = new GF2Elem(Q.X);				wynik.Y.add(wynik.X).multiply(lambda).add(wynik.X).add(Q.Y);
+		wynik.X = new GF2Elem(lambda);			wynik.X.doKwadratu().dodaj(lambda).dodaj(Q.X).dodaj(P.X).dodaj(a2);
+		wynik.Y = new GF2Elem(Q.X);				wynik.Y.dodaj(wynik.X).pomnoz(lambda).dodaj(wynik.X).dodaj(Q.Y);
 		return wynik;
-		///////////////////////Fp///////////////////////////////
-//		BigInteger lambda =P.Y.subtract(Q.Y).mod(modulo);
-//		lambda=lambda.multiply(P.X.subtract(Q.X).mod(modulo).modInverse(modulo)).mod(modulo);
-//		BigInteger x3 = lambda.modPow(TWO,modulo).subtract(Q.X).subtract(P.X).mod(modulo);
-//		BigInteger y3 = Q.X.subtract(x3).mod(modulo).multiply(lambda).mod(modulo).subtract(Q.Y).mod(modulo);
-//		Q.X=x3;
-//		Q.Y=y3;
-//		return Q;
 	}
 
 	/**
@@ -240,8 +223,8 @@ public class ECPunkt {
 	 */
 	public void wspRzutoweNaAfiniczne()
 	{
-		this.X = this.X.multiply(this.Z);
-		this.Y = this.Y.multiply(this.Z);
+		this.X = this.X.pomnoz(this.Z);
+		this.Y = this.Y.pomnoz(this.Z);
 	}
 	
 	/**
@@ -250,8 +233,8 @@ public class ECPunkt {
 	public void wspAfiniczneNaRzutowe()
 	{
 		try {
-			this.X = this.X.multiply((this.Z.inverse()));
-			this.Y = this.Y.multiply((this.Z.inverse()));
+			this.X = this.X.pomnoz((this.Z.odwrocModulo()));
+			this.Y = this.Y.pomnoz((this.Z.odwrocModulo()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -270,13 +253,13 @@ public class ECPunkt {
 	 		GF2Elem temp = new GF2Elem(this.X);
 	 		GF2Elem temp2 = new GF2Elem(this.X);
 	 		
-	 		left.square();
-	 		temp.multiply(this.Y);
-	 		left.add(temp);
+	 		left.doKwadratu();
+	 		temp.pomnoz(this.Y);
+	 		left.dodaj(temp);
 	 		
-	 		right.square().multiply(this.X);
-	 		temp2.square().multiply(a2);
-	 		right.add(temp2).add(a6);
+	 		right.doKwadratu().pomnoz(this.X);
+	 		temp2.doKwadratu().pomnoz(a2);
+	 		right.dodaj(temp2).dodaj(a6);
 	 		
 	 		if (left.b.equals(right.b)) 
 	 			return true; 

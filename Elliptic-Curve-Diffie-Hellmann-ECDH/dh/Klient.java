@@ -104,7 +104,7 @@ public class Klient {
 	 */
 	public String genklucz01()
 	{
-		return kluczTajny.X.add(kluczTajny.Y).b.toString(2);
+		return kluczTajny.X.dodaj(kluczTajny.Y).b.toString(2);
 	}
 	
 	/**

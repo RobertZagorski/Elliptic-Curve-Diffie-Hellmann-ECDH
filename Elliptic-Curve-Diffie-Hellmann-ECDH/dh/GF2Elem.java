@@ -59,7 +59,7 @@ public class GF2Elem {
 	   * Funkcja zwracająca liczbę elementów w ciele
 	   * @return liczba elementów w ciele (domyślnie 2)
 	   */
-	  public int getFieldSize() {
+	  public int rozmiarGrupySkonczonej() {
 	    return FIELDSIZE;
 	  }
 	  
@@ -67,7 +67,7 @@ public class GF2Elem {
 	   * Funkcja zwracająca długość binarną liczby przechowywanej w obiekcie typu {@link GF2Elem}
 	   * @return długość binarna liczby przechowywanej w obiekcie typu {@link GF2Elem}
 	   */
-	  public int getLength()
+	  public int dlugoscBitowa()
 	  {
 		  return bB.length;
 	  }
@@ -78,8 +78,8 @@ public class GF2Elem {
 	   * @param y liczba typu {@link int} - drugi składnik
 	   * @return wynik sumy binarnej liczb {@link x} oraz {@link y}
 	   */
-	  public int add(int x, int y) {
-		    assert(x >= 0 && x < getFieldSize() && y >= 0 && y < getFieldSize());
+	  public int dodaj(int x, int y) {
+		    assert(x >= 0 && x < rozmiarGrupySkonczonej() && y >= 0 && y < rozmiarGrupySkonczonej());
 		    return x ^ y; ///// Operacja XOR w java
 	  }
 	  
@@ -90,15 +90,15 @@ public class GF2Elem {
 	   * @param Q wielomian, którego wartość jest składnikiem sumy
 	   * @return wielomina reprezenujący wynik operacji p+q
 	   */
-	  public GF2Elem add(GF2Elem Q) 
+	  public GF2Elem dodaj(GF2Elem Q) 
 	  {
 		int[] q = Q.bB;
-	    int len = Math.max(this.getLength(), q.length);
+	    int len = Math.max(this.dlugoscBitowa(), q.length);
 	    int[] result = new int[len];
 	    for (int i = 0; i < len; i++) {
-	      if (i < this.getLength() && i < q.length) {
-	        result[i] = add(this.bB[i], q[i]);
-	      } else if (i < this.getLength()) {
+	      if (i < this.dlugoscBitowa() && i < q.length) {
+	        result[i] = dodaj(this.bB[i], q[i]);
+	      } else if (i < this.dlugoscBitowa()) {
 	        result[i] = this.bB[i];
 	      } else {
 	        result[i] = q[i];
@@ -116,21 +116,21 @@ public class GF2Elem {
 	   * @param Q element ciała, którego wartość jest składnikiem iloczynu
 	   * @return wielomina reprezenujący wynik operacji p*q
 	   */
-	  public GF2Elem multiply(GF2Elem Q) 
+	  public GF2Elem pomnoz(GF2Elem Q) 
 	  {
 		int[] q = Q.bB;
-	    int len = this.getLength() + q.length - 1;
+	    int len = this.dlugoscBitowa() + q.length - 1;
 	    int[] result = new int[len];
 	    for (int i = 0; i < len; i++) {
 	      result[i] = 0;
 	    }
-	    for (int i = 0; i < this.getLength(); i++) {
+	    for (int i = 0; i < this.dlugoscBitowa(); i++) {
 	      for (int j = 0; j < q.length; j++) {
-	        result[i + j] = add(result[i + j], this.bB[i]*q[j]);
+	        result[i + j] = dodaj(result[i + j], this.bB[i]*q[j]);
 	      }
 	    }
 	    this.bB = result;
-	    reduce();
+	    redukuj();
 	    this.b = intArraytoBigInteger(this.bB);
 	    return this;
 	  }
@@ -140,12 +140,12 @@ public class GF2Elem {
 	   * wielomian modulo zdefiniowany przez wykładniki {@link GF2Elem#m} oraz {@link GF2Elem#k}
 	   * @return
 	   */
-	  public GF2Elem reduce()
+	  public GF2Elem redukuj()
 	  {
 		  for (int i = 0 ; i<=m; i++)
 		  {
-			  this.bB[m+i] = add(this.bB[m+i],this.bB[i]);
-			  this.bB[m-k+i] = add(this.bB[m-k+i],this.bB[i]);
+			  this.bB[m+i] = dodaj(this.bB[m+i],this.bB[i]);
+			  this.bB[m-k+i] = dodaj(this.bB[m-k+i],this.bB[i]);
 		  }
 		  int[] result = new int[m+1];
 		  result[0]=0;
@@ -158,10 +158,10 @@ public class GF2Elem {
 	  }
 
 	  /**
-	   * Operacja podnoszenia wielomianu przechowywanego w elemenencie {@link GF2Elem#bB}
+	   * Operacja podnoszenia do kwadratu wielomianu przechowywanego w elemenencie {@link GF2Elem#bB}
 	   * @return obiekt typu {@link GF2Elem} przechowujący liczbę w formacie binarnym
 	   */
-	  public GF2Elem square()
+	  public GF2Elem doKwadratu()
 	  {
 		  int[] result = new int[2*m+1];
 		  for (int i = 0; i <= 2*m; i++) {
@@ -172,7 +172,7 @@ public class GF2Elem {
 		      result[2*i] = this.bB[i];
 		  }
 		  this.bB = result;
-		  reduce();
+		  redukuj();
 		  this.b = intArraytoBigInteger(this.bB);
 		  return this;
 	  }
@@ -224,7 +224,7 @@ public class GF2Elem {
 	   * binarnej będący inwersją modulo wielomianu pierwotnego
 	 * @throws Exception wyjątek rzucany jest jeśli liczba nie jest względnie pierwsza z wielomianem modulo
 	   */
-	  public GF2Elem inverse() throws Exception
+	  public GF2Elem odwrocModulo() throws Exception
 	  {
 		  int[] u=this.bB;
 		  int[] v=new int[u.length];
@@ -284,14 +284,14 @@ public class GF2Elem {
 				  temp=g1;
 				  g1=g2;
 				  g2=temp;
-				  //j�-j
+				  //j←-j
 				  j=0-j;
 			  }
-			  //u�u+z^j*v;
+			  //u←u+z^j*v;
 			  z[m-j]=1;
-			  u=reduce(add(u,multiply(z,v)));
-			  //g1�g1+z^j*g2;
-			  g1=reduce(add(g1,multiply(z,g2)));		  
+			  u=zredukuj(dodaj(u,pomnoz(z,v)));
+			  //g1←g1+z^j*g2;
+			  g1=zredukuj(dodaj(g1,pomnoz(z,g2)));		  
 			  //u!=1
 			  int sum=0;
 			  for (int i=0;i<=m;i++)
@@ -317,7 +317,7 @@ public class GF2Elem {
 	   * @param q wielomian
 	   * @return wynik mnożenia p*q
 	   */
-	  private int[] multiply(int[] p, int[] q) 
+	  private int[] pomnoz(int[] p, int[] q) 
 	  {
 		  int len = p.length + q.length - 1;
 		  int[] result = new int[len];
@@ -336,12 +336,12 @@ public class GF2Elem {
 	 * @param p wielomian przeznaczony do redukcji
 	 * @return wielomian zredukowany
 	 */
-	private int[] reduce(int[] p)
+	private int[] zredukuj(int[] p)
 	{
 		for (int i = 0 ; i<=m; i++)
 		{
-			p[m+i] = add(p[m+i],p[i]);
-			p[m-k+i] = add(p[m-k+i],p[i]);
+			p[m+i] = dodaj(p[m+i],p[i]);
+			p[m-k+i] = dodaj(p[m-k+i],p[i]);
 		}
 		int[] result = new int[m+1];
 		for (int i=0;i<m;i++)
@@ -355,14 +355,14 @@ public class GF2Elem {
 	 * @param q drugi składnik
 	 * @return suma dwóch wielomianów
 	 */
-	private int[] add(int[] p, int[] q) 
+	private int[] dodaj(int[] p, int[] q) 
 	{
 		int len = Math.max(p.length, q.length);
 	    int[] result = new int[len];
 	    for (int i = 0; i < len; i++) 
 	    {
 	      if (i < p.length && i < q.length) 
-	    	  result[len-i-1] = add(p[p.length-i-1], q[q.length-i-1]);
+	    	  result[len-i-1] = dodaj(p[p.length-i-1], q[q.length-i-1]);
 	      else if (i < p.length) 
 	    	  result[len-i-1] = p[p.length-i-1];
 	      else 

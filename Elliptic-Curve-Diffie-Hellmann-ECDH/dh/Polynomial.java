@@ -12,14 +12,13 @@ import java.util.TreeSet;
  * Supports standard arithmetic in the field, as well as reducibility tests.
  * @author themadcreator<p>
  * kod Ÿród³owy u¿yczony z projektu <i>rabinfingerptint<i><p>
+ * (<a href="https://github.com/themadcreator/rabinfingerprint">https://github.com/themadcreator/rabinfingerprint</a>)<p>
  * 
  * A Java implementation of the rabin fingerprinting method.
  * (<a href="http://en.wikipedia.org/wiki/Rabin_fingerprint">http://en.wikipedia.org/wiki/Rabin_fingerprint</a>)
  * Optimized for use on a stream including a sliding window fingerprint.
  *
  * Includes arbitrary-precision-polynomial hashing as well as very fast long-based hashing implementations, which are best for most hashing uses.<p>
- * (<a href="https://github.com/themadcreator/rabinfingerprint">https://github.com/themadcreator/rabinfingerprint</a>)
- * <p>
  * Kod Ÿród³owy rozpowszechniany z licencj¹ Apache License 2.0
  */
 public class Polynomial implements Comparable< Polynomial > {
