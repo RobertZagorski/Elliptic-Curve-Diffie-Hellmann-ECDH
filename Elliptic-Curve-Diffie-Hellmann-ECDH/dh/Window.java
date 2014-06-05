@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.JList;
 import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
+import javax.swing.JCheckBox;
 
 /**
  * Klasa odpowiadaj¹ca za budowê GUI programu. Za wczytanie danych 
@@ -131,6 +132,18 @@ public class Window extends JPanel implements ActionListener {
 	 * Obiekt potrzebny do wyœwietlania króków algorytmu DH.
 	 */
 	private DefaultListModel<String> listModel;
+	
+	/**
+	 * Sprawdza czy u¿ytkownik programu ¿¹da sprawdzenie wielomianu modulo.
+	 * Czy wielomian jest nieprzywiedlny.
+	 */
+	private JCheckBox chckbxNewCheckBox;
+	
+	/**
+	 * Flaga mówi¹ca czy wielomian modulo zosta³ ju¿
+	 * sprawdzony czy jest nieprzywiedlnym.
+	 */
+	private Boolean juzSprawdzony = false;
 	
 	/**
 	 * Konstruktor klasy Window. Tworzy g³ówne okienko aplikacji oraz
@@ -391,6 +404,10 @@ public class Window extends JPanel implements ActionListener {
 		
 		JLabel lblA_1 = new JLabel("a6:");
 		lblA_1.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		
+		chckbxNewCheckBox = new JCheckBox("Sprawdzenie nieprzywiedlno\u015Bci wielomianu modulo");
+		chckbxNewCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		chckbxNewCheckBox.setToolTipText("Ta operacja potrzebuje d\u0142u\u017Csz\u0105 chwil\u0119 czasu");
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
@@ -423,9 +440,12 @@ public class Window extends JPanel implements ActionListener {
 										.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)))))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGap(23)
-							.addComponent(lblA_1, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(textField_15, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)))
+							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+								.addComponent(chckbxNewCheckBox)
+								.addGroup(gl_panel.createSequentialGroup()
+									.addComponent(lblA_1, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(textField_15, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)))))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
@@ -452,7 +472,8 @@ public class Window extends JPanel implements ActionListener {
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(textField_15, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblA_1))
-					.addContainerGap())
+					.addGap(9)
+					.addComponent(chckbxNewCheckBox))
 		);
 		panel.setLayout(gl_panel);
 		setLayout(groupLayout);
@@ -493,13 +514,18 @@ public class Window extends JPanel implements ActionListener {
 				if (!punktG.naEC())
 					throw new IllegalArgumentException("Generator nie nale¿y do zbioru punktów krzywej eliptycznej");
 				//////////////////////////////Sprawdzenie nieprzywiedlnoœci wielomianu modulo
-//				Polynomial p = new Polynomial();
-//				p=p.setDegree(new BigInteger(Integer.toString(m)));
-//				p=p.setDegree(new BigInteger(Integer.toString(k)));
-//				p=p.setDegree(BigInteger.ZERO);
-//				if (p.isReducible())
-//					throw new IllegalArgumentException("Wielomian modulo cia³a nie jest nieprzywiedlny");
-//				/////////////////////////////////////////////////////////////////////////////
+				if (chckbxNewCheckBox.isSelected() && !juzSprawdzony) {
+					juzSprawdzony = true;
+					Polynomial p = new Polynomial();
+					p = p.setDegree(new BigInteger(Integer.toString(m)));
+					p = p.setDegree(new BigInteger(Integer.toString(k)));
+					p = p.setDegree(BigInteger.ZERO);
+					if (p.isReducible())
+						throw new IllegalArgumentException(
+								"Wielomian modulo cia³a nie jest nieprzywiedlny");
+					listModel.addElement("Wielomian modulo jest nieprzywiedlny.");
+				}
+				/////////////////////////////////////////////////////////////////////////////
 				klientA = new Klient(punktG);
 				klientA.genKluczaPrywatnego(m);
 				textField_3.setText(klientA.kluczPrywatny.toString());
@@ -553,13 +579,18 @@ public class Window extends JPanel implements ActionListener {
 				if (!punktG.naEC())
 					throw new IllegalArgumentException("Generator nie nale¿y do zbioru punktów krzywej eliptycznej");
 				//////////////////////////////Sprawdzenie nieprzywiedlnoœci wielomianu modulo
-//				Polynomial p = new Polynomial();
-//				p=p.setDegree(new BigInteger(Integer.toString(m)));
-//				p=p.setDegree(new BigInteger(Integer.toString(k)));
-//				p=p.setDegree(BigInteger.ZERO);
-//				if (p.isReducible())
-//					throw new IllegalArgumentException("Wielomian modulo cia³a nie jest nieprzywiedlny");
-//				/////////////////////////////////////////////////////////////////////////////
+				if (chckbxNewCheckBox.isSelected() && !juzSprawdzony) {
+					juzSprawdzony = true;
+					Polynomial p = new Polynomial();
+					p = p.setDegree(new BigInteger(Integer.toString(m)));
+					p = p.setDegree(new BigInteger(Integer.toString(k)));
+					p = p.setDegree(BigInteger.ZERO);
+					if (p.isReducible())
+						throw new IllegalArgumentException(
+								"Wielomian modulo cia³a nie jest nieprzywiedlny");
+					listModel.addElement("Wielomian modulo jest nieprzywiedlny.");
+				}
+				/////////////////////////////////////////////////////////////////////////////
 				klientB = new Klient(punktG);
 				klientB.genKluczaPrywatnego(m);
 				textField_4.setText(klientB.kluczPrywatny.toString());
@@ -634,6 +665,15 @@ public class Window extends JPanel implements ActionListener {
 			textField_10.setText(klientA.kluczTajny.Y.b.toString());
 			listModel.addElement("Obliczono klucz tajny u¿ytkownika A");
 		}
+		if (klientB.kluczTajny != null) {
+			if (klientB.kluczTajny.X.b.compareTo(klientA.kluczTajny.X.b) == 0 &&
+					klientB.kluczTajny.Y.b.compareTo(klientA.kluczTajny.Y.b) == 0) {
+				JOptionPane.showMessageDialog(null, "Obliczone klucze tajne u¿ytkowników A i B s¹ równe!", "", JOptionPane.INFORMATION_MESSAGE);
+				listModel.addElement("Obliczone klucze tajne u¿ytkowników A i B s¹ równe!");
+			} else {
+				listModel.addElement("Obliczone klucze tajne u¿ytkowników A i B nie s¹ równe :-(");
+			}
+		}
 	}
 	
 	/**
@@ -652,6 +692,15 @@ public class Window extends JPanel implements ActionListener {
 			textField_11.setText(klientB.kluczTajny.X.b.toString());
 			textField_12.setText(klientB.kluczTajny.Y.b.toString());
 			listModel.addElement("Obliczono klucz tajny u¿ytkownika B");
+		}
+		if (klientA.kluczTajny != null) {
+			if (klientB.kluczTajny.X.b.compareTo(klientA.kluczTajny.X.b) == 0 &&
+					klientB.kluczTajny.Y.b.compareTo(klientA.kluczTajny.Y.b) == 0) {
+				JOptionPane.showMessageDialog(null, "Obliczone klucze tajne u¿ytkowników A i B s¹ równe!", "", JOptionPane.INFORMATION_MESSAGE);
+				listModel.addElement("Obliczone klucze tajne u¿ytkowników A i B s¹ równe!");
+			} else {
+				listModel.addElement("Obliczone klucze tajne u¿ytkowników A i B nie s¹ równe :-(");
+			}
 		}
 	}
 
