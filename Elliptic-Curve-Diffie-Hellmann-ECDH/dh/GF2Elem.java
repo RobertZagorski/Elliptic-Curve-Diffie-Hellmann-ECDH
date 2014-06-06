@@ -6,7 +6,7 @@ import java.math.BigInteger;
  * Klasa implementuj¹ca element cia³a {@code GF(2^m)}. 
  * W klasie zdefiniowano operacje na ciele binarnym: dodawanie, mno¿enie, podnoszenie
  * do kwadratu. Dodatkowo zaimplementowano konwersjê liczby w postaci binarnej 
- * zaimplementowanej jako {@code int[]} na liczbE typu {@link BigInteger}. <p>
+ * zaimplementowanej jako {@code int[]} na liczbê typu {@link BigInteger}. <p>
  * Do implementacji operacji modulo wykorzystywany jest trójmian postaci {@code x^m+x^k+1}
  */
 

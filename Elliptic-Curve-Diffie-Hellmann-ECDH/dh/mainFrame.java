@@ -87,7 +87,7 @@ public class mainFrame extends JFrame {
 	}
 	
 	/**
-	 * funkcja pozwalaj¹ca na automatyczne przeprowadzanie protoko³u ECDH. Przyjmuje 
+	 * funkcja pozwalaj¹ca na automatyczne wykonywanie protoko³u ECDH. Przyjmuje 
 	 * parametry krzywej eliptycznej z pliku i zapisuje do pliku o takiej samej nazwie z przyrostkiem
 	 * <i>output<i>
 	 * @param filename nazwa pliku, z którego maj¹ zostaæ pobrane parametry
@@ -156,25 +156,41 @@ public class mainFrame extends JFrame {
 					  if (gx.toString(2).length() > m || gy.toString(2).length() > m || 
 							a2.toString(2).length() > m || a6.toString(2).length() > m)
 							throw new IllegalArgumentException("Wartoœci parametrów wykraczaj¹ poza zakres");
+					  System.out.println("k: "+k);
+					  System.out.println("m: "+m);
+					  System.out.println("Gx: "+gx.toString(16));
+					  System.out.println("Gy: "+gy.toString(16));
+					  System.out.println("a2: "+a2.toString(16));
+					  System.out.println("a6: "+a6.toString(16));
 					  punktG = new ECPunkt(m,k,a2,a6,gx,gy);
 					  if (!punktG.naEC())
 							throw new IllegalArgumentException("Generator nie nale¿y do zbioru punktów krzywej eliptycznej");
 						//////////////////////////////Sprawdzenie nieprzywiedlnoœci wielomianu modulo
-//						Polynomial p = new Polynomial();
-//						p=p.setDegree(new BigInteger(Integer.toString(m)));
-//						p=p.setDegree(new BigInteger(Integer.toString(k)));
-//						p=p.setDegree(BigInteger.ZERO);
-//						if (p.isReducible())
-//							throw new IllegalArgumentException("Wielomian modulo cia³a nie jest nieprzywiedlny");
-//						/////////////////////////////////////////////////////////////////////////////
+						Polynomial p = new Polynomial();
+						p=p.setDegree(new BigInteger(Integer.toString(m)));
+						p=p.setDegree(new BigInteger(Integer.toString(k)));
+						p=p.setDegree(BigInteger.ZERO);
+						if (p.isReducible())
+							throw new IllegalArgumentException("Wielomian modulo cia³a nie jest nieprzywiedlny");
+						/////////////////////////////////////////////////////////////////////////////
 					  	klientA = new Klient(punktG);
 					  	klientA.genKluczaPrywatnego(m);
+				  		System.out.println("A.Prywatny: "+klientA.kluczPrywatny.toString(16)+"\r\n");
 					  	klientB = new Klient(punktG);
 					  	klientB.genKluczaPrywatnego(m);
+					  	System.out.println("B.Prywatny: "+klientB.kluczPrywatny.toString(16)+"\r\n");
 					  	klientB.ustawKluczPublicznyB(klientA.oblKluczaPublicznego());
+				  		System.out.println("APub.X: "+klientA.kluczPubliczny.X.b.toString(16)+"\r\n");
+				  		System.out.println("APub.Y: "+klientA.kluczPubliczny.Y.b.toString(16)+"\r\n");
 					  	klientA.ustawKluczPublicznyB(klientB.oblKluczaPublicznego());
+				  		System.out.println("BPub.X: "+klientB.kluczPubliczny.X.b.toString(16)+"\r\n");
+				  		System.out.println("BPub.Y: "+klientB.kluczPubliczny.Y.b.toString(16)+"\r\n");
 					  	klientA.oblKluczaTajnego();
+					  	System.out.println("APub.X: "+klientA.kluczTajny.X.b.toString(16)+"\r\n");
+				  		System.out.println("APub.Y: "+klientA.kluczTajny.Y.b.toString(16)+"\r\n");
 					  	klientB.oblKluczaTajnego();
+					  	System.out.println("BPub.X: "+klientB.kluczTajny.X.b.toString(16)+"\r\n");
+				  		System.out.println("BPub.Y: "+klientB.kluczTajny.Y.b.toString(16)+"\r\n");
 					  	GF2Elem xCord = new GF2Elem(klientA.kluczTajny.X);
 					  	if (xCord.dodaj(klientB.kluczTajny.X).b.equals(BigInteger.ZERO))
 					  	{
@@ -192,6 +208,7 @@ public class mainFrame extends JFrame {
 					  		strOut = strOut.concat("BPub.X: "+klientB.kluczPubliczny.X.b.toString(16)+"\r\n");
 					  		strOut = strOut.concat("BPub.Y: "+klientB.kluczPubliczny.Y.b.toString(16)+"\r\n");
 					  		strOut = strOut.concat("Wspólny klucz sesji: "+klientA.genklucz01()+"\r\n");
+					  		System.out.println("Wspólny klucz sesji: "+klientA.genklucz01()+"\r\n");
 					  		strOut = strOut.concat("////////////////////////////////////////"+"\r\n");
 					  	}
 					  	else
@@ -205,6 +222,7 @@ public class mainFrame extends JFrame {
 					  		strOut = strOut.concat("a2: "+a2.toString(16)+"\r\n");
 					  		strOut = strOut.concat("a6: "+a6.toString(16)+"\r\n");
 					  		strOut = strOut.concat("\nAlgorytm nie zadzia³a³ poprawnie"+"\r\n");
+					  		System.out.println("\nAlgorytm nie zadzia³a³ poprawnie"+"\r\n");
 					  		strOut = strOut.concat("////////////////////////////////////////"+"\r\n");
 					  	}
 					}
