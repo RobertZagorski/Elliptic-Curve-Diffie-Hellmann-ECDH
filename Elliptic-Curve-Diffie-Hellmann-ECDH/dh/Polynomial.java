@@ -32,7 +32,8 @@ public class Polynomial implements Comparable< Polynomial > {
 	/** the polynomial "1" */
 	public static final Polynomial ONE = Polynomial.createFromLong( 1L );
 
-	/** a reverse comparator so that polynomials are printed out correctly */
+	/**Odwrotny komparator wielomianów. 
+	 * a reverse comparator so that polynomials are printed out correctly */
 	private static final class ReverseComparator implements Comparator< BigInteger > {
 		public int compare( BigInteger o1, BigInteger o2 ) {
 			return -1 * o1.compareTo( o2 );

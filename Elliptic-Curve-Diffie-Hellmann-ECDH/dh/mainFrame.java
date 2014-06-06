@@ -19,7 +19,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 /**
  * Klasa startowa projektu ECDH - protoko³u wymiany kluczy wed³ug
- * Diffiego i Hellmana na krzywych eliptycznych nad cia³em binarnym GF(2^m)
+ * Diffiego i Hellmana na krzywych eliptycznych nad cia³em binarnym {@code GF(2^m)}
  * @author Vitali Karpinski
  * @author Robert Zagórski
  *
@@ -186,11 +186,11 @@ public class mainFrame extends JFrame {
 				  		System.out.println("BPub.X: "+klientB.kluczPubliczny.X.b.toString(16)+"\r\n");
 				  		System.out.println("BPub.Y: "+klientB.kluczPubliczny.Y.b.toString(16)+"\r\n");
 					  	klientA.oblKluczaTajnego();
-					  	System.out.println("APub.X: "+klientA.kluczTajny.X.b.toString(16)+"\r\n");
-				  		System.out.println("APub.Y: "+klientA.kluczTajny.Y.b.toString(16)+"\r\n");
+					  	System.out.println("ATajny.X: "+klientA.kluczTajny.X.b.toString(16)+"\r\n");
+				  		System.out.println("ATajny.Y: "+klientA.kluczTajny.Y.b.toString(16)+"\r\n");
 					  	klientB.oblKluczaTajnego();
-					  	System.out.println("BPub.X: "+klientB.kluczTajny.X.b.toString(16)+"\r\n");
-				  		System.out.println("BPub.Y: "+klientB.kluczTajny.Y.b.toString(16)+"\r\n");
+					  	System.out.println("BTajny.X: "+klientB.kluczTajny.X.b.toString(16)+"\r\n");
+				  		System.out.println("BTajny.Y: "+klientB.kluczTajny.Y.b.toString(16)+"\r\n");
 					  	GF2Elem xCord = new GF2Elem(klientA.kluczTajny.X);
 					  	if (xCord.dodaj(klientB.kluczTajny.X).b.equals(BigInteger.ZERO))
 					  	{
@@ -207,8 +207,8 @@ public class mainFrame extends JFrame {
 					  		strOut = strOut.concat("APub.Y: "+klientA.kluczPubliczny.Y.b.toString(16)+"\r\n");
 					  		strOut = strOut.concat("BPub.X: "+klientB.kluczPubliczny.X.b.toString(16)+"\r\n");
 					  		strOut = strOut.concat("BPub.Y: "+klientB.kluczPubliczny.Y.b.toString(16)+"\r\n");
-					  		strOut = strOut.concat("Wspólny klucz sesji: "+klientA.genklucz01()+"\r\n");
-					  		System.out.println("Wspólny klucz sesji: "+klientA.genklucz01()+"\r\n");
+					  		strOut = strOut.concat("Wspolny klucz sesji: "+klientA.genklucz01()+"\r\n");
+					  		System.out.println("Wspolny klucz sesji: "+klientA.genklucz01()+"\r\n");
 					  		strOut = strOut.concat("////////////////////////////////////////"+"\r\n");
 					  	}
 					  	else
